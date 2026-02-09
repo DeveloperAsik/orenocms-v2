@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Backend/Auth/AppController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/config/app.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Controller.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/layouts/metronic/includes/main/include_sidebar.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/layouts/metronic/includes/main/include_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/helpers/global_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Libraries/Oreno/Loader.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Backend/Master/AccessControl/UserController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/pages/Backend/Master/AccessControl/User/view_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/layouts/metronic/includes/main/include_page_logo.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/routes/web.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/widgets/main/sidebar_info.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/.env</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/pages/Backend/Master/AccessControl/User/view_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/layouts/metronic/includes/main/include_top_menu.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/layouts/metronic/includes/main/include_css.blade.php</file>
+        </group>
+    </open-files>
+</project-private>

@@ -1,0 +1,1 @@
+<div id="img-loading" style="position: fixed; top:40%; left:45%; width:120px; z-index:9999"></div>
