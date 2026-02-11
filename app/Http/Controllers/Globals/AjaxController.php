@@ -648,7 +648,6 @@ class AjaxController extends Controller {
         $data = $request->json()->all();
         if (isset($data) && !empty($data)) {
             $menu_access = Tbl_b_menu_permission::get_by_id($data['id']);
-            dd($menu_access);
             switch ($data['field']) {
                 case "is_badge":
                     $update_data = [

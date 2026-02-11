@@ -46,6 +46,7 @@
                 </div>
             </div>
             <!-- END CONTENT -->
+            @include('html.components.modal')
         </div>
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->

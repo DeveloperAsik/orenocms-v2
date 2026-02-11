@@ -9,7 +9,6 @@
                 </li>
             @endforeach
         @endif
-        
     </ul>
     <div class="page-toolbar">
         <div id="dashboard-report-range" class="pull-right tooltips btn btn-sm btn-default" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">

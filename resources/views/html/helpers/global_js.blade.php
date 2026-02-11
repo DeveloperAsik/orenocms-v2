@@ -263,13 +263,12 @@
     var __fn_find_word = function(w, s) { return RegExp('\\b' + w + '\\b').test(s) };
     var __fn_hex_to_rgba = function(hex){ var c; if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){ c= hex.substring(1).split(''); if(c.length== 3){ c= [c[0], c[0], c[1], c[1], c[2], c[2]]; } c= '0x'+c.join(''); return 'rgb('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+')'; } throw new Error('Bad Hex'); };
     
-    
     //custom request between dbs
     var __fn_reload_total_chat = function(){ if (typeof __session_is_logged_in !== 'undefined') { var uri = _base_extraweb_uri + '/messaging/inbox/get_list?a=2'; var response = __fn_ajax_send({}, {url : _base_extraweb_uri + '/messaging/inbox/get_list?a=2', type : 'POST', dataType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000}); if(response.responseJSON){ $('span#total_chat').html(response.responseJSON.total_chat); } } return false; };
     var __fn_fetch_notif = function(){ var i = 0; setInterval(function(){ i++; if(i%10 == 0){ var full_url = document.URL; var segment = full_url.replace(_base_extraweb_uri ,''); switch(segment){ case "/messaging/inbox": __fn_reload_datatables('#inbox'); break;  default: __fn_reload_total_chat();  break; } } },1000); };
     
     
-     var __fn_init_info_board  = function(i){
+    var __fn_init_info_board  = function(i){
         //__fn_loading_bg('start','sidebarWrapper');
         var sh = screen.height;
         var eh = parseInt(sh * 0.7);
@@ -304,7 +303,7 @@
     };
     
     var __fn_init_info_line = function(i){
-         var arrOptions = {
+        var arrOptions = {
                 url : _base_extraweb_uri + '/ajax/post/get_information_line',
                 type : 'POST',
                 dataType: 'json',
@@ -350,11 +349,10 @@
     }();
     jQuery(document).ready(function () {
         Globaljs.init();
-       // Metronic.init(); // init metronic core componets
-        Layout.init(); // init layout
-        //QuickSidebar.init(); // init quick sidebar
-        //Demo.init(); // init demo features
-        ComponentsDropdowns.init();
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        QuickSidebar.init(); // init quick sidebar
+        Demo.init(); // init demo features
     });
     jQuery(window).on("load", function () {
         __fn_alert_message('page completed load', 'success', {type: 'toastr', timeOut: 2000});

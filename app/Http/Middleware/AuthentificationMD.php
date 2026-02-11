@@ -33,7 +33,6 @@ class AuthentificationMD {
         //validating session for user is on login session or no
         $validate_session = $this->Authentification->init_session_check($request, $next);
         $validate_url = $this->Authentification->init_url_check($request, $next);
-        //dd($validate_url);
         if ($validate_session == false && $validate_url == false) {
             //session is empty and url is not allow or public accesed
             if ($request->ajax()) {

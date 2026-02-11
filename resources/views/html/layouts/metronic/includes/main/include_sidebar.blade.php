@@ -11,7 +11,11 @@
         <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
         <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
-         
+            <li class="sidebar-toggler-wrapper">
+                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+                <div class="sidebar-toggler"></div>
+                <!-- END SIDEBAR TOGGLER BUTTON -->
+            </li>
             <li class="sidebar-search-wrapper">
                 <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
                 <!-- DOC: Apply "sidebar-search-bordered" class the below search form to have bordered search box -->
