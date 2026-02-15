@@ -351,7 +351,7 @@
         Globaljs.init();
         Metronic.init(); // init metronic core components
         Layout.init(); // init current layout
-        QuickSidebar.init(); // init quick sidebar
+        //QuickSidebar.init(); // init quick sidebar
         Demo.init(); // init demo features
     });
     jQuery(window).on("load", function () {

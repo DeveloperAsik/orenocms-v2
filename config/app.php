@@ -53,6 +53,9 @@ return [
     'jenkins_ciso_path_dast' => env('JENKINS_CISO_PATH_DAST'),
     'jenkins_user' => $Converter->base64_basic(env('JENKINS_USER'), 'decode', ['rep' => 3]),
     'jenkins_pass' => $Converter->base64_basic(env('JENKINS_PASS'), 'decode', ['rep' => 3]),
+    'default_variables' => [
+        'title_for_layout' => env('APP_NAME'),
+    ],
     'auto_logout' => env('APP_AUTO_LOGOUT'),
     'timezone' => 'UTC',
     'locale' => env('APP_LOCALE', 'en'),

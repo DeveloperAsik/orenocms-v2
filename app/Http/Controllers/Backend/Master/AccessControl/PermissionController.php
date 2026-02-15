@@ -10,8 +10,9 @@ namespace App\Http\Controllers\Backend\Master\AccessControl;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Libraries\Oreno\General;
-
 use App\Models\Entity\uac\Tbl_a_uac_permissions_p_en;
+use App\Models\Entity\app\Tbl_d_app_assets_master_controller_p_en;
+use App\Models\Entity\app\Tbl_d_app_assets_master_method_p_en;
 
 /**
  * Description of PermissionController
@@ -23,11 +24,15 @@ class PermissionController extends Controller {
     //put your code here
     protected $General;
     protected $Tbl_a_uac_permissions_p_en;
+    protected $Tbl_d_app_assets_master_controller_p_en;
+    protected $Tbl_d_app_assets_master_method_p_en;
 
     public function __construct(Request $request) {
         parent::__construct($request);
         $this->General = new General();
         $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
+        $this->Tbl_d_app_assets_master_controller_p_en = new Tbl_d_app_assets_master_controller_p_en();
+        $this->Tbl_d_app_assets_master_method_p_en = new Tbl_d_app_assets_master_method_p_en();
     }
 
     public function view(Request $request) {
@@ -35,9 +40,14 @@ class PermissionController extends Controller {
         $_config = [
             'title_for_header' => '<b>Group</b> master data management page',
             'pages' => [
-                'title' => 'View Pages Master Data Permissions',
-                'icon' => '<i class="fas fa-square-plus"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/view'
+                'title' => 'View Page Master Data Permissions',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
+            ],
+            'header' => [
+                'title' => 'Add New',
+                'icon' => '<i class="fa fa-plus-square"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
             ],
             'tables' => [
                 'el-id' => 'dt_tbl_permissions',
@@ -48,7 +58,6 @@ class PermissionController extends Controller {
                 ],
                 'dt_tbl_th' => [
                     '<th> ID </th>',
-                    '<th> Alias </th>',
                     '<th> Name </th>',
                     '<th> Path </th>',
                     '<th> Controller </th>',
@@ -96,7 +105,6 @@ class PermissionController extends Controller {
             if (isset($search) && !empty($search)) {
                 $conditions = [
                     'orWhere' => [
-                        ['a.__alias', 'like', '%' . $search . '%'],
                         ['a.__name', 'like', '%' . $search . '%'],
                         ['a.__path', 'like', '%' . $search . '%'],
                         ['a.__controller', 'like', '%' . $search . '%'],
@@ -134,7 +142,6 @@ class PermissionController extends Controller {
                     }
                     $arrData[] = [
                         'id' => $i,
-                        '__alias' => $value->__alias,
                         '__name' => $value->__name,
                         '__path' => $value->__path,
                         '__controller' => $value->__controller,
@@ -144,9 +151,9 @@ class PermissionController extends Controller {
                         'public' => '<input type="checkbox"' . $is_public . ' name="is_public" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                         'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                         'action' => '<div class="btn-group">
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fas fa-edit"></i></a></button>
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fas fa-xmark"></i></a></button>
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Add"><i class="far fa-trash-alt"></i></a></button>
+                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
+                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
+                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
                       </div>',
                     ];
                     if ($i <= $data['meta']['total']) {
@@ -165,6 +172,70 @@ class PermissionController extends Controller {
             }
         } else {
             echo json_encode(array());
+        }
+    }
+
+    public function create(Request $request) {
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Group</b> master data management page',
+            'pages' => [
+                'title' => 'Create Page Master Data Permissions',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
+            ],
+            'form' => [
+                'el-id' => 'frm_create_permission',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Name </th>',
+                    '<th> Path </th>',
+                    '<th> Controller </th>',
+                    '<th> Action Cont </th>',
+                    '<th> Method </th>',
+                    '<th> Basic </th>',
+                    '<th> Public </th>',
+                    '<th> Status </th>',
+                    '<th> Action </th>'
+                ]
+            ],
+            'modals' => [
+                'el-id' => 'md_permission_settings',
+                'title' => 'Settings Page Modals Master Data Permissions'
+            ]
+        ];
+        $controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
+        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
+        $StrHtmlActions = '';
+        if (isset($actions['data']) && !empty($actions['data'])) {
+            foreach ($actions['data'] AS $key => $val) {
+                $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . ' - ' . $val->__param . '</option>';
+            }
+        }
+        $_modal_data = [
+            'html.modals.master.uac.permissions.md_permission_settings'
+        ];
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"
+        ]);
+
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', '_modal_data', 'controllers', 'StrHtmlActions'));
+    }
+
+    public function insert(Request $request) {
+        if (isset($request) && !empty($request)) {
+            
         }
     }
 }

@@ -64,8 +64,8 @@ class AppController extends Controller {
     public function login(Request $request) {
         $title_for_layout = config('app.name');
         $_modal_data = [
-            ['path' => 'html.widgets.login.widgets_login_forgot_password'],
-            ['path' => 'html.widgets.login.widgets_login_register']
+            'html.widgets.login.widgets_login_forgot_password',
+            'html.widgets.login.widgets_login_register'
         ];
         $_page_styles = [
             'login' => [

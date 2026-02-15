@@ -2,7 +2,7 @@
     <div class="portlet box blue">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-edit"></i>{{$_config['pages']['title']}}
+                {!! $_config['pages']['icon'] !!}{{$_config['pages']['title']}}
             </div>
             <div class="tools">
                 <a href="javascript:;" class="collapse"></a>
@@ -15,15 +15,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="btn-group">
-                            <button id="sample_editable_1_new" class="btn green">
-                                Add New <i class="fa fa-plus"></i>
-                            </button>
+                            <a href="{!! $_config['header']['link'] !!}" id="sample_editable_1_new" class="btn green">
+                               {!! $_config['header']['title'] !!} {!! $_config['header']['icon'] !!}
+                            </a>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="btn-group pull-right">
-                            <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
-                            </button>
+                            <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
                             <ul class="dropdown-menu pull-right">
                                 @if(isset($_config['tables']['btn-tools']) && !empty($_config['tables']['btn-tools']))
                                     @foreach($_config['tables']['btn-tools'] AS $k => $v)
@@ -45,9 +44,7 @@
                         @endif
                     </tr>
                 </thead>
-                <tbody>
-                    
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>

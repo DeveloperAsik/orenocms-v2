@@ -1,29 +1,27 @@
 <?php
 
-namespace App\Models\Entity\app;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
  */
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use App\Models\Object\app\Tbl_d_app_assets_master_method_p;
+namespace App\Models\Entity\app;
+
+use App\Models\Object\app\Tbl_d_app_assets_master_form_method_p;
 
 /**
- * Description of Tbl_d_app_assets_master_method_p
+ * Description of Tbl_d_app_assets_master_form_method_p_en
  *
  * @author 64146
  */
-class Tbl_d_app_assets_master_method_p_en extends Tbl_d_app_assets_master_method_p {
+class Tbl_d_app_assets_master_form_method_p_en extends Tbl_d_app_assets_master_form_method_p {
 
     //put your code here
-    protected $Tbl_d_app_assets_master_method_p;
+    protected $Tbl_d_app_assets_master_form_method_p;
 
     public function __construct() {
         parent::__construct();
-        $this->Tbl_d_app_assets_master_method_p = new Tbl_d_app_assets_master_method_p();
+        $this->Tbl_d_app_assets_master_form_method_p = new Tbl_d_app_assets_master_form_method_p();
     }
 
     public function __get_all(Request $request, $keyword = null) {
@@ -38,17 +36,16 @@ class Tbl_d_app_assets_master_method_p_en extends Tbl_d_app_assets_master_method
                     ['a.is_active', '=', 1]
                 ],
                 'orWhere' => [
+                    ['a.__alias', 'like', '%' . $keyword],
                     ['a.__name', 'like', '%' . $keyword],
-                    ['a.__param', 'like', '%' . $keyword],
-                    ['a.__rank', 'like', '%' . $keyword]
                 ]
             ];
         }
         $paramCheckName = [
-            'table_name' => 'tbl_d_app_assets_master_method_p',
-            'select' => ['a.id', 'a.__name', 'a.__param', 'a.__rank', '__description', 'a.is_active'],
+            'table_name' => 'tbl_d_app_assets_master_controller_p',
+            'select' => ['a.id', 'a.alias', 'a.__name', '__description', 'a.is_active'],
             'conditions' => $conditions
         ];
-        return $this->Tbl_d_app_assets_master_method_p->__find($request, 'all', $paramCheckName, 'mysql_app');
+        return $this->Tbl_d_app_assets_master_controller_p->__find($request, 'all', $paramCheckName, 'mysql_app');
     }
 }
