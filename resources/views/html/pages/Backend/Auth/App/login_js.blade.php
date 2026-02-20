@@ -112,8 +112,8 @@
                         e: Base64.encode($('input[name="' + b + '"]').val())
                     };
                     var response = __fn_ajax_send(JSON.stringify(formdata), options);
-//                    console.log(response.responseJSON);
-//                    return false;
+                    //console.log(response.responseJSON);
+                    //return false;
                     if (response.responseJSON.status.code == 200) {
                         $('input[name="' + a + '"]').removeClass('is-invalid');
                         $('input[name="' + a + '"').css({'color': '#666', 'border': '1px solid #ced4da', 'font-size': '12px'});

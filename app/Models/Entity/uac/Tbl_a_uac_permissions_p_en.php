@@ -9,6 +9,7 @@ namespace App\Models\Entity\uac;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Libraries\Oreno\General;
 use App\Models\Object\uac\Tbl_a_uac_permissions_p;
 
 /**
@@ -19,30 +20,27 @@ use App\Models\Object\uac\Tbl_a_uac_permissions_p;
 class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
 
     //put your code here
+    protected $General;
     protected $Tbl_a_uac_permissions_p;
 
     public function __construct() {
         parent::__construct();
+        $this->General = new General();
         $this->Tbl_a_uac_permissions_p = new Tbl_a_uac_permissions_p();
     }
 
     public function __get_permission(Request $request, $keyword) {
-        $__get_segment_by_url = $this->__get_segment_by_url($keyword);
+        $__get_segment_by_url = $this->__get_where_by_url($keyword);
         $conditions = [
             'where' => [
                 ['a.is_active', '=', 1]
             ]
         ];
         if (isset($keyword) && !empty($keyword)) {
-            $conditions = [
-                'where' => [
-                    ['a.is_active', '=', 1],
-                    ['a.__path','like',$__get_segment_by_url.'%']
-                ]
-            ];
+            $conditions = array_merge($conditions, $__get_segment_by_url);
         }
         $paramCheckName = [
-             'table_name' => 'tbl_a_uac_permissions_p',
+            'table_name' => 'tbl_a_uac_permissions_p',
             'select' => ['a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 'a.__segment1', 'a.__segment2', 'a.__segment3', 'a.__segment4', 'a.__segment5', 'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS permission_id', 'b.__is_allowed'],
             'join' => [
                 'leftJoin' => [
@@ -53,7 +51,8 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
         ];
         return $this->Tbl_a_uac_permissions_p->__find($request, 'first', $paramCheckName);
     }
- public function __get_all_permission_group_by_segment(Request $request, $keyword) {
+
+    public function __get_all_permission_group_by_segment(Request $request, $keyword) {
         $segment1 = request()->segment(1);
         if ($segment1 == null) {
             $segment1 = 'extraweb';
@@ -166,6 +165,7 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
             return $responseFinal;
         }
     }
+
     public function __get_permission_by_segment(Request $request, $keyword) {
         $segment1 = request()->segment(1);
         $segment2 = request()->segment(2);
@@ -336,7 +336,7 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
             return $responseFinal;
         }
     }
-    
+
     public function __get_segment_by_url($url) {
         $arrData = [];
         if ($url) {
@@ -355,5 +355,34 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
             $arrData = implode('/', $newArr);
         }
         return $arrData;
+    }
+
+    public function __get_where_by_url($url = null) {
+        $ArrUrl = $this->__get_segment_by_url($url);
+        $cond = [];
+        $arrCond = [];
+        if ($ArrUrl) {
+            $explodeUrl = explode('/', $ArrUrl);
+            $maxSegment = count($explodeUrl);
+            $minSegment = $maxSegment - 2;
+            $no = 1;
+            foreach ($explodeUrl AS $key => $value) {
+                if ($maxSegment > 2) {
+                    $getRangeNumber = $this->General->getRangeNumber($minSegment, ($maxSegment - 1));
+                    foreach ($getRangeNumber AS $k => $v) {
+                        if ($key == ($v - 1)) {
+                            $arrCond[] = ['a.__segment' . $v, 'like', '%' . $explodeUrl[$key] . '%'];
+                        }
+                    }
+                } else {
+                    $arrCond[] = ['a.__segment' . $no, 'like', '%' . $explodeUrl[$key] . '%'];
+                }
+                $no++;
+            }
+            $cond = [
+                'where' => $arrCond
+            ];
+        }
+        return $cond;
     }
 }

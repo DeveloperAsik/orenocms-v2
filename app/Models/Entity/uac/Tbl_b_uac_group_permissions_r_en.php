@@ -9,6 +9,7 @@ namespace App\Models\Entity\uac;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Libraries\Oreno\General;
 use App\Models\Object\uac\Tbl_b_uac_group_permissions_r;
 
 /**
@@ -19,15 +20,17 @@ use App\Models\Object\uac\Tbl_b_uac_group_permissions_r;
 class Tbl_b_uac_group_permissions_r_en extends Tbl_b_uac_group_permissions_r {
 
     //put your code here   
+    protected $General;
     protected $Tbl_b_uac_group_permissions_r;
 
     public function __construct() {
         parent::__construct();
+        $this->General = new General();
         $this->Tbl_b_uac_group_permissions_r = new Tbl_b_uac_group_permissions_r();
     }
 
     public function __get_permission_group(Request $request, $keyword) {
-        $__get_segment_by_url =$this->__get_segment_by_url($keyword);
+        $__get_segment_by_url = $this->General->getSegmentByUrl($keyword);
         $paramCheckName = [
             'table_name' => 'tbl_a_uac_permissions_p',
             'select' => ['a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS permission_id', 'b.__is_allowed'],
@@ -38,7 +41,7 @@ class Tbl_b_uac_group_permissions_r_en extends Tbl_b_uac_group_permissions_r {
             ],
             'conditions' => [
                 'where' => [
-                    ['a.__path', 'like', $__get_segment_by_url .'%']
+                    ['a.__path', 'like', $__get_segment_by_url . '%']
                 ]
             ]
         ];
@@ -180,7 +183,7 @@ class Tbl_b_uac_group_permissions_r_en extends Tbl_b_uac_group_permissions_r {
     }
 
     public function __get_all_permission(Request $request, $keyword) {
-        $__get_segment_by_url = $this->__get_segment_by_url($keyword);
+        $__get_segment_by_url = $this->General->getSegmentByUrl($keyword);
         $conditions = [
             'where' => [
                 ['a.is_active', '=', 1]
@@ -207,25 +210,5 @@ class Tbl_b_uac_group_permissions_r_en extends Tbl_b_uac_group_permissions_r {
             'conditions' => $conditions
         ];
         return $this->Tbl_b_uac_group_permissions_r->__find($request, 'all', $paramCheckName);
-    }
-
-    public function __get_segment_by_url($url) {
-        $arrData = [];
-        if ($url) {
-            $url2 = explode('/', $url);
-            $newArr = [];
-            $unsetID = null;
-            foreach ($url2 AS $key => $value) {
-                if ($value) {
-                    $newArr[] = $value;
-                    if (Str::contains($value, '-')) {
-                        $unsetID = $key;
-                    }
-                }
-            }
-            unset($newArr[$unsetID]);
-            $arrData = implode('/', $newArr);
-        }
-        return $arrData;
     }
 }

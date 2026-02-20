@@ -123,7 +123,7 @@ class Authentification {
         session()->save();
     }
 
-    public function clear_session() {
+    public function clear_session($request) {
         $sessionAssignArr = [
             '_session_is_logged_in' => 0,
             '_session_is_autologged_out' => 0,

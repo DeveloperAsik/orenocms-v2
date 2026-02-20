@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Backend\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 //load libraries
+use App\Libraries\Oreno\Authentification;
 use App\Libraries\Oreno\Encrypter;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Sanitize;
@@ -32,6 +33,7 @@ use App\Models\Entity\uac\Tbl_a_uac_modules_p_en;
 class AppController extends Controller {
 
     //put your code here
+    protected $Authentification;
     protected $Encrypter;
     protected $Sanitize;
     protected $Converter;
@@ -47,6 +49,7 @@ class AppController extends Controller {
 
     public function __construct(Request $request) {
         parent::__construct($request);
+        $this->Authentification = new Authentification();
         $this->Encrypter = new Encrypter();
         $this->Converter = new Converter();
         $this->Sanitize = new Sanitize();
@@ -94,6 +97,18 @@ class AppController extends Controller {
         ];
         $this->load_ajax_var($ajaxVar);
         return view('html.layouts.metronic.login', compact('title_for_layout', '_modal_data', '_page_styles', '_page_elements'));
+    }
+
+    public function logout(Request $request) {
+        $data = $request->session()->all();
+        if (isset($data) && !empty($data)) {
+            $_user_id = $this->Converter->base64_basic($data['_auth']['_user_id'], 'decode', ['rep' => 3]);
+            $this->Tbl_a_uac_user_token_c_en->__update_clear_user_token($request, ['id' => (int) $_user_id]);
+            $this->Authentification->clear_session($request);
+            return redirect('/extraweb/login');
+        } else {
+            return redirect('/extraweb/dashboard');
+        }
     }
 
     public function dashboard(Request $request) {
@@ -212,7 +227,7 @@ class AppController extends Controller {
             $sessiondata = $request->session()->all();
             //tbl_a_uac_user_token_c
             $tokenExist = $this->Tbl_a_uac_user_token_c_en->__get_user($request, $params);
-            if (isset($tokenExist['data']) && !empty($tokenExist['data'])) {
+            if (isset($tokenExist['data']) && !empty($tokenExist['data'] && $tokenExist['data']->__token != '' && $tokenExist['data']->__is_expiry != 0)) {
                 //if token exist
                 $decryptToken = $this->Encrypter->shuffle('decrypt', $tokenExist['data']->__token);
                 $decryptTokenArr = explode('&', $decryptToken);

@@ -39,6 +39,79 @@
                         {"data": "action", width: "15%", className: "dt-center", targets: '_all'}
                     ]
                 });
+
+                $('#' + table_id).on('click', 'input[type="checkbox"][name="is_basic"]', function () {
+                    __fn_loading_img('img-loading', 'start');
+                    var checked = this.checked;
+                    var id = $(this).attr('data-id');
+                    var formdata = {a: 'is_basic', b: (checked == true) ? 1 : 0};
+                    var options = {
+                        url: _base_extraweb_uri + '/master/uac/permissions/update/' + id,
+                        type: 'POST',
+                        dataType: 'json',
+                        file: false,
+                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        async: false,
+                        timeout: ''
+                    };
+                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var msg = 'error';
+                    if (response.responseJSON.status.code == 200) {
+                        msg = 'success';
+                    }
+                    setTimeout(function () {
+                        __fn_loading_img('img-loading', 'stop');
+                        __fn_alert_message(response.responseJSON.status.message, msg, {type: 'toastr', timeOut: 2000});
+                    }, 1500);
+                });
+                $('#' + table_id).on('click', 'input[type="checkbox"][name="is_public"]', function () {
+                    __fn_loading_img('img-loading', 'start');
+                    var checked = this.checked;
+                    var id = $(this).attr('data-id');
+                    var formdata = {a: 'is_public', b: (checked == true) ? 1 : 0};
+                    var options = {
+                        url: _base_extraweb_uri + '/master/uac/permissions/update/' + id,
+                        type: 'POST',
+                        dataType: 'json',
+                        file: false,
+                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        async: false,
+                        timeout: ''
+                    };
+                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var msg = 'error';
+                    if (response.responseJSON.status.code == 200) {
+                        msg = 'success';
+                    }
+                    setTimeout(function () {
+                        __fn_loading_img('img-loading', 'stop');
+                        __fn_alert_message(response.responseJSON.status.message, msg, {type: 'toastr', timeOut: 2000});
+                    }, 1500);
+                });
+                $('#' + table_id).on('click', 'input[type="checkbox"][name="is_active"]', function () {
+                    __fn_loading_img('img-loading', 'start');
+                    var checked = this.checked;
+                    var id = $(this).attr('data-id');
+                    var formdata = {a: 'is_active', b: (checked == true) ? 1 : 0};
+                    var options = {
+                        url: _base_extraweb_uri + '/master/uac/permissions/update/' + id,
+                        type: 'POST',
+                        dataType: 'json',
+                        file: false,
+                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        async: false,
+                        timeout: ''
+                    };
+                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var msg = 'error';
+                    if (response.responseJSON.status.code == 200) {
+                        msg = 'success';
+                    }
+                    setTimeout(function () {
+                        __fn_loading_img('img-loading', 'stop');
+                        __fn_alert_message(response.responseJSON.status.message, msg, {type: 'toastr', timeOut: 2000});
+                    }, 1500);
+                });
             }
         }
     }();

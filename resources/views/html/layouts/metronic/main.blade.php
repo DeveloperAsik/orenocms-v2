@@ -11,11 +11,13 @@
     <!-- END HEAD -->
     <!-- BEGIN BODY -->
     <body class="page-header-fixed page-quick-sidebar-over-content page-sidebar-fixed page-sidebar-closed-hide-logo">
+        <div id="img-loading" style="position: fixed; top:40%; left:45%; width:120px; z-index:9999"></div>
         <!-- BEGIN HEADER -->
         <div class="page-header -i navbar navbar-fixed-top">
             <!-- BEGIN HEADER INNER -->
             <div class="page-header-inner">
                 <!-- BEGIN LOGO -->
+                
                 @include('html.layouts.metronic.includes.main.include_page_logo')
                 <!-- END LOGO -->
                 <!-- BEGIN RESPONSIVE MENU TOGGLER -->

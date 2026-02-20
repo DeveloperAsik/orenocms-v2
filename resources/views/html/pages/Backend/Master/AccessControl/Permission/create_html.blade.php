@@ -5,9 +5,8 @@
                 {!! $_config['pages']['icon'] !!}{{$_config['pages']['title']}}
             </div>
             <div class="tools">
-                <a href="javascript:;" class="collapse"></a>
-                <a href="#{{$_config['modals']['el-id']}}" data-toggle="modal" class="config"></a>
-                <a href="javascript:;" class="reload"></a>
+                <a href="javascrht:;" class="collapse"></a>
+                <a href="javascrht:;" class="reload"></a>
             </div>
         </div>
         <div class="portlet-body">
@@ -17,66 +16,65 @@
                         <div class="col-md-6">
                             <div class="form-body">
                                 <div class="form-group form-md-line-input">
-                                    <input type="text" name="__name" class="form-control" id="form_control_1" placeholder="Enter Permission Title">
-                                    <label for="form_control_1">Name</label>
+                                    <input type="text" name="a" class="form-control" id="a" placeholder="Enter Permision Title">
+                                    <label for="a">Name</label>
                                     <span class="help-block">Some help goes here...</span>
                                 </div>
                                 <div class="form-group form-md-line-input">
-                                    <input type="text" name="__path" class="form-control" id="form_control_1" placeholder="Enter Permission Path : extraweb/...">
-                                    <label for="form_control_1">Path</label>
-                                    <span class="help-block">Some help goes here...</span>
+                                    <input type="text" name="b" class="form-control" id="b" placeholder="Enter Permision Path">
+                                    <label for="b">Path</label>
+                                    <span class="help-block">e.g. : extraweb/[segment2]/[segment3]/[segment4]/...</span>
                                 </div>
                                 <div class="form-group form-md-line-input has-success">
-                                    <input type="text" name="__controller" class="form-control" id="form_control_1" placeholder="Enter Controller Name">
-                                    <label for="form_control_1">Controller</label>
+                                    <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
+                                    <label for="c">Controller</label>
                                 </div>
-
                                 <div class="form-group form-md-line-input has-info">
-                                    <select class="form-control" name="__action" id="form_control_1">
+                                    <select class="form-control" name="d" id="d">
                                         <option value="0">-- select one --</option>
                                         @if(isset($StrHtmlActions) && !empty($StrHtmlActions))
                                         {!! $StrHtmlActions !!}
                                         @endif
                                     </select>
-                                    <label for="form_control_1">Action Controller</label>
+                                    <label for="d">Action Controller</label>
                                 </div>
                                 <div class="form-group form-md-line-input has-warning">
-                                    <input type="text" name="__method" class="form-control" id="__method" placeholder="Enter Form Submit Method Name (Put, Post, Get, Options etc)">
-                                    <label for="form_control_1">Form Method</label>
+                                    <input type="text" name="e" class="form-control" id="e" placeholder="Enter Form Submit Method Name (Put, Post, Get, Options etc)">
+                                    <label for="e">Form Method</label>
                                 </div>
                                 <div class="form-group form-md-line-input">
-                                    <textarea class="form-control" name="__description" rows="3" placeholder="Enter Description"></textarea>
-                                    <label for="form_control_1">Description</label>
+                                    <textarea class="form-control" name="f" rows="3" placeholder="Enter Descrhtion"></textarea>
+                                    <label for="form_control_1">Descrhtion</label>
                                 </div>
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
-                                            <input type="checkbox" name="is_basic" id="is_basic" class="md-check">
-                                            <label for="is_basic">
+                                            <input type="checkbox" name="g" id="g" class="md-check">
+                                            <label for="g">
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
-                                                Basic Permission </label>
+                                                Basic Permision </label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
-                                            <input type="checkbox" name="is_public" id="is_public" class="md-check">
-                                            <label for="is_public">
+                                            <input type="checkbox" name="h" id="h" class="md-check">
+                                            <label for="h">
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
-                                                Public Permission </label>
+                                                Public Permision </label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
-                                            <input type="checkbox" name="is_active" id="is_active" class="md-check">
-                                            <label for="is_active">
+                                            <input type="checkbox" name="i" id="i" class="md-check">
+                                            <label for="i">
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>

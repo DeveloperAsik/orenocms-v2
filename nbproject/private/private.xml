@@ -6,6 +6,7 @@
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/routes/web.php</file>
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Backend/Auth/AppController.php</file>
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/config/app.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Models/Entity/uac/Tbl_a_uac_user_token_c_en.php</file>
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Controller.php</file>
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Backend/Master/AccessControl/PermissionController.php</file>
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/pages/Backend/Master/AccessControl/Permission/view_html.blade.php</file>
@@ -14,7 +15,6 @@
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_html.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/pages/Backend/Master/AccessControl/Permission/view_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Models/Entity/app/Tbl_d_app_assets_master_form_method_p_en.php</file>
         </group>
     </open-files>
 </project-private>
