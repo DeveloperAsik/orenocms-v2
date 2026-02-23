@@ -8,7 +8,7 @@ namespace App\Models\Entity\uac;
  */
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Libraries\Oreno\General;
 use App\Models\Object\uac\Tbl_b_uac_user_permissions_r;
 
 /**
@@ -22,11 +22,12 @@ class Tbl_b_uac_user_permissions_r_en extends Tbl_b_uac_user_permissions_r {
 
     public function __construct() {
         parent::__construct();
+        $this->General = new General();
         $this->Tbl_b_uac_user_permissions_r = new Tbl_b_uac_user_permissions_r();
     }
 
     public function __get_permission_user(Request $request, $keyword) {
-        $__get_segment_by_url = $this->__get_segment_by_url($keyword);
+        $__get_segment_by_url = $this->General->getSegmentByUrl($keyword);
         $conditions = [
             'where' => [
                 ['a.is_active', '=', 1]
@@ -103,23 +104,4 @@ class Tbl_b_uac_user_permissions_r_en extends Tbl_b_uac_user_permissions_r {
         return $this->Tbl_b_uac_user_permissions_r->__find($request, 'all', $paramCheckName);
     }
 
-    public function __get_segment_by_url($url) {
-        $arrData = [];
-        if ($url) {
-            $url2 = explode('/', $url);
-            $newArr = [];
-            $unsetID = null;
-            foreach ($url2 AS $key => $value) {
-                if ($value) {
-                    $newArr[] = $value;
-                    if (Str::contains($value, '-')) {
-                        $unsetID = $key;
-                    }
-                }
-            }
-            unset($newArr[$unsetID]);
-            $arrData = implode('/', $newArr);
-        }
-        return $arrData;
-    }
 }

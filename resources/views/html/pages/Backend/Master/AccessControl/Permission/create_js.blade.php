@@ -16,9 +16,11 @@
                         timeout: ''
                     };
                     var response = __fn_ajax_send(JSON.stringify({'value': val}), options);
-                    coonsole.log(response);
+                    console.log(response);
                 });
-
+                $('#d').multiSelect({
+                    selectableOptgroup: true
+                });
                 $('#submitForm').on('click', 'input[type="checkbox"][name="is_active"]', function () {
                     var formdata = {
                         a: $('input[name="a"]').val(),

@@ -184,10 +184,11 @@ class PermissionController extends Controller {
             echo json_encode(array());
         }
     }
-    
-    public function __get_list_path_segment($request){
-         $data = $request->json()->all();
-         dd($data);
+
+    public function __get_list_path_segment($request) {
+        $data = $request->json()->all();
+        $get_segment_by_url = $this->General->getSegmentByUrl($data["value"]);
+        dd($get_segment_by_url);
     }
 
     public function create(Request $request) {
@@ -233,13 +234,14 @@ class PermissionController extends Controller {
             }
         }
         $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
         ]);
         $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
         return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions'));
     }

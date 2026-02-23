@@ -337,28 +337,9 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
         }
     }
 
-    public function __get_segment_by_url($url) {
-        $arrData = [];
-        if ($url) {
-            $url2 = explode('/', $url);
-            $newArr = [];
-            $unsetID = null;
-            foreach ($url2 AS $key => $value) {
-                if ($value) {
-                    $newArr[] = $value;
-                    if (Str::contains($value, '_')) {
-                        $unsetID = $key;
-                    }
-                }
-            }
-            unset($newArr[$unsetID]);
-            $arrData = implode('/', $newArr);
-        }
-        return $arrData;
-    }
 
     public function __get_where_by_url($url = null) {
-        $ArrUrl = $this->__get_segment_by_url($url);
+        $ArrUrl = $this->General->getSegmentByUrl($url);
         $cond = [];
         $arrCond = [];
         if ($ArrUrl) {

@@ -30,14 +30,14 @@
                                     <label for="c">Controller</label>
                                 </div>
                                 <div class="form-group form-md-line-input has-info">
-                                    <select class="form-control" name="d" id="d">
-                                        <option value="0">-- select one --</option>
+                                    <select multiple="multiple" class="form-control" name="d[]" id="d">
                                         @if(isset($StrHtmlActions) && !empty($StrHtmlActions))
                                         {!! $StrHtmlActions !!}
                                         @endif
                                     </select>
                                     <label for="d">Action Controller</label>
                                 </div>
+                                
                                 <div class="form-group form-md-line-input has-warning">
                                     <input type="text" name="e" class="form-control" id="e" placeholder="Enter Form Submit Method Name (Put, Post, Get, Options etc)">
                                     <label for="e">Form Method</label>
