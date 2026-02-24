@@ -188,7 +188,10 @@ class PermissionController extends Controller {
     public function __get_list_path_segment($request) {
         $data = $request->json()->all();
         $get_segment_by_url = $this->General->getSegmentByUrl($data["value"]);
-        dd($get_segment_by_url);
+        $segmented = explode('/', $get_segment_by_url);
+        if (isset($segmented) && !empty($segmented)) {
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching and reformat data', 'valid' => true, 'data'=> $segmented]);
+        }
     }
 
     public function create(Request $request) {

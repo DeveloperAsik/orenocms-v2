@@ -16,6 +16,12 @@
                         timeout: ''
                     };
                     var response = __fn_ajax_send(JSON.stringify({'value': val}), options);
+                    if (response && response.responseJSON && response.responseJSON.data) {
+                        for (var i = 1; i <= response.responseJSON.data.length; i++) {
+                            var j = i - 1;
+                            $('input[name="__segment' + i + '"]').val(response.responseJSON.data[j])
+                        }
+                    }
                     console.log(response);
                 });
                 $('#d').multiSelect({
@@ -26,7 +32,7 @@
                         a: $('input[name="a"]').val(),
                         b: $('input[name="b"]').val(),
                         c: $('input[name="c"]').val(),
-                        d: $('input[name="d"]').val(),
+                        d: $('input[name="d[]"]').val(),
                         e: $('input[name="e"]').val(),
                         f: $('textarea[name="f"]').val(),
                         g: ($('input[type="checkbox"][name="g"]:checked').val()) ? 1 : 0,
