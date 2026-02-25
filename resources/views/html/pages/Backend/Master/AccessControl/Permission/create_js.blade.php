@@ -38,10 +38,9 @@
                         c: $('input[name="c"]').val(),
                         d: $('input[name="d[]"]').val(),
                         e: $('input[name="e"]').val(),
-                        f: $('textarea[name="f"]').val(),
+                        f: ($('input[type="checkbox"][name="f"]:checked').val()) ? 1 : 0,
                         g: ($('input[type="checkbox"][name="g"]:checked').val()) ? 1 : 0,
-                        h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,
-                        i: ($('input[type="checkbox"][name="i"]:checked').val()) ? 1 : 0
+                        h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0
                     };
                     var options = {
                         url: _base_extraweb_uri + '/master/uac/permissions/insert/',

@@ -37,20 +37,15 @@
                                     </select>
                                     <label for="d">Action Controller</label>
                                 </div>
-                                
-                                <div class="form-group form-md-line-input has-warning">
-                                    <input type="text" name="e" class="form-control" id="e" placeholder="Enter Form Submit Method Name (Put, Post, Get, Options etc)">
-                                    <label for="e">Form Method</label>
-                                </div>
                                 <div class="form-group form-md-line-input">
-                                    <textarea class="form-control" name="f" rows="3" placeholder="Enter Descrhtion"></textarea>
-                                    <label for="form_control_1">Descrhtion</label>
+                                    <textarea class="form-control" name="e" rows="3" placeholder="Enter Descrhtion"></textarea>
+                                    <label for="e">Description</label>
                                 </div>
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
-                                            <input type="checkbox" name="g" id="g" class="md-check">
-                                            <label for="g">
+                                            <input type="checkbox" name="f" id="f" class="md-check">
+                                            <label for="f">
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
@@ -61,8 +56,8 @@
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
-                                            <input type="checkbox" name="h" id="h" class="md-check">
-                                            <label for="h">
+                                            <input type="checkbox" name="g" id="g" class="md-check">
+                                            <label for="g">
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
@@ -73,8 +68,8 @@
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
-                                            <input type="checkbox" name="i" id="i" class="md-check">
-                                            <label for="i">
+                                            <input type="checkbox" name="h" id="h" class="md-check">
+                                            <label for="h">
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
