@@ -31,12 +31,12 @@
                 $('#d').multiSelect({
                     selectableOptgroup: true
                 });
-                $('#submitForm').on('click', 'input[type="checkbox"][name="is_active"]', function () {
+                $('#submitForm').on('click', function () {
                     var formdata = {
                         a: $('input[name="a"]').val(),
                         b: $('input[name="b"]').val(),
                         c: $('input[name="c"]').val(),
-                        d: $('input[name="d[]"]').val(),
+                        d: $('select[name="d[]"]').val(),
                         e: $('input[name="e"]').val(),
                         f: ($('input[type="checkbox"][name="f"]:checked').val()) ? 1 : 0,
                         g: ($('input[type="checkbox"][name="g"]:checked').val()) ? 1 : 0,

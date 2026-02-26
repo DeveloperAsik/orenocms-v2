@@ -109,7 +109,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-actions noborder">
-                                <button type="button" class="btn blue">Submit</button>
+                                <button type="button" class="btn blue" id="submitForm">Submit</button>
                                 <button type="button" class="btn default">Cancel</button>
                             </div>
                         </div>
