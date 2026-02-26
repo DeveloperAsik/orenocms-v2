@@ -6,7 +6,6 @@
             </div>
             <div class="tools">
                 <a href="javascript:;" class="collapse"></a>
-                <a href="#{{$_config['modals']['el-id']}}" data-toggle="modal" class="config"></a>
                 <a href="javascript:;" class="reload"></a>
             </div>
         </div>

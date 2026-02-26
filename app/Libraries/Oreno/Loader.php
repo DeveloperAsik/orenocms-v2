@@ -100,13 +100,6 @@ class Loader {
         $_session_is_autologged_out = (int) config('app.auto_logout');
         View::share('_session_is_autologged_out', $_session_is_autologged_out);
 
-        $data = $request->session()->all();
-        $_session_is_logged_in = 0;
-        if (isset($data['_session_is_logged_in']) && !empty($data['_session_is_logged_in']) && $data['_session_is_logged_in'] == true) {
-            $_session_is_logged_in = $data['_session_is_logged_in'];
-            $this->__is_logged_in = (int) $_session_is_logged_in;
-        }
-        View::share('_session_is_logged_in', $_session_is_logged_in);
         $default__breadcrumbs = $this->__default_breadcrumbs($request);
         View::share('_breadcrumbs', $default__breadcrumbs);
 
@@ -114,6 +107,8 @@ class Loader {
         View::share('_notifications', $top_menu['notif']);
         View::share('_messages', $top_menu['messages']);
     }
+
+    
 
     public function __replace_namespace($namespace) {
         $path_without_namespace = str_replace("App", '', $namespace);
