@@ -74,12 +74,12 @@
                     }
                 });
                 $('input[name="' + a + '"]').on('change', function () {
-                    __fn_loading_img('img-loading', 'start');
+                    //__fn_loading_img('img-loading', 'start');
                     var keys = this.value;
                     var type = 'validate-userid';
                     var stringSanitize = __fn_validate_input(keys, type);
                     setTimeout(function () {
-                        __fn_loading_img('img-loading', 'stop');
+                        //__fn_loading_img('img-loading', 'stop');
                         $('input[name="' + a + '"]').val(stringSanitize);
                     }, 2000);
                 });
@@ -112,8 +112,8 @@
                         e: Base64.encode($('input[name="' + b + '"]').val())
                     };
                     var response = __fn_ajax_send(JSON.stringify(formdata), options);
-//                    console.log(response.responseJSON);
-//                    return false;
+                    //console.log(response.responseJSON);
+                    //return false;
                     if (response.responseJSON.status.code == 200) {
                         $('input[name="' + a + '"]').removeClass('is-invalid');
                         $('input[name="' + a + '"').css({'color': '#666', 'border': '1px solid #ced4da', 'font-size': '12px'});
@@ -125,6 +125,7 @@
                         }, 2000);
                     } else {
                         __fn_alert_message('Failed login, username or password is not matched or not founded!', 'error', {type: 'toastr', timeOut: 2000});
+                        __fn_loading_img('img-loading', 'stop');
                         $('input[name="' + a + '"]').addClass('is-invalid');
                         $('input[name="' + a + '"]').css({'color': 'red', 'border': '2px solid red', 'font-size': '10px'});
                         $('input[name="' + b + '"]').addClass('is-invalid');
