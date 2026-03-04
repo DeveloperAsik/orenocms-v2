@@ -8,7 +8,7 @@
                     var val = $(this).val();
                     var options = {
                         url: _base_extraweb_uri + '/master/uac/permissions/get_list?a=1',
-                        type: 'POST',
+                        methodType: 'POST',
                         dataType: 'json',
                         file: false,
                         header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -44,18 +44,20 @@
                     };
                     var options = {
                         url: _base_extraweb_uri + '/master/uac/permissions/insert/',
-                        type: 'POST',
+                        methodType: 'POST',
                         dataType: 'json',
                         file: false,
                         header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                         async: false,
                         timeout: ''
                     };
+                    console.log(options);
                     var response = __fn_ajax_send(JSON.stringify(formdata), options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';
                     }
+                    return false;
                     setTimeout(function () {
                         __fn_loading_img('img-loading', 'stop');
                         __fn_alert_message(response.responseJSON.status.message, msg, {type: 'toastr', timeOut: 2000});

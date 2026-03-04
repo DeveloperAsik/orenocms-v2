@@ -207,7 +207,7 @@
     var __fn_ajax_send = function(d, o){
         //var options = {
         //  uri : '',
-        //  type : '',
+        //  methodType : '',
         //  dataType: 'json',
         //  file : '',
         //  header : '',
@@ -216,7 +216,7 @@
         //};
         //__fn_ajax_send = {arrdata, arrOptions};
         var url = o.url;
-        var type = o.type;
+        var methodType = o.methodType;
         var file = o.file;
         var header = o.header;
         var dataType = o.dataType;
@@ -224,7 +224,7 @@
         var timeout = o.timeout;
         var param_ajax = {
             url: url, 
-            type: type, 
+            type: methodType, 
             dataType: dataType, 
             data: d, 
             headers: (header) ? header : '', 
@@ -236,7 +236,7 @@
             param_ajax = {
                 url: url,
                 cache: false,
-                type: type,
+                type: methodType,
                 data: d,
                 headers: (header) ? header : '',
                 async: async,
@@ -264,7 +264,7 @@
     var __fn_hex_to_rgba = function(hex){ var c; if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){ c= hex.substring(1).split(''); if(c.length== 3){ c= [c[0], c[0], c[1], c[1], c[2], c[2]]; } c= '0x'+c.join(''); return 'rgb('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+')'; } throw new Error('Bad Hex'); };
     
     //custom request between dbs
-    var __fn_reload_total_chat = function(){ if (typeof __session_is_logged_in !== 'undefined') { var uri = _base_extraweb_uri + '/messaging/inbox/get_list?a=2'; var response = __fn_ajax_send({}, {url : _base_extraweb_uri + '/messaging/inbox/get_list?a=2', type : 'POST', dataType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000}); if(response.responseJSON){ $('span#total_chat').html(response.responseJSON.total_chat); } } return false; };
+    var __fn_reload_total_chat = function(){ if (typeof __session_is_logged_in !== 'undefined') { var uri = _base_extraweb_uri + '/messaging/inbox/get_list?a=2'; var response = __fn_ajax_send({}, {url : _base_extraweb_uri + '/messaging/inbox/get_list?a=2', methodType : 'POST', dataType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000}); if(response.responseJSON){ $('span#total_chat').html(response.responseJSON.total_chat); } } return false; };
     var __fn_fetch_notif = function(){ var i = 0; setInterval(function(){ i++; if(i%10 == 0){ var full_url = document.URL; var segment = full_url.replace(_base_extraweb_uri ,''); switch(segment){ case "/messaging/inbox": __fn_reload_datatables('#inbox'); break;  default: __fn_reload_total_chat();  break; } } },1000); };
     
     
@@ -277,7 +277,7 @@
         if (divIDVar !== 0){
             var arrOptions = {
                 url : _base_extraweb_uri + '/ajax/post/get_information_board',
-                type : 'POST',
+                methodType : 'POST',
                 dataType: 'json',
                 file : '',
                 header :  {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -305,7 +305,7 @@
     var __fn_init_info_line = function(i){
         var arrOptions = {
                 url : _base_extraweb_uri + '/ajax/post/get_information_line',
-                type : 'POST',
+                methodType : 'POST',
                 dataType: 'json',
                 file : '',
                 header :  {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -341,7 +341,7 @@
                 $('.close').on('click', function () {
                     var t = $(this).attr('data-dismiss');
                     if (t == 'alert') {
-                        __fn_ajax_send({type: t, close: true}, {url : _base_url + '/remove-session-flash', type : 'POST', dataType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000});
+                        __fn_ajax_send({methodType: t, close: true}, {url : _base_url + '/remove-session-flash', type : 'POST', dataType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000});
                     }
                 });
             }

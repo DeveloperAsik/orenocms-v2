@@ -250,7 +250,8 @@ class PermissionController extends Controller {
     }
 
     public function insert(Request $request) {
-        $data = $request->json()->all();
+        //$data = $request->json()->all();
+        $data = $request->all();
         if (isset($data) && !empty($data)) {
             dd($data);
             $code = $this->General->getRandomChar(20);

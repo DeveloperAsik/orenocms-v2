@@ -3,7 +3,7 @@
         var formdata = {t: types, k: keyword};
         var options = {
             url: _base_extraweb_uri + '/authentification/init',
-            type: 'POST',
+            methodType: 'POST',
             dataType: 'json',
             file: false,
             header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -98,7 +98,7 @@
                     __fn_loading_img('img-loading', 'start');
                     var options = {
                         url: _base_extraweb_uri + '/authentification/init',
-                        type: 'POST',
+                        methodType: 'POST',
                         dataType: 'json',
                         file: false,
                         header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
