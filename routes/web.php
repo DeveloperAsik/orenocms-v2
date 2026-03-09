@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Backend\Auth\AppController;
 use App\Http\Controllers\Globals\AjaxController;
+
 use App\Http\Controllers\Backend\Master\AccessControl\UserController;
 use App\Http\Controllers\Backend\Master\AccessControl\GroupController;
 use App\Http\Controllers\Backend\Master\AccessControl\PermissionController;
@@ -17,6 +18,10 @@ use App\Http\Controllers\Backend\Master\Locations\ProvincesController;
 use App\Http\Controllers\Backend\Master\Locations\CitiesController;
 use App\Http\Controllers\Backend\Master\Locations\DistrictsController;
 use App\Http\Controllers\Backend\Master\Locations\AreasController;
+use App\Http\Controllers\Backend\Prefferences\Permissions\UserController AS PermissionUserController;
+use App\Http\Controllers\Backend\Prefferences\Permissions\GroupController AS PermissionGroupController;
+use App\Http\Controllers\Backend\Prefferences\Permissions\MenuController AS PermissionMenuController;
+use App\Http\Controllers\Backend\Messaging\DefaultController AS MessagingDefaultController;
 
 Route::get('/', function () {
     return redirect('/extraweb/login');
@@ -162,7 +167,7 @@ Route::prefix('extraweb')->group(function () {
                 Route::post('/remove/{id}', [DistrictsController::class, 'remove'])->name('extraweb.master.locations.districts.remove');
             });
             Route::prefix('/areas')->group(function () {
-                 Route::get('/view', [AreasController::class, 'view'])->name('extraweb.master.locations.areas.view');
+                Route::get('/view', [AreasController::class, 'view'])->name('extraweb.master.locations.areas.view');
                 Route::post('/get_list', [AreasController::class, 'get_list'])->name('extraweb.master.locations.areas.get_list');
                 Route::get('/edit/{id}', [AreasController::class, 'edit'])->name('extraweb.master.locations.areas.edit');
                 Route::post('/update/{id}', [AreasController::class, 'update'])->name('extraweb.master.locations.areas.update');
@@ -173,51 +178,48 @@ Route::prefix('extraweb')->group(function () {
             });
         });
         Route::prefix('/prefferences')->group(function () {
-            
-        });
-    });
-});
-Route::group(['prefix' => 'extraweb'], function ($e) {
-    
-    Route::group(['prefix' => 'prefferences'], function ($e) {
-        Route::group(['prefix' => 'permissions'], function ($e) {
-            Route::group(['prefix' => 'user'], function ($e) {
-                Route::get('view', 'App\Http\Controllers\Backend\Prefferences\Permissions\UserController@view')->name('extraweb.prefferences.permissions.user.view');
-                Route::post('get_list', 'App\Http\Controllers\Backend\Prefferences\Permissions\UserController@get_list')->name('extraweb.prefferences.permissions.user.get_list');
-                Route::get('edit/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\UserController@edit')->name('extraweb.prefferences.permissionsuser.edit');
-                Route::post('update/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\UserController@update')->name('extraweb.prefferences.permissions.user.update');
-                Route::get('create', 'App\Http\Controllers\Backend\Prefferences\Permissions\UserController@create')->name('extraweb.prefferences.permissions.user.create');
-                Route::post('insert', 'App\Http\Controllers\Backend\Prefferences\Permissions\UserController@insert')->name('extraweb.prefferences.permissions.user.insert');
-                Route::post('delete/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\UserController@delete')->name('extraweb.prefferences.permissions.user.delete');
-                Route::post('remove/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\UserController@remove')->name('extraweb.prefferences.permissions.user.remove');
+            Route::prefix('/permissions')->group(function () {
+                Route::prefix('/user')->group(function () {
+                    Route::get('/view', [PermissionUserController::class, 'view'])->name('extraweb.master.prefferences.permissions.user.view');
+                    Route::post('/get_list', [PermissionUserController::class, 'get_list'])->name('extraweb.master.prefferences.permissions.user.get_list');
+                    Route::get('/edit/{id}', [PermissionUserController::class, 'edit'])->name('extraweb.master.prefferences.permissions.user.edit');
+                    Route::post('/update/{id}', [PermissionUserController::class, 'update'])->name('extraweb.master.prefferences.permissions.user.update');
+                    Route::get('/create', [PermissionUserController::class, 'create'])->name('extraweb.master.prefferences.permissions.user.create');
+                    Route::post('/insert', [PermissionUserController::class, 'insert'])->name('extraweb.master.prefferences.permissions.user.insert');
+                    Route::post('/delete/{id}', [PermissionUserController::class, 'delete'])->name('extraweb.master.prefferences.permissions.user.delete');
+                    Route::post('/remove/{id}', [PermissionUserController::class, 'remove'])->name('extraweb.master.prefferences.permissions.user.remove');
+                });
+                Route::prefix('/group')->group(function () {
+                    Route::get('/view', [PermissionGroupController::class, 'view'])->name('extraweb.master.locations.areas.view');
+                    Route::post('/get_list', [PermissionGroupController::class, 'get_list'])->name('extraweb.master.locations.areas.get_list');
+                    Route::get('/edit/{id}', [PermissionGroupController::class, 'edit'])->name('extraweb.master.locations.areas.edit');
+                    Route::post('/update/{id}', [PermissionGroupController::class, 'update'])->name('extraweb.master.locations.areas.update');
+                    Route::get('/create', [PermissionGroupController::class, 'create'])->name('extraweb.master.locations.areas.create');
+                    Route::post('/insert', [PermissionGroupController::class, 'insert'])->name('extraweb.master.locations.areas.insert');
+                    Route::post('/delete/{id}', [PermissionGroupController::class, 'delete'])->name('extraweb.master.locations.areas.delete');
+                    Route::post('/remove/{id}', [PermissionGroupController::class, 'remove'])->name('extraweb.master.locations.areas.remove');
+                });
+                Route::prefix('/menu')->group(function () {
+                    Route::get('/view', [PermissionMenuController::class, 'view'])->name('extraweb.master.locations.areas.view');
+                    Route::post('/get_list', [PermissionMenuController::class, 'get_list'])->name('extraweb.master.locations.areas.get_list');
+                    Route::get('/edit/{id}', [PermissionMenuController::class, 'edit'])->name('extraweb.master.locations.areas.edit');
+                    Route::post('/update/{id}', [PermissionMenuController::class, 'update'])->name('extraweb.master.locations.areas.update');
+                    Route::get('/create', [PermissionMenuController::class, 'create'])->name('extraweb.master.locations.areas.create');
+                    Route::post('/insert', [PermissionMenuController::class, 'insert'])->name('extraweb.master.locations.areas.insert');
+                    Route::post('/delete/{id}', [PermissionMenuController::class, 'delete'])->name('extraweb.master.locations.areas.delete');
+                    Route::post('/remove/{id}', [PermissionMenuController::class, 'remove'])->name('extraweb.master.locations.areas.remove');
+                });
             });
-            Route::group(['prefix' => 'group'], function ($e) {
-                Route::get('view', 'App\Http\Controllers\Backend\Prefferences\Permissions\GroupController@view')->name('extraweb.prefferences.permissions.group.view');
-                Route::post('get_list', 'App\Http\Controllers\Backend\Prefferences\Permissions\GroupController@get_list')->name('extraweb.prefferences.permissions.group.get_list');
-                Route::get('edit/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\GroupController@edit')->name('extraweb.prefferences.permissions.group.edit');
-                Route::post('update/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\GroupController@update')->name('extraweb.prefferences.permissions.group.update');
-                Route::get('create', 'App\Http\Controllers\Backend\Prefferences\Permissions\GroupController@create')->name('extraweb.prefferences.permissions.group.create');
-                Route::post('insert', 'App\Http\Controllers\Backend\Prefferences\Permissions\GroupController@insert')->name('extraweb.prefferences.permissions.group.insert');
-                Route::post('delete/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\GroupController@delete')->name('extraweb.prefferences.permissions.group.delete');
-                Route::post('remove/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\GroupController@remove')->name('extraweb.prefferences.permissions.group.remove');
+            Route::prefix('/messaging')->group(function () {
+                Route::get('/view', [MessagingDefaultController::class, 'view'])->name('extraweb.master.locations.areas.view');
+                Route::post('/get_list', [MessagingDefaultController::class, 'get_list'])->name('extraweb.master.locations.areas.get_list');
+                Route::get('/edit/{id}', [MessagingDefaultController::class, 'edit'])->name('extraweb.master.locations.areas.edit');
+                Route::post('/update/{id}', [MessagingDefaultController::class, 'update'])->name('extraweb.master.locations.areas.update');
+                Route::get('/create', [MessagingDefaultController::class, 'create'])->name('extraweb.master.locations.areas.create');
+                Route::post('/insert', [MessagingDefaultController::class, 'insert'])->name('extraweb.master.locations.areas.insert');
+                Route::post('/delete/{id}', [MessagingDefaultController::class, 'delete'])->name('extraweb.master.locations.areas.delete');
+                Route::post('/remove/{id}', [MessagingDefaultController::class, 'remove'])->name('extraweb.master.locations.areas.remove');
             });
-            Route::group(['prefix' => 'menu'], function ($e) {
-                Route::get('view', 'App\Http\Controllers\Backend\Prefferences\Permissions\MenuController@view')->name('extraweb.prefferences.permissions.menu.view');
-                Route::post('get_list', 'App\Http\Controllers\Backend\Prefferences\Permissions\MenuController@get_list')->name('extraweb.prefferences.permissions.menu.get_list');
-                Route::get('edit/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\MenuController@edit')->name('extraweb.prefferences.permissions.menu.edit');
-                Route::post('update/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\MenuController@update')->name('extraweb.prefferences.permissions.menu.update');
-                Route::get('create', 'App\Http\Controllers\Backend\Prefferences\Permissions\MenuController@create')->name('extraweb.prefferences.permissions.menu.create');
-                Route::post('insert', 'App\Http\Controllers\Backend\Prefferences\Permissions\MenuController@insert')->name('extraweb.prefferences.permissions.menu.insert');
-                Route::post('delete/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\MenuController@delete')->name('extraweb.prefferences.permissions.menu.delete');
-                Route::post('remove/{id}', 'App\Http\Controllers\Backend\Prefferences\Permissions\MenuController@remove')->name('extraweb.prefferences.permissions.menu.remove');
-            });
-        });
-        Route::group(['prefix' => 'messaging'], function ($e) {
-            Route::get('inbox', 'App\Http\Controllers\Backend\Messaging\DefaultController@inbox')->name('extraweb.messaging.inbox');
-            Route::get('outbox', 'App\Http\Controllers\Backend\Messaging\DefaultController@outbox')->name('extraweb.messaging.outbox');
-            Route::get('spam', 'App\Http\Controllers\Backend\Messaging\DefaultController@spam')->name('extraweb.messaging.spam');
-            Route::get('draft', 'App\Http\Controllers\Backend\Messaging\DefaultController@draft')->name('extraweb.messaging.draft');
-            Route::get('trash', 'App\Http\Controllers\Backend\Messaging\DefaultController@trash')->name('extraweb.messaging.trash');
         });
     });
 });
