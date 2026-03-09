@@ -16,7 +16,7 @@ use App\Http\Controllers\Backend\Master\Locations\CountryController;
 use App\Http\Controllers\Backend\Master\Locations\ProvincesController;
 use App\Http\Controllers\Backend\Master\Locations\CitiesController;
 use App\Http\Controllers\Backend\Master\Locations\DistrictsController;
-App\Http\Controllers\Backend\Master\Locations\AreasController;
+use App\Http\Controllers\Backend\Master\Locations\AreasController;
 
 Route::get('/', function () {
     return redirect('/extraweb/login');
