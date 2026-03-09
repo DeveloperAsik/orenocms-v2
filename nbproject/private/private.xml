@@ -10,8 +10,6 @@
             <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/PermissionController.php</file>
             <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_js.blade.php</file>
             <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_html.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/helpers/global_js.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/app/Traits/HCL.php</file>
         </group>
     </open-files>
 </project-private>

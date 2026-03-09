@@ -19,7 +19,7 @@
                     if (response && response.responseJSON && response.responseJSON.data) {
                         for (var i = 1; i <= response.responseJSON.data.length; i++) {
                             if (i > response.responseJSON.data.length) {
-                                $('input[name="__segment' + i + '"]').css({'border':'1px solid red'});
+                                $('input[name="__segment' + i + '"]').css({'border': '1px solid red'});
                             } else {
                                 var j = i - 1;
                                 $('input[name="__segment' + i + '"]').val(response.responseJSON.data[j])
@@ -40,23 +40,30 @@
                         e: $('input[name="e"]').val(),
                         f: ($('input[type="checkbox"][name="f"]:checked').val()) ? 1 : 0,
                         g: ($('input[type="checkbox"][name="g"]:checked').val()) ? 1 : 0,
-                        h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0
+                        h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,
+                        i: $('input[name="__segment1"]').val(),
+                        j: $('input[name="__segment2"]').val(),                        
+                        k: $('input[name="__segment3"]').val(),
+                        l: $('input[name="__segment4"]').val(),
+                        m: $('input[name="__segment5"]').val(),
+                        n: $('input[name="__segment6"]').val(),
+
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/insert/',
+                        url: _base_extraweb_uri + '/master/uac/permissions/insert',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
                         header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                         async: false,
-                        timeout: ''
+                        timeout: 2000
                     };
-                    console.log(options);
                     var response = __fn_ajax_send(JSON.stringify(formdata), options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';
                     }
+                    console.log(response);
                     return false;
                     setTimeout(function () {
                         __fn_loading_img('img-loading', 'stop');

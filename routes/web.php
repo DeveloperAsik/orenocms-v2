@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+
 use App\Http\Controllers\Backend\Auth\AppController;
 use App\Http\Controllers\Globals\AjaxController;
 

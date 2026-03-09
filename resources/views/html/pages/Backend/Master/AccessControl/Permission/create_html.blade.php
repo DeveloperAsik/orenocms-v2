@@ -38,7 +38,7 @@
                                     <label for="d">Action Controller</label>
                                 </div>
                                 <div class="form-group form-md-line-input">
-                                    <textarea class="form-control" name="e" rows="3" placeholder="Enter Descrhtion"></textarea>
+                                    <textarea class="form-control" name="e" rows="3" placeholder="Enter Description"></textarea>
                                     <label for="e">Description</label>
                                 </div>
                                 <div class="form-group form-md-checkboxes">
