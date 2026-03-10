@@ -37,7 +37,7 @@
                         b: $('input[name="b"]').val(),
                         c: $('input[name="c"]').val(),
                         d: $('select[name="d[]"]').val(),
-                        e: $('input[name="e"]').val(),
+                        e: $('textarea[name="e"]').val(),
                         f: ($('input[type="checkbox"][name="f"]:checked').val()) ? 1 : 0,
                         g: ($('input[type="checkbox"][name="g"]:checked').val()) ? 1 : 0,
                         h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,

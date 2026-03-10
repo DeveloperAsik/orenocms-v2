@@ -51,4 +51,17 @@ class Tbl_d_app_assets_master_method_p_en extends Tbl_d_app_assets_master_method
         ];
         return $this->Tbl_d_app_assets_master_method_p->__find($request, 'all', $paramCheckName, 'mysql_app');
     }
+
+    public function __find_by_id(Request $request, $id = null) {
+        $paramCheckName = [
+            'table_name' => 'tbl_d_app_assets_master_method_p',
+            'select' => ['a.id', 'a.__name', 'a.__param', 'a.__method', 'a.__rank', '__description', 'a.is_active'],
+            'conditions' => [
+                'where' => [
+                    ['a.id', '=', $id]
+                ]
+            ]
+        ];
+        return $this->Tbl_d_app_assets_master_method_p->__find($request, 'all', $paramCheckName, 'mysql_app');
+    }
 }

@@ -47,6 +47,11 @@ class Tbl_d_app_assets_master_method_p extends ObjectTable {
                 'type' => 'varchar',
                 'length' => 255
             ],
+             [
+                'name' => '__method',
+                'type' => 'varchar',
+                'length' => 5
+            ],            
             [
                 'name' => '__rank',
                 'type' => 'tinyint',

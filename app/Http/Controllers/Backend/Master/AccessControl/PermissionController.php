@@ -190,7 +190,7 @@ class PermissionController extends Controller {
         $get_segment_by_url = $this->General->getSegmentByUrl($data["value"]);
         $segmented = explode('/', $get_segment_by_url);
         if (isset($segmented) && !empty($segmented)) {
-            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching and reformat data', 'valid' => true, 'data'=> $segmented]);
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching and reformat data', 'valid' => true, 'data' => $segmented]);
         }
     }
 
@@ -251,30 +251,41 @@ class PermissionController extends Controller {
 
     public function insert(Request $request) {
         $data = $request->json()->all();
-        //$data = $request->all();
         if (isset($data) && !empty($data)) {
             $code = $this->General->getRandomChar(20);
-            $alias = $this->General->getSlug($data['a']);
+            $insertData = [];
             dd($data);
+            if (isset($data['d']) && !empty($data['d'])) {
+                foreach ($data['d'] AS $key => $value) {
+                    $action = $this->Tbl_d_app_assets_master_method_p_en->__find_by_id($request, $value);
+                    $insertData[] = [
+                        'code' => $code,
+                        '__alias' => $data['a'],
+                        '__name' => $data['b'],
+                        '__path' => $data['b'],
+                        '__controller' => $data['c'],
+                        '__action' => $action['data']->__name,
+                        '__method' => $action['data']->__method,
+                        '__segment1' => $data,
+                        '__segment2' => $data,
+                        '__segment3' => $data,
+                        '__segment4' => $data,
+                        '__segment5' => $data,
+                        '__segment6' => $data,
+                        '__description' => isset($data['f']) ? $data['f'] : '-',
+                        '__is_basic' => isset($data['ib ']) ? 1 : 0,
+                        '__is_public' => isset($data['ip']) ? 1 : 0,
+                        'is_active' => isset($data['ia']) ? 1 : 0,
+                        'created_by' => $this->__user_id,
+                        'created_date' => $this->Date->now(),
+                        'updated_by' => $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                }
+            }
             $insert = [
                 'table_name' => 'tbl_a_uac_permissions_p',
-                'data' => [
-                    'code' => $code,
-                    '__alias' => $alias,
-                    '__name' => $data['a'],
-                    '__path' => $data['b'],
-                    '__controller' => $data['c'],
-                    '__action' => $data['d'],
-                    '__method' => $data['e'],
-                    '__description' => isset($data['f']) ? $data['f'] : '-',
-                    '__is_basic' => isset($data['ib ']) ? 1 : 0,
-                    '__is_public' => isset($data['ip']) ? 1 : 0,
-                    'is_active' => isset($data['ia']) ? 1 : 0,
-                    'created_by' => $this->__user_id,
-                    'created_date' => $this->Date->now(),
-                    'updated_by' => $this->__user_id,
-                    'updated_date' => $this->Date->now()
-                ]
+                'data' => $insertData
             ];
             $response = $this->Tbl_a_uac_permissions_p_en->__insert($request, $insert);
             if ($response) {
