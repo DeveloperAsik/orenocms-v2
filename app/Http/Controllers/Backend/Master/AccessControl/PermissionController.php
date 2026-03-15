@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Date;
+use App\Models\Entity\uac\Tbl_a_uac_users_p_en;
+use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_permissions_p_en;
 use App\Models\Entity\app\Tbl_d_app_assets_master_controller_p_en;
 use App\Models\Entity\app\Tbl_d_app_assets_master_method_p_en;
@@ -27,6 +29,8 @@ class PermissionController extends Controller {
     protected $General;
     protected $Converter;
     protected $Date;
+    protected $Tbl_a_uac_users_p_en;
+    protected $Tbl_a_uac_groups_p_en;
     protected $Tbl_a_uac_permissions_p_en;
     protected $Tbl_d_app_assets_master_controller_p_en;
     protected $Tbl_d_app_assets_master_method_p_en;
@@ -36,6 +40,8 @@ class PermissionController extends Controller {
         $this->General = new General();
         $this->Converter = new Converter();
         $this->Date = new Date();
+        $this->Tbl_a_uac_users_p_en = new Tbl_a_uac_users_p_en();
+        $this->Tbl_a_uac_groups_p_en = new Tbl_a_uac_groups_p_en();
         $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
         $this->Tbl_d_app_assets_master_controller_p_en = new Tbl_d_app_assets_master_controller_p_en();
         $this->Tbl_d_app_assets_master_method_p_en = new Tbl_d_app_assets_master_method_p_en();
@@ -51,7 +57,7 @@ class PermissionController extends Controller {
                 'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
             ],
             'header' => [
-                'title' => 'Add New',
+                'title' => 'Create',
                 'icon' => '<i class="fa fa-plus-square"></i>',
                 'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
             ],
@@ -164,9 +170,9 @@ class PermissionController extends Controller {
                     'public' => '<input type="checkbox"' . $is_public . ' name="is_public" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                     'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                     'action' => '<div class="btn-group">
-                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
-                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
-                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permission/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
+                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permissions/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
+                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permissions/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
+                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/master/uac/permissions/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
                       </div>',
                 ];
                 if ($i <= $data['meta']['total']) {
@@ -203,107 +209,10 @@ class PermissionController extends Controller {
                 'icon' => '<i class="fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
             ],
-            'form' => [
-                'el-id' => 'frm_create_permission',
-                'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
-                ],
-                'dt_tbl_th' => [
-                    '<th> ID </th>',
-                    '<th> Name </th>',
-                    '<th> Path </th>',
-                    '<th> Controller </th>',
-                    '<th> Action Cont </th>',
-                    '<th> Method </th>',
-                    '<th> Basic </th>',
-                    '<th> Public </th>',
-                    '<th> Status </th>',
-                    '<th> Action </th>'
-                ]
-            ]
-        ];
-        $controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
-        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
-        $StrHtmlActions = '';
-        if (isset($actions['data']) && !empty($actions['data'])) {
-            foreach ($actions['data'] AS $key => $val) {
-                $param = $val->__param;
-                if (isset($param) && !empty($param)) {
-                    $param = ' - ' . $param;
-                }
-                $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . $param . '</option>';
-            }
-        }
-        $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
-        ]);
-        $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
-        ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions'));
-    }
-
-    public function insert(Request $request) {
-        $data = $request->json()->all();
-        if (isset($data) && !empty($data)) {
-            $code = $this->General->getRandomChar(20);
-            $insertData = [];
-            dd($data);
-            if (isset($data['d']) && !empty($data['d'])) {
-                foreach ($data['d'] AS $key => $value) {
-                    $action = $this->Tbl_d_app_assets_master_method_p_en->__find_by_id($request, $value);
-                    $insertData[] = [
-                        'code' => $code,
-                        '__alias' => $data['a'],
-                        '__name' => $data['b'],
-                        '__path' => $data['b'],
-                        '__controller' => $data['c'],
-                        '__action' => $action['data']->__name,
-                        '__method' => $action['data']->__method,
-                        '__segment1' => $data,
-                        '__segment2' => $data,
-                        '__segment3' => $data,
-                        '__segment4' => $data,
-                        '__segment5' => $data,
-                        '__segment6' => $data,
-                        '__description' => isset($data['f']) ? $data['f'] : '-',
-                        '__is_basic' => isset($data['ib ']) ? 1 : 0,
-                        '__is_public' => isset($data['ip']) ? 1 : 0,
-                        'is_active' => isset($data['ia']) ? 1 : 0,
-                        'created_by' => $this->__user_id,
-                        'created_date' => $this->Date->now(),
-                        'updated_by' => $this->__user_id,
-                        'updated_date' => $this->Date->now()
-                    ];
-                }
-            }
-            $insert = [
-                'table_name' => 'tbl_a_uac_permissions_p',
-                'data' => $insertData
-            ];
-            $response = $this->Tbl_a_uac_permissions_p_en->__insert($request, $insert);
-            if ($response) {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
-            } else {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
-            }
-        }
-    }
-
-    public function edit(Request $request, $params = null) {
-        $title_for_layout = config('app.default_variables.title_for_layout');
-        $_config = [
-            'title_for_header' => '<b>Group</b> master data management page',
-            'pages' => [
-                'title' => 'Create Page Master Data Permissions',
+            'header' => [
+                'title' => 'View',
                 'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
+                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/view'
             ],
             'form' => [
                 'el-id' => 'frm_create_permission',
@@ -326,17 +235,183 @@ class PermissionController extends Controller {
                 ]
             ]
         ];
+        //$controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
+        $users = $this->Tbl_a_uac_users_p_en->__get_all($request);
+        $groups = $this->Tbl_a_uac_groups_p_en->__get_all($request);
+        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
+        $StrHtmlActions = '';
+        if (isset($actions['data']) && !empty($actions['data'])) {
+            foreach ($actions['data'] AS $key => $val) {
+                $param = $val->__param;
+                if (isset($param) && !empty($param)) {
+                    $param = ' - ' . $param;
+                }
+                $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . $param . '</option>';
+            }
+        }
+        $StrHtmlUsers = '';
+        if (isset($users['data']) && !empty($users['data'])) {
+            foreach ($users['data'] AS $key1 => $val1) {
+                $StrHtmlUsers .= '<option value="' . $val1->id . '" title="' . $val1->__email . '">' . $val1->__user_name . '</option>';
+            }
+        }
+        $StrHtmlGroups = '';
+        if (isset($groups['data']) && !empty($groups['data'])) {
+            foreach ($groups['data'] AS $key2 => $val2) {
+                $StrHtmlGroups .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
+            }
+        }
         $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
         ]);
         $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlGroups'));
+    }
 
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+    public function insert(Request $request) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $code = $this->General->getRandomChar(20);
+            $insertData = [];
+            if (isset($data['d']) && !empty($data['d'])) {
+                foreach ($data['d'] AS $key => $value) {
+                    $action = $this->Tbl_d_app_assets_master_method_p_en->__find_by_id($request, $value);
+                    $__segment1 = $__segment2 = $__segment3 = $__segment4 = $__segment5 = $__segment6 = $__segment7 = $__segment8 = '';
+                    $param = '';
+                    if (isset($action['data'][0]->__param) && !empty($action['data'][0]->__param)) {
+                        $param = '/' . $action['data'][0]->__param;
+                    }
+                    $classPath = strtolower(str_replace('Controller', '', $data['c']));
+                    $__path = $data['b'] . '/' . $classPath . '/' . $action['data'][0]->__name . $param;
+
+                    $get_segment_by_url = $this->General->getSegmentByUrl($__path);
+                    $segmented = explode('/', $get_segment_by_url);
+                    if ($segmented) {
+                        $n = 1;
+                        foreach ($segmented AS $k => $v) {
+                            ${'__segment' . $n} = $v;
+                            $n++;
+                        }
+                    }
+                    $insertData[] = [
+                        'code' => $code,
+                        '__alias' => $data['a'],
+                        '__name' => $__path,
+                        '__path' => $__path,
+                        '__controller' => $data['c'],
+                        '__action' => $action['data'][0]->__name,
+                        '__method' => $action['data'][0]->__method,
+                        '__segment1' => $__segment1,
+                        '__segment2' => $__segment2,
+                        '__segment3' => $__segment3,
+                        '__segment4' => $__segment4,
+                        '__segment5' => $__segment5,
+                        '__segment6' => $__segment6,
+                        '__segment7' => $__segment7,
+                        '__segment8' => $__segment8,
+                        '__description' => isset($data['f']) ? $data['f'] : '-',
+                        '__is_basic' => $data['f'],
+                        '__is_public' => $data['g'],
+                        'is_active' => $data['h'],
+                        'created_by' => (int) $this->__user_id,
+                        'created_date' => $this->Date->now(),
+                        'updated_by' => (int) $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                }
+            }
+            $insert = [
+                'table_name' => 'tbl_a_uac_permissions_p',
+                'data' => $insertData
+            ];
+            $response = $this->Tbl_a_uac_permissions_p_en->__insert($request, $insert);
+            if ($response) {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
+            } else {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
+            }
+        }
+    }
+
+    public function edit(Request $request, $params = null) {
+        $id = base64_decode($params);
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Group</b> master data management page',
+            'pages' => [
+                'title' => 'Edit Page Master Data Permissions',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/edit/' . $params
+            ],
+            'header' => [
+                'title' => 'View',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/view'
+            ],
+            'form' => [
+                'el-id' => 'frm_create_permission',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Name </th>',
+                    '<th> Path </th>',
+                    '<th> Controller </th>',
+                    '<th> Action Cont </th>',
+                    '<th> Method </th>',
+                    '<th> Basic </th>',
+                    '<th> Public </th>',
+                    '<th> Status </th>',
+                    '<th> Action </th>'
+                ]
+            ]
+        ];
+        //$controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
+        $users = $this->Tbl_a_uac_users_p_en->__get_all($request);
+        $groups = $this->Tbl_a_uac_groups_p_en->__get_all($request);
+        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
+        $StrHtmlActions = '';
+        if (isset($actions['data']) && !empty($actions['data'])) {
+            foreach ($actions['data'] AS $key => $val) {
+                $param = $val->__param;
+                if (isset($param) && !empty($param)) {
+                    $param = ' - ' . $param;
+                }
+                $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . $param . '</option>';
+            }
+        }
+        $StrHtmlUsers = '';
+        if (isset($users['data']) && !empty($users['data'])) {
+            foreach ($users['data'] AS $key1 => $val1) {
+                $StrHtmlUsers .= '<option value="' . $val1->id . '" title="' . $val1->__email . '">' . $val1->__user_name . '</option>';
+            }
+        }
+        $StrHtmlGroups = '';
+        if (isset($groups['data']) && !empty($groups['data'])) {
+            foreach ($groups['data'] AS $key2 => $val2) {
+                $StrHtmlGroups .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
+            }
+        }
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlGroups'));
     }
 
     public function update(Request $request, $params = null) {

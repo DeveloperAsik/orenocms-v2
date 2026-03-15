@@ -28,6 +28,30 @@ class Tbl_a_uac_users_p_en extends Tbl_a_uac_users_p {
         $this->Tbl_a_uac_users_p = new Tbl_a_uac_users_p();
     }
 
+    public function __get_all(Request $request, $keyword = null) {
+        $conditions = [
+            'where' => [
+                ['a.is_active', '=', 1]
+            ]
+        ];
+        if (isset($keyword) && !empty($keyword)) {
+            $conditions = [
+                'where' => [
+                    ['a.is_active', '=', 1]
+                ],
+                'orWhere' => [
+                    ['a.__name', 'like', '%' . $keyword],
+                ]
+            ];
+        }
+        $paramCheckName = [
+            'table_name' => 'tbl_a_uac_users_p',
+            'select' => ['a.id', 'a.__user_name', 'a.__first_name', 'a.__last_name', 'a.__email'],
+            'conditions' => $conditions
+        ];
+        return $this->Tbl_a_uac_users_p->__find($request, 'all', $paramCheckName);
+    }
+
     public function __get_user(Request $request, $keyword) {
         $conditions = [
             'where' => [
