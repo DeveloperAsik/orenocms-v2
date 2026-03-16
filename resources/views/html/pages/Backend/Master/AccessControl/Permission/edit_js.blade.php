@@ -1,9 +1,9 @@
 <script>
-    var CreateJS = function () {
+    var EditJS = function () {
         return {
             //main function to initiate the module
             init: function () {
-                __fn_alert_message('CreateJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
+                __fn_alert_message('EditJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
                 $('input[name="b"]').on('change', function () {
                     var val = $(this).val();
                     var options = {
@@ -82,7 +82,7 @@
 
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/insert',
+                        url: _base_extraweb_uri + '/master/uac/permissions/update',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
@@ -104,6 +104,6 @@
         }
     }();
     jQuery(document).ready(function () {
-        CreateJS.init();
+        EditJS.init();
     });
 </script>

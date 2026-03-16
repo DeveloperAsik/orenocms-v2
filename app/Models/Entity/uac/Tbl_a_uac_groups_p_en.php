@@ -28,6 +28,30 @@ class Tbl_a_uac_groups_p_en extends Tbl_a_uac_groups_p {
         $this->Tbl_a_uac_groups_p = new Tbl_a_uac_groups_p();
     }
 
+    public function __get_all(Request $request, $keyword = null) {
+        $conditions = [
+            'where' => [
+                ['a.is_active', '=', 1]
+            ]
+        ];
+        if (isset($keyword) && !empty($keyword)) {
+            $conditions = [
+                'where' => [
+                    ['a.is_active', '=', 1]
+                ],
+                'orWhere' => [
+                    ['a.__name', 'like', '%' . $keyword],
+                ]
+            ];
+        }
+        $paramCheckName = [
+            'table_name' => 'tbl_a_uac_groups_p',
+            'select' => ['a.id', 'a.__name', 'a.__rank', 'a.__level', 'a.__uac_group_parent_id', 'a.__is_key_group', 'a.__is_menu', 'a.__is_group_project', 'a.is_active'],
+            'conditions' => $conditions
+        ];
+        return $this->Tbl_a_uac_groups_p->__find($request, 'all', $paramCheckName);
+    }
+
     public function __get_group(Request $request, $keyword) {
         $conditions = [
             'where' => [
