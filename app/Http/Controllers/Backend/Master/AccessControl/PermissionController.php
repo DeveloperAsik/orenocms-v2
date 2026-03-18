@@ -443,17 +443,25 @@ class PermissionController extends Controller {
                 default:
                     $alias = strtolower(str_replace(' ', '-', $data['name']));
                     $update_data = [
-                        '__alias' => $alias,
-                        '__name' => $data['name'],
-                        '__path' => $data['path'],
-                        '__controller' => $data['controller'],
-                        '__action' => $data['action'],
-                        '__method' => $data['method'],
-                        '__description' => isset($data['description']) ? $data['description'] : '-',
-                        '__is_basic' => isset($data['is_basic ']) ? 1 : 0,
-                        '__is_public' => isset($data['is_public']) ? 1 : 0,
-                        'is_active' => isset($data['is_active']) ? 1 : 0,
-                        'updated_by' => $this->__user_id,
+                        '__alias' => $data['a'],
+                        '__name' => $__path,
+                        '__path' => $__path,
+                        '__controller' => $data['c'],
+                        '__action' => $action['data'][0]->__name,
+                        '__method' => $action['data'][0]->__method,
+                        '__segment1' => $__segment1,
+                        '__segment2' => $__segment2,
+                        '__segment3' => $__segment3,
+                        '__segment4' => $__segment4,
+                        '__segment5' => $__segment5,
+                        '__segment6' => $__segment6,
+                        '__segment7' => $__segment7,
+                        '__segment8' => $__segment8,
+                        '__description' => isset($data['f']) ? $data['f'] : '-',
+                        '__is_basic' => $data['f'],
+                        '__is_public' => $data['g'],
+                        'is_active' => $data['h'],
+                        'updated_by' => (int) $this->__user_id,
                         'updated_date' => $this->Date->now()
                     ];
                     break;
