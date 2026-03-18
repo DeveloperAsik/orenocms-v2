@@ -3,17 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Web-Labs/orenocms-v2/.env</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/routes/web.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Controller.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Auth/AppController.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/PermissionController.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_js.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_html.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/view_html.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/view_js.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/edit_js.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/edit_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/routes/web.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Backend/Auth/AppController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/config/app.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Controller.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Http/Controllers/Backend/Master/AccessControl/PermissionController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/.env</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Libraries/Oreno/Loader.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Models/Object/ObjectTable.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/sandbox.local/app/Models/Entity/app/Tbl_d_app_assets_master_method_p_en.php</file>
         </group>
     </open-files>
 </project-private>

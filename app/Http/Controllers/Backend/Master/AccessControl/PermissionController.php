@@ -209,11 +209,6 @@ class PermissionController extends Controller {
                 'icon' => '<i class="fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
             ],
-            'header' => [
-                'title' => 'View',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/view'
-            ],
             'form' => [
                 'el-id' => 'frm_create_permission',
                 'btn-tools' => [
@@ -235,9 +230,7 @@ class PermissionController extends Controller {
                 ]
             ]
         ];
-        //$controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
-        $users = $this->Tbl_a_uac_users_p_en->__get_all($request);
-        $groups = $this->Tbl_a_uac_groups_p_en->__get_all($request);
+        $controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
         $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
         $StrHtmlActions = '';
         if (isset($actions['data']) && !empty($actions['data'])) {
@@ -247,18 +240,6 @@ class PermissionController extends Controller {
                     $param = ' - ' . $param;
                 }
                 $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . $param . '</option>';
-            }
-        }
-        $StrHtmlUsers = '';
-        if (isset($users['data']) && !empty($users['data'])) {
-            foreach ($users['data'] AS $key1 => $val1) {
-                $StrHtmlUsers .= '<option value="' . $val1->id . '" title="' . $val1->__email . '">' . $val1->__user_name . '</option>';
-            }
-        }
-        $StrHtmlGroups = '';
-        if (isset($groups['data']) && !empty($groups['data'])) {
-            foreach ($groups['data'] AS $key2 => $val2) {
-                $StrHtmlGroups .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
             }
         }
         $this->load_css([
@@ -271,7 +252,7 @@ class PermissionController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlGroups'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions'));
     }
 
     public function insert(Request $request) {
