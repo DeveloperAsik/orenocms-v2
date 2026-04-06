@@ -9,12 +9,15 @@ namespace App\Http\Controllers\Backend\Master\AccessControl;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
 use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Date;
 use App\Models\Entity\uac\Tbl_a_uac_users_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_permissions_p_en;
+use App\Models\Entity\uac\Tbl_b_uac_user_permissions_r_en;
+use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
 use App\Models\Entity\app\Tbl_d_app_assets_master_controller_p_en;
 use App\Models\Entity\app\Tbl_d_app_assets_master_method_p_en;
 
@@ -32,6 +35,8 @@ class PermissionController extends Controller {
     protected $Tbl_a_uac_users_p_en;
     protected $Tbl_a_uac_groups_p_en;
     protected $Tbl_a_uac_permissions_p_en;
+    protected $Tbl_b_uac_user_permissions_r_en;
+    protected $Tbl_b_uac_group_permissions_r_en;
     protected $Tbl_d_app_assets_master_controller_p_en;
     protected $Tbl_d_app_assets_master_method_p_en;
 
@@ -43,6 +48,8 @@ class PermissionController extends Controller {
         $this->Tbl_a_uac_users_p_en = new Tbl_a_uac_users_p_en();
         $this->Tbl_a_uac_groups_p_en = new Tbl_a_uac_groups_p_en();
         $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
+        $this->Tbl_b_uac_user_permissions_r_en = new Tbl_b_uac_user_permissions_r_en();
+        $this->Tbl_b_uac_group_permissions_r_en = new Tbl_b_uac_group_permissions_r_en();
         $this->Tbl_d_app_assets_master_controller_p_en = new Tbl_d_app_assets_master_controller_p_en();
         $this->Tbl_d_app_assets_master_method_p_en = new Tbl_d_app_assets_master_method_p_en();
     }
@@ -50,7 +57,7 @@ class PermissionController extends Controller {
     public function view(Request $request) {
         $title_for_layout = config('app.default_variables.title_for_layout');
         $_config = [
-            'title_for_header' => '<b>Group</b> master data management page',
+            'title_for_header' => '<b>Permission</b> master data management page',
             'pages' => [
                 'title' => 'View Page Master Data Permissions',
                 'icon' => '<i class="fa fa-list"></i>',
@@ -117,10 +124,7 @@ class PermissionController extends Controller {
         }
         $offset = ($request->start) ? $request->start : 0;
         $search = $request->search['value'];
-        $conditions = ['where' => [
-                ['a.is_active', '=', 1]
-            ]
-        ];
+        $conditions = [];
         if (isset($search) && !empty($search)) {
             $conditions = [
                 'orWhere' => [
@@ -200,14 +204,35 @@ class PermissionController extends Controller {
         }
     }
 
+    public function __get_list_by_controller($request, $keywords = null) {
+        if (isset($keywords) && !empty($keywords) && $keywords !== null) {
+            $params = [
+                'table_name' => 'tbl_a_uac_permissions_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.__controller', '=', $keywords]
+                    ]
+                ],
+                'limit' => 100
+            ];
+            return $this->Tbl_a_uac_permissions_p_en->__find($request, 'all', $params);
+        }
+    }
+
     public function create(Request $request) {
         $title_for_layout = config('app.default_variables.title_for_layout');
         $_config = [
-            'title_for_header' => '<b>Group</b> master data management page',
+            'title_for_header' => '<b>Permission</b> master data management page',
             'pages' => [
                 'title' => 'Create Page Master Data Permissions',
                 'icon' => '<i class="fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/create'
+            ],
+            'header' => [
+                'title' => 'View',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/permissions/view'
             ],
             'form' => [
                 'el-id' => 'frm_create_permission',
@@ -242,6 +267,22 @@ class PermissionController extends Controller {
                 $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . $param . '</option>';
             }
         }
+        $users = $this->Tbl_a_uac_users_p_en->__get_all($request);
+        $groups = $this->Tbl_a_uac_groups_p_en->__get_all($request);
+        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
+
+        $StrHtmlUsers = '';
+        if (isset($users['data']) && !empty($users['data'])) {
+            foreach ($users['data'] AS $key1 => $val1) {
+                $StrHtmlUsers .= '<option value="' . $val1->id . '" title="' . $val1->__email . '">' . $val1->__user_name . '</option>';
+            }
+        }
+        $StrHtmlPermissions = '';
+        if (isset($groups['data']) && !empty($groups['data'])) {
+            foreach ($groups['data'] AS $key2 => $val2) {
+                $StrHtmlPermissions .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
+            }
+        }
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -252,7 +293,7 @@ class PermissionController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlPermissions'));
     }
 
     public function insert(Request $request) {
@@ -311,11 +352,57 @@ class PermissionController extends Controller {
                 'table_name' => 'tbl_a_uac_permissions_p',
                 'data' => $insertData
             ];
-            $response = $this->Tbl_a_uac_permissions_p_en->__insert($request, $insert);
+            $response = true; //$this->Tbl_a_uac_permissions_p_en->__insert($request, $insert);
             if ($response) {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
+                $permissions = $this->__get_list_by_controller($request, $data['c']);
+                $arrUserPermissions = [];
+                $arrPermissionPermissions = [];
+                foreach ($permissions['data'] AS $key1 => $permission) {
+                    //apply to user
+                    if (isset($data['r']) && !empty($data['r'])) {
+                        foreach ($data['r'] AS $key => $user) {
+                            $arrUserPermissions[] = [
+                                '__user_id' => (int) $user,
+                                '__permission_id' => $permission->id,
+                                '__is_denied' => 0,
+                                'is_active' => $data['h'],
+                                'created_by' => (int) $this->__user_id,
+                                'created_date' => $this->Date->now(),
+                                'updated_by' => (int) $this->__user_id,
+                                'updated_date' => $this->Date->now()
+                            ];
+                        }
+                    }
+                    //apply to group
+                    if (isset($data['t']) && !empty($data['t'])) {
+                        foreach ($data['t'] AS $key => $group) {
+                            $arrPermissionPermissions[] = [
+                                '__group_id' => (int) $group,
+                                '__permission_id' => $permission->id,
+                                '__module_id' => isset($data['u']) ? $data['s'] : 3,
+                                '__is_allowed' => 0,
+                                'is_active' => $data['h'],
+                                'created_by' => (int) $this->__user_id,
+                                'created_date' => $this->Date->now(),
+                                'updated_by' => (int) $this->__user_id,
+                                'updated_date' => $this->Date->now()
+                            ];
+                        }
+                    }
+                }
+                $insertUserPermissions = [
+                    'table_name' => 'tbl_b_uac_user_permissions_r',
+                    'data' => $arrUserPermissions
+                ];
+                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserPermissions);
+                $insertPermissionPermissions = [
+                    'table_name' => 'tbl_b_uac_group_permissions_r',
+                    'data' => $arrPermissionPermissions
+                ];
+                $this->Tbl_b_uac_group_permissions_r_en->__insert($request, $insertPermissionPermissions);
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
             } else {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
             }
         }
     }
@@ -324,7 +411,7 @@ class PermissionController extends Controller {
         $id = base64_decode($params);
         $title_for_layout = config('app.default_variables.title_for_layout');
         $_config = [
-            'title_for_header' => '<b>Group</b> master data management page',
+            'title_for_header' => '<b>Permission</b> master data management page',
             'pages' => [
                 'title' => 'Edit Page Master Data Permissions',
                 'icon' => '<i class="fa fa-list"></i>',
@@ -356,32 +443,18 @@ class PermissionController extends Controller {
                 ]
             ]
         ];
-        //$controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
-        $users = $this->Tbl_a_uac_users_p_en->__get_all($request);
-        $groups = $this->Tbl_a_uac_groups_p_en->__get_all($request);
-        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
-        $StrHtmlActions = '';
-        if (isset($actions['data']) && !empty($actions['data'])) {
-            foreach ($actions['data'] AS $key => $val) {
-                $param = $val->__param;
-                if (isset($param) && !empty($param)) {
-                    $param = ' - ' . $param;
-                }
-                $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . $param . '</option>';
-            }
-        }
-        $StrHtmlUsers = '';
-        if (isset($users['data']) && !empty($users['data'])) {
-            foreach ($users['data'] AS $key1 => $val1) {
-                $StrHtmlUsers .= '<option value="' . $val1->id . '" title="' . $val1->__email . '">' . $val1->__user_name . '</option>';
-            }
-        }
-        $StrHtmlGroups = '';
-        if (isset($groups['data']) && !empty($groups['data'])) {
-            foreach ($groups['data'] AS $key2 => $val2) {
-                $StrHtmlGroups .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
-            }
-        }
+        $params = [
+            'table_name' => 'tbl_a_uac_permissions_p',
+            'select' => ['a.*'],
+            'conditions' => [
+                'where' => [
+                    ['a.id', '=', $id]
+                ]
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $permission = $this->Tbl_a_uac_permissions_p_en->__find($request, 'first', $params);
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -392,7 +465,7 @@ class PermissionController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlGroups'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'permission'));
     }
 
     public function update(Request $request, $params = null) {
@@ -459,6 +532,58 @@ class PermissionController extends Controller {
                 return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
             } else {
                 return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
+            }
+        }
+    }
+
+    public function remove(Request $request, $params = null) {
+        if ($params != null) {
+            $data = (['a' => 'is_active']);
+            //$request->request->add($data);
+            $request->json()->replace([
+                'a' => 'is_active',
+                'b' => 0
+            ]);
+            $resp = $this->update($request, $params);
+            $response = json_decode($resp);
+            if ($response && $response->status->code == 200) {
+                return redirect()->back()->with('success', 'successfully update data');
+            } else {
+                return redirect()->back()->with('error', 'failed update data.');
+            }
+        }
+    }
+
+    public function delete(Request $request, $params = null) {
+        if ($params != null) {
+            $id = base64_decode($params);
+            $params = [
+                'table_name' => 'tbl_a_uac_permissions_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.id', '=', $id]
+                    ]
+                ]
+            ];
+            $existData = $this->Tbl_a_uac_permissions_p_en->__find($request, 'first', $params);
+            if ($existData && $existData['data']) {
+                $insertUserPermissionsBackup = [
+                    'table_name' => 'tbl_a_uac_permissions_p',
+                    'data' => (array) $existData['data']
+                ];
+                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserPermissionsBackup, 'mysql_bak');
+                $deleteParams = [
+                    'table_name' => 'tbl_a_uac_permissions_p',
+                    'conditions' => [
+                        'keyword' => 'id',
+                        'value' => $id
+                    ]
+                ];
+                $response = $this->Tbl_a_uac_permissions_p_en->__delete($request, $deleteParams, 'mysql');
+                return redirect()->back()->with('success', 'successfully delete data');
+            } else {
+                return redirect()->back()->with('error', 'failed delete data.');
             }
         }
     }

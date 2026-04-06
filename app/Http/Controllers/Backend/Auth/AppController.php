@@ -225,18 +225,15 @@ class AppController extends Controller {
     protected function __generate_token($request, $params = []) {
         if ($params && $params != '') {
             $sessiondata = $request->session()->all();
-            //tbl_a_uac_user_token_c
             $tokenExist = $this->Tbl_a_uac_user_token_c_en->__get_user($request, $params);
             if (isset($tokenExist['data']) && !empty($tokenExist['data'] && $tokenExist['data']->__token != '' && $tokenExist['data']->__is_expiry != 0)) {
                 //if token exist
                 $decryptToken = $this->Encrypter->shuffle('decrypt', $tokenExist['data']->__token);
                 $decryptTokenArr = explode('&', $decryptToken);
-
                 $userid = $this->Converter->base64($request, str_replace('userid->', '', $decryptTokenArr[0]), 'decode', ['rep' => 3]);
                 $groupid = $this->Converter->base64($request, str_replace('groupid->', '', $decryptTokenArr[1]), 'decode', ['rep' => 3]);
                 $createdate = str_replace('|', ' ', str_replace('createdate->', '', $decryptTokenArr[2]));
                 $expirydate = strtotime(str_replace('|', ' ', str_replace('expirydate->', '', $decryptTokenArr[3])));
-                //dd($expirydate .'<='. strtotime($this->Date->now('Y-m-d H:i:s')));
                 if ($expirydate <= strtotime($this->Date->now('Y-m-d H:i:s'))) {
                     $userid = $this->Converter->base64($request, $userid, 'encode', ['rep' => 3]);
                     $groupid = $this->Converter->base64($request, $groupid, 'encode', ['rep' => 3]);

@@ -30,16 +30,17 @@
                                 <div class="form-group form-md-line-input">
                                     <input type="text" name="a" class="form-control" id="a" placeholder="Enter Permision Title">
                                     <label for="a">Name</label>
-                                    <span class="help-block">Some help goes here...</span>
+                                    <span class="help-block">Free format, you could use same as path below</span>
                                 </div>
                                 <div class="form-group form-md-line-input">
                                     <input type="text" name="b" class="form-control" id="b" placeholder="Enter Permision Path">
                                     <label for="b">Path</label>
                                     <span class="help-block">e.g. : extraweb/[segment2]/[segment3]/[segment4]/...</span>
                                 </div>
-                                <div class="form-group form-md-line-input has-success">
+                                <div class="form-group form-md-line-input">
                                     <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
                                     <label for="c">Controller</label>
+                                    <span class="help-block">Use case sensitif and add suffix <b>'Controller'</b> at the end of controller name, e.g (UserController)</span>
                                 </div>
                                 <div class="form-group form-md-line-input has-info">
                                     <select multiple="multiple" class="form-control" name="d[]" id="d">

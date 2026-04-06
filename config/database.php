@@ -10,11 +10,24 @@ $database_uac = $Converter->base64_basic(env('CORE_DB_DATABASE'), 'decode', ['re
 $username_uac = $Converter->base64_basic(env('CORE_DB_USERNAME'), 'decode', ['rep' => 3]);
 $password_uac = $Converter->base64_basic(env('CORE_DB_PASSWORD'), 'decode', ['rep' => 3]);
 
+$host_bak_uac = $Converter->base64_basic(env('CORE_BAK_DB_HOST'), 'decode', ['rep' => 3]);
+$port_bak_uac = $Converter->base64_basic(env('CORE_BAK_DB_PORT'), 'decode', ['rep' => 3]);
+$database_bak_uac = $Converter->base64_basic(env('CORE_BAK_DB_DATABASE'), 'decode', ['rep' => 3]);
+$username_bak_uac = $Converter->base64_basic(env('CORE_BAK_DB_USERNAME'), 'decode', ['rep' => 3]);
+$password_bak_uac = $Converter->base64_basic(env('CORE_BAK_DB_PASSWORD'), 'decode', ['rep' => 3]);
+
 $host_app = $Converter->base64_basic(env('CORE_DB_HOST'), 'decode', ['rep' => 3]);
 $port_app = $Converter->base64_basic(env('APP_DB_PORT'), 'decode', ['rep' => 3]);
 $database_app = $Converter->base64_basic(env('APP_DB_DATABASE'), 'decode', ['rep' => 3]);
 $username_app = $Converter->base64_basic(env('APP_DB_USERNAME'), 'decode', ['rep' => 3]);
 $password_app = $Converter->base64_basic(env('APP_DB_PASSWORD'), 'decode', ['rep' => 3]);
+
+
+$host_bak_app = $Converter->base64_basic(env('CORE_BAK_DB_HOST'), 'decode', ['rep' => 3]);
+$port_bak_app = $Converter->base64_basic(env('APP_BAK_DB_PORT'), 'decode', ['rep' => 3]);
+$database_bak_app = $Converter->base64_basic(env('APP_BAK_DB_DATABASE'), 'decode', ['rep' => 3]);
+$username_bak_app = $Converter->base64_basic(env('APP_BAK_DB_USERNAME'), 'decode', ['rep' => 3]);
+$password_bak_app = $Converter->base64_basic(env('APP_BAK_DB_PASSWORD'), 'decode', ['rep' => 3]);
 
 return [
     /*
@@ -71,6 +84,25 @@ return [
                 (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+        'mysql_bak' => [ //uac
+            'driver' => 'mysql',
+            'url' => env('DB_URL'),
+            'host' => $host_bak_uac,
+            'port' => $port_bak_uac,
+            'database' => $database_bak_uac,
+            'username' => $username_bak_uac,
+            'password' => $password_bak_uac,
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
         'mysql_app' => [ //app
             'driver' => 'mysql',
             'url' => env('DB_URL'),
@@ -79,6 +111,25 @@ return [
             'database' => $database_app,
             'username' => $username_app,
             'password' => $password_app,
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+         'mysql_app_bak' => [ //app
+            'driver' => 'mysql',
+            'url' => env('DB_URL'),
+            'host' => $host_bak_app,
+            'port' => $port_bak_app,
+            'database' => $database_bak_app,
+            'username' => $username_bak_app,
+            'password' => $password_bak_app,
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),

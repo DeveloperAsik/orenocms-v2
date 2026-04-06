@@ -1,9 +1,9 @@
 <script>
-    var EditJS = function () {
+    var CreateJS = function () {
         return {
             //main function to initiate the module
             init: function () {
-                __fn_alert_message('EditJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
+                __fn_alert_message('CreateJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
                 $('input[name="b"]').on('change', function () {
                     var val = $(this).val();
                     var options = {
@@ -62,7 +62,7 @@
                         a: $('input[name="a"]').val(),
                         b: $('input[name="b"]').val(),
                         c: $('input[name="c"]').val(),
-                        d: $('input[name="d"]').val(),
+                        d: $('select[name="d[]"]').val(),
                         e: $('textarea[name="e"]').val(),
                         f: ($('input[type="checkbox"][name="f"]:checked').val()) ? 1 : 0,
                         g: ($('input[type="checkbox"][name="g"]:checked').val()) ? 1 : 0,
@@ -74,11 +74,15 @@
                         m: $('input[name="__segment5"]').val(),
                         n: $('input[name="__segment6"]').val(),
                         o: $('input[name="__segment7"]').val(),
-                        p: $('input[name="__segment8"]').val()
+                        p: $('input[name="__segment8"]').val(),
+                        q: ($('input[type="checkbox"][name="q"]:checked').val()) ? 1 : 0,
+                        r: $('select[name="r[]"]').val(),
+                        s: ($('input[type="checkbox"][name="s"]:checked').val()) ? 1 : 0,
+                        t: $('select[name="t[]"]').val(),
 
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/update',
+                        url: _base_extraweb_uri + '/master/uac/permissions/insert',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
@@ -100,6 +104,6 @@
         }
     }();
     jQuery(document).ready(function () {
-        EditJS.init();
+        CreateJS.init();
     });
 </script>
