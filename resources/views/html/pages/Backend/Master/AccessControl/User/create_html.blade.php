@@ -1,6 +1,10 @@
-
-<div class="col-md-10">
+<div class="col-md-10" style="padding-left:0px !important">
     <div class="col-md-12">
+        <div class="btn-group" style="margin: 0px 0px 5px 0px">
+            <a href="{!! $_config['header']['link'] !!}" id="sample_editable_1_new" class="btn green">
+                {!! $_config['header']['title'] !!} {!! $_config['header']['icon'] !!}
+            </a>
+        </div>
         <div class="portlet box blue">
             <div class="portlet-title">
                 <div class="caption">
@@ -16,11 +20,7 @@
                     <div class="table-toolbar">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="btn-group">
-                                    <a href="{!! $_config['header']['link'] !!}" id="sample_editable_1_new" class="btn green">
-                                        {!! $_config['header']['title'] !!} {!! $_config['header']['icon'] !!}
-                                    </a>
-                                </div>
+
                             </div>
                             <div class="col-md-6"></div>
                         </div>
@@ -35,33 +35,33 @@
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" name="b" class="form-control" id="b" placeholder="Enter Permision Path">
+                                        <input type="text" name="b" class="form-control" id="b" placeholder="Enter LDAP user account">
                                         <label for="b">User LDAP</label>
                                         <span class="help-block">e.g. : ...</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
+                                        <input type="text" name="c" class="form-control" id="c" placeholder="Enter first Name">
                                         <label for="c">First Name</label>
                                         <span class="help-block">User first name</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
-                                        <label for="c">Last Name</label>
+                                        <input type="text" name="d" class="form-control" id="d" placeholder="Enter last Name">
+                                        <label for="d">Last Name</label>
                                         <span class="help-block">User last name</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
-                                        <label for="c">Email</label>
+                                        <input type="text" name="e" class="form-control" id="e" placeholder="Enter email">
+                                        <label for="e">Email</label>
                                         <span class="help-block">User Email</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
-                                        <label for="c">Phone Number</label>
+                                        <input type="text" name="f" class="form-control" id="f" placeholder="Enter phone number">
+                                        <label for="f">Phone Number</label>
                                         <span class="help-block">User Phone Number</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <textarea class="form-control" name="e" rows="3" placeholder="Enter Description"></textarea>
-                                        <label for="e">Description</label>
+                                        <textarea class="form-control" name="g" rows="3" placeholder="Enter Description"></textarea>
+                                        <label for="g">Description</label>
                                     </div>
                                     <div class="form-group form-md-checkboxes">
                                         <div class="md-checkbox-inline">
@@ -81,22 +81,22 @@
                             <div class="col-md-6">
                                 <div class="form-body">
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
-                                        <label for="c">Last Education</label>
+                                        <input type="text" name="i" class="form-control" id="i" placeholder="Enter Controller Name">
+                                        <label for="i">Last Education</label>
                                         <span class="help-block">Last Education</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
-                                        <label for="c">Education Institution</label>
+                                        <input type="text" name="j" class="form-control" id="j" placeholder="Enter Controller Name">
+                                        <label for="j">Education Institution</label>
                                         <span class="help-block">Education Institution</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <textarea class="form-control" name="e" rows="3" placeholder="Enter Skills"></textarea>
-                                        <label for="e">Skills</label>
+                                        <textarea class="form-control" name="k" rows="3" placeholder="Enter Skills"></textarea>
+                                        <label for="k">Skills</label>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <textarea class="form-control" name="e" rows="3" placeholder="Enter Notes   "></textarea>
-                                        <label for="e">Notes</label>
+                                        <textarea class="form-control" name="l" rows="3" placeholder="Enter Notes   "></textarea>
+                                        <label for="m">Notes</label>
                                     </div>
                                 </div>
                             </div>
@@ -110,12 +110,7 @@
                                     <form action="../../assets/global/plugins/dropzone/upload.php" class="dropzone" id="my-dropzone"> </form>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-actions noborder">
-                                    <button type="button" class="btn blue" id="submitForm">Submit</button>
-                                    <button type="button" class="btn default">Cancel</button>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </form>
@@ -181,6 +176,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-actions noborder">
+            <button type="button" class="btn blue" id="submitForm">Submit</button>
+            <button type="button" class="btn default">Cancel</button>
         </div>
     </div>
 </div>

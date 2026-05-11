@@ -362,26 +362,6 @@ class UserController extends Controller {
                 'title' => 'View',
                 'icon' => '<i class="fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/master/uac/users/view'
-            ],
-            'form' => [
-                'el-id' => 'frm_create_permission',
-                'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
-                ],
-                'dt_tbl_th' => [
-                    '<th> ID </th>',
-                    '<th> Name </th>',
-                    '<th> Path </th>',
-                    '<th> Controller </th>',
-                    '<th> Action Cont </th>',
-                    '<th> Method </th>',
-                    '<th> Basic </th>',
-                    '<th> Public </th>',
-                    '<th> Status </th>',
-                    '<th> Action </th>'
-                ]
             ]
         ];
         $params = [
@@ -395,18 +375,18 @@ class UserController extends Controller {
             'limit' => 100,
             'offset' => 0
         ];
-        $permission = $this->Tbl_a_uac_users_p_en->__find($request, 'first', $params);
+        $user = $this->Tbl_a_uac_users_p_en->__find($request, 'first', $params);
         $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
         ]);
         $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'permission'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'user'));
     }
 
     public function update(Request $request, $params = null) {

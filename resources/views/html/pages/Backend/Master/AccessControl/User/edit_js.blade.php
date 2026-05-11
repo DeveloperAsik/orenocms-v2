@@ -4,59 +4,6 @@
             //main function to initiate the module
             init: function () {
                 __fn_alert_message('EditJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
-                $('input[name="b"]').on('change', function () {
-                    var val = $(this).val();
-                    var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/get_list?a=1',
-                        methodType: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: ''
-                    };
-                    var response = __fn_ajax_send(JSON.stringify({'value': val}), options);
-                    if (response && response.responseJSON && response.responseJSON.data) {
-                        for (var i = 1; i <= response.responseJSON.data.length; i++) {
-                            if (i > response.responseJSON.data.length) {
-                                $('input[name="__segment' + i + '"]').css({'border': '1px solid red'});
-                            } else {
-                                var j = i - 1;
-                                $('input[name="__segment' + i + '"]').val(response.responseJSON.data[j])
-                            }
-                        }
-                    }
-                    console.log(response);
-                });
-                $('#d').multiSelect({
-                    selectableOptgroup: true
-                });
-                $('#r').multiSelect({
-                    selectableOptgroup: true
-                });
-                $('#t').multiSelect({
-                    selectableOptgroup: true
-                });
-                $('#q').on('click', function () {
-                    __fn_loading_img('img-loading', 'start');
-                    var checked = this.checked;
-                    if (checked) {
-                        setTimeout(function () {
-                            console.log('checked q : ' + checked);
-                           $('#r').multiSelect('select_all');
-                            __fn_loading_img('img-loading', 'stop');
-                        }, 700);
-                    }
-                });
-                $('#s').on('click', function () {
-                    __fn_loading_img('img-loading', 'start');
-                    var checked = this.checked;
-                    setTimeout(function () {
-                        console.log('checked s : ' + checked);
-                           $('#t').multiSelect('select_all');
-                        __fn_loading_img('img-loading', 'stop');
-                    }, 700);
-                });
                 $('#submitForm').on('click', function () {
                     var formdata = {
                         a: $('input[name="a"]').val(),
@@ -78,7 +25,7 @@
 
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/update',
+                        url: _base_extraweb_uri + '/master/uac/user/update',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
