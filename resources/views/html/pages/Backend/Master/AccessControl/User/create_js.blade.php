@@ -4,6 +4,9 @@
             //main function to initiate the module
             init: function () {
                 __fn_alert_message('CreateJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
+                $('#t').multiSelect({
+                    selectableOptgroup: true
+                });
                 Dropzone.autoDiscover = false;
                 var myDropzone = new Dropzone("#uploadPicture", {
                     url: _base_extraweb_uri +  "/master/uac/users/insert?a=1",

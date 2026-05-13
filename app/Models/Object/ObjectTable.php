@@ -94,7 +94,7 @@ class ObjectTable extends Model {
             $select = $arrSelect; //$params['select'];
         }
         if ($type == "list") {
-            $select = ['a.id', 'a.name'];
+            $select = ['a.id', 'a.__name'];
         }
         if (isset($params['join']) && !empty($params['join'])) {
             foreach ($params['join'] AS $key => $val) {

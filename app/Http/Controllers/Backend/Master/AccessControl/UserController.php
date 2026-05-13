@@ -221,7 +221,24 @@ class UserController extends Controller {
                 ]
             ]
         ];
-
+        $params = [
+            'table_name' => 'tbl_a_uac_groups_p',
+            'select' => ['a.*'],
+            'conditions' => [
+                'whereNotIn' => [
+                    ['a.id',[1, 2, 3]]
+                ]
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $groups_master = $this->Tbl_a_uac_users_p_en->__find($request, 'list', $params);
+        $groupOptions = '';
+        if (isset($groups_master['data']) && !empty($groups_master['data'])) {
+            foreach ($groups_master['data'] AS $key => $value) {
+                $groupOptions .= "<option value=" . $value->id . ">" . $value->__name . "</option>";
+            }
+        }
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -234,7 +251,7 @@ class UserController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/dropzone/dropzone.js"
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'groupOptions'));
     }
 
     public function insert(Request $request) {
@@ -362,8 +379,8 @@ class UserController extends Controller {
             return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
         }
     }
-    
-    public function __insert_photo($request){
+
+    public function __insert_photo($request) {
         $data = $request->all();
         dd($data);
     }
