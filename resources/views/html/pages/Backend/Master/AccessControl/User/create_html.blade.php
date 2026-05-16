@@ -1,22 +1,22 @@
 <div class="col-md-10" style="padding-left:0px !important">
-    <div class="col-md-12">
-        <div class="btn-group" style="margin: 0px 0px 5px 0px">
-            <a href="{!! $_config['header']['link'] !!}" id="sample_editable_1_new" class="btn green">
-                {!! $_config['header']['title'] !!} {!! $_config['header']['icon'] !!}
-            </a>
-        </div>
-        <div class="portlet box blue">
-            <div class="portlet-title">
-                <div class="caption">
-                    {!! $_config['pages']['icon'] !!}{{$_config['pages']['title']}}
-                </div>
-                <div class="tools">
-                    <a href="javascrht:;" class="collapse"></a>
-                    <a href="javascrht:;" class="reload"></a>
-                </div>
+    <form role="form">
+        <div class="col-md-12">
+            <div class="btn-group" style="margin: 0px 0px 5px 0px">
+                <a href="{!! $_config['header']['link'] !!}" id="sample_editable_1_new" class="btn green">
+                    {!! $_config['header']['title'] !!} {!! $_config['header']['icon'] !!}
+                </a>
             </div>
-            <div class="portlet-body">
-                <form role="form">
+            <div class="portlet box blue">
+                <div class="portlet-title">
+                    <div class="caption">
+                        {!! $_config['pages']['icon'] !!}{{$_config['pages']['title']}}
+                    </div>
+                    <div class="tools">
+                        <a href="javascrht:;" class="collapse"></a>
+                        <a href="javascrht:;" class="reload"></a>
+                    </div>
+                </div>
+                <div class="portlet-body">
                     <div class="table-toolbar">
                         <div class="row">
                             <div class="col-md-6">
@@ -96,7 +96,7 @@
                                     </div>
                                     <div class="form-group form-md-line-input">
                                         <textarea class="form-control" name="l" rows="3" placeholder="Enter Notes   "></textarea>
-                                        <label for="m">Notes</label>
+                                        <label for="l">Notes</label>
                                     </div>
                                 </div>
                             </div>
@@ -107,67 +107,70 @@
                                             NOTE: </span>
                                         &nbsp; This plugins works only on Latest Chrome, Firefox, Safari, Opera & Internet Explorer 10.
                                     </p>
-                                    <form action="../../assets/global/plugins/dropzone/upload.php" class="dropzone" id="my-dropzone"> </form>
+                                    <div class="dropzone" id="uploadPicture"> </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-12">
-        <div class="portlet box blue">
-            <div class="portlet-title">
-                <div class="caption">
-                    {!! $_config['pages']['icon'] !!}{{$_config['pages']['title']}}
-                </div>
-                <div class="tools">
-                    <a href="javascrht:;" class="collapse"></a>
-                    <a href="javascrht:;" class="reload"></a>
-                </div>
-            </div>
-            <div class="portlet-body">
-                <div class="row">
-                    <div class="portlet-body form">
-                        <div class="col-md-6" style="min-height:800px">
-                            <div class="form-body">
-                                <div class="col-md-6" style="min-height:800px">
-                                    <div class="form-body">
-                                        <div class="form-group form-md-line-input">
-                                            <textarea class="form-control" name="e" rows="3" placeholder="Enter Address"></textarea>
-                                            <label for="e">Address</label>
+        <div class="col-md-12">
+            <div class="portlet box blue">
+                <div class="portlet-title"></div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-12" style="min-height:800px">
+                            <div class="portlet-body form">
+                                <div class="form-body">
+                                    <div class="col-md-6" style="min-height:800px">
+                                        <div class="form-body">
+                                            <div class="form-group form-md-line-input">
+                                                <textarea class="form-control" name="m" rows="3" placeholder="Enter Address"></textarea>
+                                                <label for="m">Address</label>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="n" class="form-control" id="n" placeholder="Enter Latitude">
+                                                <label for="n">Latitude</label>
+                                                <span class="help-block">Latitude</span>
+                                            </div>  
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="o" class="form-control" id="o" placeholder="Enter Longitude">
+                                                <label for="o">Longitude</label>
+                                                <span class="help-block">Longitude</span>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="p" class="form-control" id="p" placeholder="Enter Facebook">
+                                                <label for="p">Facebook</label>
+                                                <span class="help-block">Facebook</span>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="q" class="form-control" id="q" placeholder="Enter Tweeter">
+                                                <label for="q">Tweeter</label>
+                                                <span class="help-block">Tweeter</span>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="r" class="form-control" id="r" placeholder="Enter Instagram">
+                                                <label for="r">Instagram</label>
+                                                <span class="help-block">Instagram</span>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="s" class="form-control" id="s" placeholder="Enter Linkedin">
+                                                <label for="s">Linkedin</label>
+                                                <span class="help-block">Linkedin</span>
+                                            </div>
                                         </div>
-                                        <div class="form-group form-md-line-input">
-                                            <input type="text" name="c" class="form-control" id="c" placeholder="Enter Latitude">
-                                            <label for="c">Latitude</label>
-                                            <span class="help-block">Latitude</span>
-                                        </div>  
-                                        <div class="form-group form-md-line-input">
-                                            <input type="text" name="c" class="form-control" id="c" placeholder="Enter Longitude">
-                                            <label for="c">Longitude</label>
-                                            <span class="help-block">Longitude</span>
-                                        </div>
-                                        <div class="form-group form-md-line-input">
-                                            <input type="text" name="c" class="form-control" id="c" placeholder="Enter Facebook">
-                                            <label for="c">Facebook</label>
-                                            <span class="help-block">Facebook</span>
-                                        </div>
-                                        <div class="form-group form-md-line-input">
-                                            <input type="text" name="c" class="form-control" id="c" placeholder="Enter Tweeter">
-                                            <label for="c">Tweeter</label>
-                                            <span class="help-block">Tweeter</span>
-                                        </div>
-                                        <div class="form-group form-md-line-input">
-                                            <input type="text" name="c" class="form-control" id="c" placeholder="Enter Instagram">
-                                            <label for="c">Instagram</label>
-                                            <span class="help-block">Instagram</span>
-                                        </div>
-                                        <div class="form-group form-md-line-input">
-                                            <input type="text" name="c" class="form-control" id="c" placeholder="Enter Linkedin">
-                                            <label for="c">Linkedin</label>
-                                            <span class="help-block">Linkedin</span>
+                                    </div>
+                                    <div class="col-md-6" style="min-height:800px">
+                                        <div class="form-body">
+                                            <div class="form-group form-md-line-input has-info">
+                                                <select multiple="multiple" class="form-control" name="t[]" id="t">
+                                                    @if(isset($groupOptions) && !empty($groupOptions))
+                                                    {!! $groupOptions !!}
+                                                    @endif
+                                                </select>
+                                                <label for="t">Groups</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -177,11 +180,11 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-12">
-        <div class="form-actions noborder">
-            <button type="button" class="btn blue" id="submitForm">Submit</button>
-            <button type="button" class="btn default">Cancel</button>
+        <div class="col-md-12">
+            <div class="form-actions noborder">
+                <button type="button" class="btn blue" id="submitForm">Submit</button>
+                <button type="button" class="btn default">Cancel</button>
+            </div>
         </div>
-    </div>
+    </form>
 </div>

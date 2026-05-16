@@ -146,7 +146,7 @@ class UserController extends Controller {
                     'code' => $value->code,
                     '__user_name' => $value->__user_name,
                     '__user_ldap' => $value->__user_ldap,
-                    '__full_name' => $value->__first_name .' '. $value->__last_name,
+                    '__full_name' => $value->__first_name . ' ' . $value->__last_name,
                     '__email' => $value->__email,
                     '__phone_number' => $value->__phone_number,
                     '__score' => $value->__email,
@@ -221,7 +221,24 @@ class UserController extends Controller {
                 ]
             ]
         ];
-        
+        $params = [
+            'table_name' => 'tbl_a_uac_groups_p',
+            'select' => ['a.*'],
+            'conditions' => [
+                'whereNotIn' => [
+                    ['a.id',[1, 2, 3]]
+                ]
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $groups_master = $this->Tbl_a_uac_users_p_en->__find($request, 'list', $params);
+        $groupOptions = '';
+        if (isset($groups_master['data']) && !empty($groups_master['data'])) {
+            foreach ($groups_master['data'] AS $key => $value) {
+                $groupOptions .= "<option value=" . $value->id . ">" . $value->__name . "</option>";
+            }
+        }
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -234,118 +251,138 @@ class UserController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/dropzone/dropzone.js"
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'groupOptions'));
     }
 
     public function insert(Request $request) {
-        $data = $request->json()->all();
-        if (isset($data) && !empty($data)) {
-            $code = $this->General->getRandomChar(20);
-            $insertData = [];
-            if (isset($data['d']) && !empty($data['d'])) {
-                foreach ($data['d'] AS $key => $value) {
-                    $action = $this->Tbl_d_app_assets_master_method_p_en->__find_by_id($request, $value);
-                    $__segment1 = $__segment2 = $__segment3 = $__segment4 = $__segment5 = $__segment6 = $__segment7 = $__segment8 = '';
-                    $param = '';
-                    if (isset($action['data'][0]->__param) && !empty($action['data'][0]->__param)) {
-                        $param = '/' . $action['data'][0]->__param;
-                    }
-                    $classPath = strtolower(str_replace('Controller', '', $data['c']));
-                    $__path = $data['b'] . '/' . $classPath . '/' . $action['data'][0]->__name . $param;
-
-                    $get_segment_by_url = $this->General->getSegmentByUrl($__path);
-                    $segmented = explode('/', $get_segment_by_url);
-                    if ($segmented) {
-                        $n = 1;
-                        foreach ($segmented AS $k => $v) {
-                            ${'__segment' . $n} = $v;
-                            $n++;
-                        }
-                    }
-                    $insertData[] = [
-                        'code' => $code,
-                        '__alias' => $data['a'],
-                        '__name' => $__path,
-                        '__path' => $__path,
-                        '__controller' => $data['c'],
-                        '__action' => $action['data'][0]->__name,
-                        '__method' => $action['data'][0]->__method,
-                        '__segment1' => $__segment1,
-                        '__segment2' => $__segment2,
-                        '__segment3' => $__segment3,
-                        '__segment4' => $__segment4,
-                        '__segment5' => $__segment5,
-                        '__segment6' => $__segment6,
-                        '__segment7' => $__segment7,
-                        '__segment8' => $__segment8,
-                        '__description' => isset($data['f']) ? $data['f'] : '-',
-                        '__is_basic' => $data['f'],
-                        '__is_public' => $data['g'],
-                        'is_active' => $data['h'],
-                        'created_by' => (int) $this->__user_id,
-                        'created_date' => $this->Date->now(),
-                        'updated_by' => (int) $this->__user_id,
-                        'updated_date' => $this->Date->now()
-                    ];
-                }
+        $data = $request->all();
+        if (isset($data) && !empty($data) && isset($data['a']) && !empty($data['a'])) {
+            switch ($data['a']) {
+                case 1 :
+                    return $this->__insert_photo($request);
+                    break;
+                case 2 :
+                    break;
+                default:
+                    return $this->__insert_default($request);
+                    break;
             }
-            $insert = [
-                'table_name' => 'tbl_a_uac_users_p',
-                'data' => $insertData
-            ];
-            $response = true; //$this->Tbl_a_uac_users_p_en->__insert($request, $insert);
-            if ($response) {
-                $users = $this->__get_list_by_controller($request, $data['c']);
-                $arrUserUsers = [];
-                $arrUserUsers = [];
-                foreach ($users['data'] AS $key1 => $permission) {
-                    //apply to user
-                    if (isset($data['r']) && !empty($data['r'])) {
-                        foreach ($data['r'] AS $key => $user) {
-                            $arrUserUsers[] = [
-                                '__user_id' => (int) $user,
-                                '__permission_id' => $permission->id,
-                                '__is_denied' => 0,
-                                'is_active' => $data['h'],
-                                'created_by' => (int) $this->__user_id,
-                                'created_date' => $this->Date->now(),
-                                'updated_by' => (int) $this->__user_id,
-                                'updated_date' => $this->Date->now()
-                            ];
-                        }
-                    }
-                    //apply to group
-                    if (isset($data['t']) && !empty($data['t'])) {
-                        foreach ($data['t'] AS $key => $group) {
-                            $arrUserUsers[] = [
-                                '__group_id' => (int) $group,
-                                '__permission_id' => $permission->id,
-                                '__module_id' => isset($data['u']) ? $data['s'] : 3,
-                                '__is_allowed' => 0,
-                                'is_active' => $data['h'],
-                                'created_by' => (int) $this->__user_id,
-                                'created_date' => $this->Date->now(),
-                                'updated_by' => (int) $this->__user_id,
-                                'updated_date' => $this->Date->now()
-                            ];
-                        }
+            dd($data);
+        }
+    }
+
+    public function __insert_default($request) {
+        $data = $request->json()->all();
+        $code = $this->General->getRandomChar(20);
+        $insertData = [];
+        if (isset($data['d']) && !empty($data['d'])) {
+            foreach ($data['d'] AS $key => $value) {
+                $action = $this->Tbl_d_app_assets_master_method_p_en->__find_by_id($request, $value);
+                $__segment1 = $__segment2 = $__segment3 = $__segment4 = $__segment5 = $__segment6 = $__segment7 = $__segment8 = '';
+                $param = '';
+                if (isset($action['data'][0]->__param) && !empty($action['data'][0]->__param)) {
+                    $param = '/' . $action['data'][0]->__param;
+                }
+                $classPath = strtolower(str_replace('Controller', '', $data['c']));
+                $__path = $data['b'] . '/' . $classPath . '/' . $action['data'][0]->__name . $param;
+
+                $get_segment_by_url = $this->General->getSegmentByUrl($__path);
+                $segmented = explode('/', $get_segment_by_url);
+                if ($segmented) {
+                    $n = 1;
+                    foreach ($segmented AS $k => $v) {
+                        ${'__segment' . $n} = $v;
+                        $n++;
                     }
                 }
-                $insertUserUsers = [
-                    'table_name' => 'tbl_b_uac_user_users_r',
-                    'data' => $arrUserUsers
+                $insertData[] = [
+                    'code' => $code,
+                    '__alias' => $data['a'],
+                    '__name' => $__path,
+                    '__path' => $__path,
+                    '__controller' => $data['c'],
+                    '__action' => $action['data'][0]->__name,
+                    '__method' => $action['data'][0]->__method,
+                    '__segment1' => $__segment1,
+                    '__segment2' => $__segment2,
+                    '__segment3' => $__segment3,
+                    '__segment4' => $__segment4,
+                    '__segment5' => $__segment5,
+                    '__segment6' => $__segment6,
+                    '__segment7' => $__segment7,
+                    '__segment8' => $__segment8,
+                    '__description' => isset($data['f']) ? $data['f'] : '-',
+                    '__is_basic' => $data['f'],
+                    '__is_public' => $data['g'],
+                    'is_active' => $data['h'],
+                    'created_by' => (int) $this->__user_id,
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->__user_id,
+                    'updated_date' => $this->Date->now()
                 ];
-                $this->Tbl_b_uac_user_users_r_en->__insert($request, $insertUserUsers);
-                $insertUserUsers = [
-                    'table_name' => 'tbl_b_uac_group_users_r',
-                    'data' => $arrUserUsers
-                ];
-                $this->Tbl_b_uac_group_users_r_en->__insert($request, $insertUserUsers);
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
-            } else {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
             }
         }
+        $insert = [
+            'table_name' => 'tbl_a_uac_users_p',
+            'data' => $insertData
+        ];
+        $response = true; //$this->Tbl_a_uac_users_p_en->__insert($request, $insert);
+        if ($response) {
+            $users = $this->__get_list_by_controller($request, $data['c']);
+            $arrUserUsers = [];
+            $arrUserUsers = [];
+            foreach ($users['data'] AS $key1 => $permission) {
+                //apply to user
+                if (isset($data['r']) && !empty($data['r'])) {
+                    foreach ($data['r'] AS $key => $user) {
+                        $arrUserUsers[] = [
+                            '__user_id' => (int) $user,
+                            '__permission_id' => $permission->id,
+                            '__is_denied' => 0,
+                            'is_active' => $data['h'],
+                            'created_by' => (int) $this->__user_id,
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->__user_id,
+                            'updated_date' => $this->Date->now()
+                        ];
+                    }
+                }
+                //apply to group
+                if (isset($data['t']) && !empty($data['t'])) {
+                    foreach ($data['t'] AS $key => $group) {
+                        $arrUserUsers[] = [
+                            '__group_id' => (int) $group,
+                            '__permission_id' => $permission->id,
+                            '__module_id' => isset($data['u']) ? $data['s'] : 3,
+                            '__is_allowed' => 0,
+                            'is_active' => $data['h'],
+                            'created_by' => (int) $this->__user_id,
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->__user_id,
+                            'updated_date' => $this->Date->now()
+                        ];
+                    }
+                }
+            }
+            $insertUserUsers = [
+                'table_name' => 'tbl_b_uac_user_users_r',
+                'data' => $arrUserUsers
+            ];
+            $this->Tbl_b_uac_user_users_r_en->__insert($request, $insertUserUsers);
+            $insertUserUsers = [
+                'table_name' => 'tbl_b_uac_group_users_r',
+                'data' => $arrUserUsers
+            ];
+            $this->Tbl_b_uac_group_users_r_en->__insert($request, $insertUserUsers);
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
+        } else {
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
+        }
+    }
+
+    public function __insert_photo($request) {
+        $data = $request->all();
+        dd($data);
     }
 
     public function edit(Request $request, $params = null) {
@@ -377,14 +414,14 @@ class UserController extends Controller {
         ];
         $user = $this->Tbl_a_uac_users_p_en->__find($request, 'first', $params);
         $this->load_css([
-            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
-            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
-            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
         ]);
         $this->load_js([
-            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
-            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
         return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'user'));
     }
