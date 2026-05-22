@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Models\Entity\app;
+namespace App\Models\Entity\uac;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
  */
 
-use App\Models\Object\app\Tbl_d_app_assets_documents_p;
+use Illuminate\Http\Request;
+use App\Models\Object\uac\Tbl_a_uac_permissions_schemes_p;
 
 /**
- * Description of Tbl_d_app_assets_documents_p
+ * Description of Tbl_a_uac_permissions_schemes_p_en
  *
  * @author 64146
  */
-class Tbl_d_app_assets_documents_p_en extends Tbl_d_app_assets_documents_p {
+class Tbl_a_uac_permissions_schemes_p_en extends Tbl_a_uac_permissions_schemes_p {
     //put your code here
 }

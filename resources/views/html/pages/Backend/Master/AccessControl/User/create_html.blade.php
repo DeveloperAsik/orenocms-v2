@@ -77,7 +77,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="form-body">
                                     <div class="form-group form-md-line-input">
@@ -140,23 +139,27 @@
                                                 <span class="help-block">Longitude</span>
                                             </div>
                                             <div class="form-group form-md-line-input">
-                                                <input type="text" name="p" class="form-control" id="p" placeholder="Enter Facebook">
-                                                <label for="p">Facebook</label>
+                                                <input type="text" name="p" class="form-control" id="p" placeholder="Enter Zoom scalings">
+                                                <label for="p">Zoom</label>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="q" class="form-control" id="q" placeholder="Enter Facebook">
+                                                <label for="q">Facebook</label>
                                                 <span class="help-block">Facebook</span>
                                             </div>
                                             <div class="form-group form-md-line-input">
-                                                <input type="text" name="q" class="form-control" id="q" placeholder="Enter Tweeter">
-                                                <label for="q">Tweeter</label>
+                                                <input type="text" name="r" class="form-control" id="r" placeholder="Enter Tweeter">
+                                                <label for="r">Tweeter</label>
                                                 <span class="help-block">Tweeter</span>
                                             </div>
                                             <div class="form-group form-md-line-input">
-                                                <input type="text" name="r" class="form-control" id="r" placeholder="Enter Instagram">
-                                                <label for="r">Instagram</label>
+                                                <input type="text" name="s" class="form-control" id="s" placeholder="Enter Instagram">
+                                                <label for="s">Instagram</label>
                                                 <span class="help-block">Instagram</span>
                                             </div>
                                             <div class="form-group form-md-line-input">
-                                                <input type="text" name="s" class="form-control" id="s" placeholder="Enter Linkedin">
-                                                <label for="s">Linkedin</label>
+                                                <input type="text" name="t" class="form-control" id="t" placeholder="Enter Linkedin">
+                                                <label for="t">Linkedin</label>
                                                 <span class="help-block">Linkedin</span>
                                             </div>
                                         </div>
@@ -164,12 +167,20 @@
                                     <div class="col-md-6" style="min-height:800px">
                                         <div class="form-body">
                                             <div class="form-group form-md-line-input has-info">
-                                                <select multiple="multiple" class="form-control" name="t[]" id="t">
+                                                <select multiple="multiple" class="form-control" name="u[]" id="u">
                                                     @if(isset($groupOptions) && !empty($groupOptions))
                                                     {!! $groupOptions !!}
                                                     @endif
                                                 </select>
-                                                <label for="t">Groups</label>
+                                                <label for="u">Groups</label>
+                                            </div>
+                                            <div class="form-group form-md-line-input has-info">
+                                                <select multiple="multiple" class="form-control" name="v[]" id="v">
+                                                    @if(isset($moduleOptions) && !empty($moduleOptions))
+                                                    {!! $moduleOptions !!}
+                                                    @endif
+                                                </select>
+                                                <label for="v">Module</label>
                                             </div>
                                         </div>
                                     </div>
@@ -182,6 +193,7 @@
         </div>
         <div class="col-md-12">
             <div class="form-actions noborder">
+                <input type="text" name="__code" value="{{$code}}" hidden/>
                 <button type="button" class="btn blue" id="submitForm">Submit</button>
                 <button type="button" class="btn default">Cancel</button>
             </div>

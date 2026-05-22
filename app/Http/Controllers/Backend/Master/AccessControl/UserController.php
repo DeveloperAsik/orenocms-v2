@@ -13,8 +13,14 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Date;
+use App\Libraries\Oreno\UploadFile;
+use App\Libraries\Oreno\Encrypter;
 use App\Models\Entity\uac\Tbl_a_uac_users_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
+use App\Models\Entity\uac\Tbl_a_uac_user_profiles_c_en;
+use App\Models\Entity\uac\Tbl_a_uac_modules_p_en;
+use App\Models\Entity\app\Tbl_d_app_assets_documents_p_en;
+use App\Models\Entity\app\Tbl_d_app_assets_document_type_r_en;
 
 /**
  * Description of UserController
@@ -27,16 +33,28 @@ class UserController extends Controller {
     protected $General;
     protected $Converter;
     protected $Date;
+    protected $UploadFile;
+    protected $Encrypter;
     protected $Tbl_a_uac_users_p_en;
     protected $Tbl_a_uac_groups_p_en;
+    protected $Tbl_d_app_assets_documents_p_en;
+    protected $Tbl_d_app_assets_document_type_r_en;
+    protected $Tbl_a_uac_user_profiles_c_en;
+    protected $Tbl_a_uac_modules_p_en;
 
     public function __construct(Request $request) {
         parent::__construct($request);
         $this->General = new General();
         $this->Converter = new Converter();
         $this->Date = new Date();
+        $this->UploadFile = new UploadFile();
+        $this->Encrypter = new Encrypter();
         $this->Tbl_a_uac_users_p_en = new Tbl_a_uac_users_p_en();
         $this->Tbl_a_uac_groups_p_en = new Tbl_a_uac_groups_p_en();
+        $this->Tbl_d_app_assets_documents_p_en = new Tbl_d_app_assets_documents_p_en();
+        $this->Tbl_d_app_assets_document_type_r_en = new Tbl_d_app_assets_document_type_r_en();
+        $this->Tbl_a_uac_user_profiles_c_en = new Tbl_a_uac_user_profiles_c_en();
+        $this->Tbl_a_uac_modules_p_en = new Tbl_a_uac_modules_p_en();
     }
 
     public function view(Request $request) {
@@ -200,6 +218,7 @@ class UserController extends Controller {
 
     public function create(Request $request) {
         $title_for_layout = config('app.default_variables.title_for_layout');
+        $code = $this->General->getRandomChar(32);
         $_config = [
             'title_for_header' => '<b>User</b> master data management page',
             'pages' => [
@@ -221,24 +240,8 @@ class UserController extends Controller {
                 ]
             ]
         ];
-        $params = [
-            'table_name' => 'tbl_a_uac_groups_p',
-            'select' => ['a.*'],
-            'conditions' => [
-                'whereNotIn' => [
-                    ['a.id',[1, 2, 3]]
-                ]
-            ],
-            'limit' => 100,
-            'offset' => 0
-        ];
-        $groups_master = $this->Tbl_a_uac_users_p_en->__find($request, 'list', $params);
-        $groupOptions = '';
-        if (isset($groups_master['data']) && !empty($groups_master['data'])) {
-            foreach ($groups_master['data'] AS $key => $value) {
-                $groupOptions .= "<option value=" . $value->id . ">" . $value->__name . "</option>";
-            }
-        }
+        $groupOptions = $this->__get_user_groups($request);
+        $moduleOptions = $this->__get_modules($request);
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -251,7 +254,58 @@ class UserController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/dropzone/dropzone.js"
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'groupOptions'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'code', 'groupOptions', 'moduleOptions'));
+    }
+
+    protected function __get_user_groups($request) {
+        $params = [
+            'table_name' => 'tbl_a_uac_groups_p',
+            'conditions' => [
+                'where' => [
+                    ['a.__is_group_project', '=', 1],
+                    ['a.is_active', '=', 1]
+                ]
+            ], 'order' => [
+                'conditions' => ['a.__name', 'asc']
+            ],
+            'order' => [
+                'conditions' => ['a.__name', 'asc']
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $response = $this->Tbl_a_uac_groups_p_en->__find($request, 'list', $params);
+        $responseOptions = '';
+        if (isset($response['data']) && !empty($response['data'])) {
+            foreach ($response['data'] AS $key => $value) {
+                $responseOptions .= "<option value=" . $value->id . ">" . $value->__name . "</option>";
+            }
+        }
+        return $responseOptions;
+    }
+
+    protected function __get_modules($request) {
+        $params = [
+            'table_name' => 'tbl_a_uac_modules_p',
+            'conditions' => [
+                'where' => [
+                    ['a.is_active', '=', 1]
+                ]
+            ],
+            'order' => [
+                'conditions' => ['a.__name', 'asc']
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $response = $this->Tbl_a_uac_modules_p_en->__find($request, 'list', $params);
+        $responseOptions = '';
+        if (isset($response['data']) && !empty($response['data'])) {
+            foreach ($response['data'] AS $key => $value) {
+                $responseOptions .= "<option value=" . $value->id . ">" . $value->__name . "</option>";
+            }
+        }
+        return $responseOptions;
     }
 
     public function insert(Request $request) {
@@ -262,59 +316,71 @@ class UserController extends Controller {
                     return $this->__insert_photo($request);
                     break;
                 case 2 :
-                    break;
                 default:
                     return $this->__insert_default($request);
                     break;
             }
-            dd($data);
         }
+    }
+
+    protected function __insert_user_profile($request) {
+        $data = $request->json()->all();
+        dd($data);
+        $insertData[] = [
+            'code' => $code,
+            '__address' => $data['m'],
+            '__lat' => $data['n'],
+            '__lng' => $data['o'],
+            '__zoom' => $data['p'],
+            '__socmed_fb' => $data['q'],
+            '__socmed_tw' => $data['r'],
+            '__socmed_ins' => $data['s'],
+            '__socmed_lnkd' => $data['t'],
+            '__photos' => $data[''],
+            '__last_education' => $data[''],
+            '__last_education_institution' => $data[''],
+            '__skill' => $data[''],
+            '__notes' => $data[''],
+            '__description' => $data[''],
+            'is_active' => $data[''],
+            'created_by' => (int) $this->__user_id,
+            'created_date' => $this->Date->now(),
+            'updated_by' => (int) $this->__user_id,
+            'updated_date' => $this->Date->now()
+        ];
+        $insert = [
+            'table_name' => 'tbl_a_uac_user_profiles_c',
+            'data' => $insertData
+        ];
+        $response = $this->Tbl_a_uac_user_profiles_c_en->__insert_get_id($request, $insert);
     }
 
     public function __insert_default($request) {
         $data = $request->json()->all();
-        $code = $this->General->getRandomChar(20);
         $insertData = [];
         if (isset($data['d']) && !empty($data['d'])) {
+            $password = $this->General->getRandomChar(8);
+            $__password = $this->Encrypter->encrypt($password);
+            $__salt = '';
+            $__uac_user_profile_id = 0;
+            $__uac_user_registered_type_id = 0;
+            dd($data);
             foreach ($data['d'] AS $key => $value) {
-                $action = $this->Tbl_d_app_assets_master_method_p_en->__find_by_id($request, $value);
-                $__segment1 = $__segment2 = $__segment3 = $__segment4 = $__segment5 = $__segment6 = $__segment7 = $__segment8 = '';
-                $param = '';
-                if (isset($action['data'][0]->__param) && !empty($action['data'][0]->__param)) {
-                    $param = '/' . $action['data'][0]->__param;
-                }
-                $classPath = strtolower(str_replace('Controller', '', $data['c']));
-                $__path = $data['b'] . '/' . $classPath . '/' . $action['data'][0]->__name . $param;
-
-                $get_segment_by_url = $this->General->getSegmentByUrl($__path);
-                $segmented = explode('/', $get_segment_by_url);
-                if ($segmented) {
-                    $n = 1;
-                    foreach ($segmented AS $k => $v) {
-                        ${'__segment' . $n} = $v;
-                        $n++;
-                    }
-                }
                 $insertData[] = [
                     'code' => $code,
-                    '__alias' => $data['a'],
-                    '__name' => $__path,
-                    '__path' => $__path,
-                    '__controller' => $data['c'],
-                    '__action' => $action['data'][0]->__name,
-                    '__method' => $action['data'][0]->__method,
-                    '__segment1' => $__segment1,
-                    '__segment2' => $__segment2,
-                    '__segment3' => $__segment3,
-                    '__segment4' => $__segment4,
-                    '__segment5' => $__segment5,
-                    '__segment6' => $__segment6,
-                    '__segment7' => $__segment7,
-                    '__segment8' => $__segment8,
-                    '__description' => isset($data['f']) ? $data['f'] : '-',
-                    '__is_basic' => $data['f'],
-                    '__is_public' => $data['g'],
-                    'is_active' => $data['h'],
+                    '__user_name' => $value['a'],
+                    '__user_ldap' => $value['b'],
+                    '__first_name' => $value['c'],
+                    '__last_name' => $value['d'],
+                    '__email' => $value['e'],
+                    '__phone_number' => $value['f'],
+                    '__password' => $__password,
+                    '__salt' => $__salt,
+                    '__description' => isset($value['g'],) ? $value['g'] : '-',
+                    '__score' => $__score,
+                    '__uac_user_profile_id' => $__uac_user_profile_id,
+                    '__uac_user_registered_type_id' => $__uac_user_registered_type_id,
+                    'is_active' => $value['h'],
                     'created_by' => (int) $this->__user_id,
                     'created_date' => $this->Date->now(),
                     'updated_by' => (int) $this->__user_id,
@@ -382,7 +448,57 @@ class UserController extends Controller {
 
     public function __insert_photo($request) {
         $data = $request->all();
-        dd($data);
+        if (isset($data['file']) && !empty($data['file'])) {
+            $options = array(
+                'id' => $data['code'],
+                'name' => $data['file']->getClientOriginalName(),
+                'origin_name' => $data['file']->getClientOriginalName(),
+                'tmp_name' => $data['file']->path(),
+                'img_path' => config('app.path_assets_media') . '/images/users',
+                'img_size_width' => array('128', '320'),
+                'img_name' => array('tiny', 'small')
+            );
+            $upload_file = $this->UploadFile->do_upload($request, $options);
+            if (isset($upload_file) && !empty($upload_file)) {
+                $doc_ids = [];
+                foreach ($upload_file AS $key => $val) {
+                    $insertData = [
+                        'code' => $options['id'],
+                        '__name' => $options['name'],
+                        '__content' => $val,
+                        '__description' => 'upload photos from create user at admin dashboard',
+                        'is_active' => 1,
+                        'created_by' => (int) $this->__user_id,
+                        'created_date' => $this->Date->now(),
+                        'updated_by' => (int) $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                    $insert = [
+                        'table_name' => 'tbl_d_app_assets_documents_p',
+                        'data' => $insertData
+                    ];
+                    $doc_id = $this->Tbl_d_app_assets_documents_p_en->__insert_get_id($request, $insert, 'mysql_app');
+                    if ($doc_id) {
+                        $doc_ids[] = $doc_id;
+                        $insertDataDocType = [
+                            '__app_document_id' => $doc_id,
+                            '__app_document_type_id' => 1,
+                            'is_active' => 1,
+                            'created_by' => (int) $this->__user_id,
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->__user_id,
+                            'updated_date' => $this->Date->now()
+                        ];
+                        $insertDocType = [
+                            'table_name' => 'tbl_d_app_assets_document_type_r',
+                            'data' => $insertDataDocType
+                        ];
+                        $this->Tbl_d_app_assets_document_type_r_en->__insert($request, $insertDocType, 'mysql_app');
+                    }
+                }
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully upload documents', 'data' => ['code' => $data['code'], 'document_id' => $doc_ids]]);
+            }
+        }
     }
 
     public function edit(Request $request, $params = null) {
