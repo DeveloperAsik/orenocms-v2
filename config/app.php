@@ -29,6 +29,8 @@ $base_url_assets_libraries = $base_url . env('APP_CDN_ASSETS_LIBRARIES');
 $base_url_assets_templates = $base_url . env('APP_CDN_ASSETS_TEMPLATES');
 $base_url_assets_media = $base_url . env('APP_CDN_ASSETS_MEDIA');
 $path_assets = $base_path . env('APP_CDN_ASSETS');
+$path_assets_media = $base_path . env('APP_CDN_ASSETS_MEDIA');
+
 
 $base_extraweb_uri = $base_url . '/extraweb';
 $base_api_uri = $base_url . '/api/v1';
@@ -47,6 +49,8 @@ return [
     'base_extraweb_uri' => $base_extraweb_uri,
     'base_api_url' => $base_api_uri,
     'base_json_uri' => $base_json_uri,
+    'path_assets' => $path_assets,
+    'path_assets_media' => $path_assets_media,
     'jenkins_url' => env('JENKINS_URL'),
     'jenkins_ciso_path' => env('JENKINS_CISO_PATH'),
     'jenkins_ciso_path_original' => env('JENKINS_CISO_PATH_ORIGINAL'),

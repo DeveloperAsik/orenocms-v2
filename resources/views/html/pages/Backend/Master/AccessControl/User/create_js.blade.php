@@ -1,58 +1,24 @@
 <script>
+    var code = "{{$code}}";
     var CreateJS = function () {
         return {
             //main function to initiate the module
             init: function () {
                 __fn_alert_message('CreateJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
-                $('#t').multiSelect({
+                $('#u').multiSelect({
+                    selectableOptgroup: true
+                });
+                $('#v').multiSelect({
                     selectableOptgroup: true
                 });
                 Dropzone.autoDiscover = false;
                 var myDropzone = new Dropzone("#uploadPicture", {
-                    url: _base_extraweb_uri +  "/master/uac/users/insert?a=1",
+                    url: _base_extraweb_uri + "/master/uac/users/insert?a=1&code=" + code,
                     // Add the CSRF token to headers
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    // Additional configuration options...
                 });
-//                Dropzone.options.uploadForm = {// The camelized version of the ID of the form element
-//
-//                    // The configuration we've talked about above
-//                    autoProcessQueue: false,
-//                    uploadMultiple: true,
-//                    parallelUploads: 100,
-//                    maxFiles: 100,
-//
-//                    // The setting up of the dropzone
-//                    init: function () {
-//                        var myDropzone = this;
-//
-//                        // First change the button to actually tell Dropzone to process the queue.
-//                        this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-//                            // Make sure that the form isn't actually being sent.
-//                            e.preventDefault();
-//                            e.stopPropagation();
-//                            myDropzone.processQueue();
-//                        });
-//
-//                        // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-//                        // of the sending event because uploadMultiple is set to true.
-//                        this.on("sendingmultiple", function () {
-//                            // Gets triggered when the form is actually being sent.
-//                            // Hide the success button or the complete form.
-//                        });
-//                        this.on("successmultiple", function (files, response) {
-//                            // Gets triggered when the files have successfully been sent.
-//                            // Redirect user or notify of success.
-//                        });
-//                        this.on("errormultiple", function (files, response) {
-//                            // Gets triggered when there was an error sending the files.
-//                            // Maybe show form again, and notify user of error
-//                        });
-//                    }
-//
-//                }
                 $('#submitForm').on('click', function () {
                     var formdata = {
                         a: $('input[name="a"]').val(),
@@ -62,10 +28,24 @@
                         e: $('input[name="e"]').val(),
                         f: $('input[name="f"]').val(),
                         g: $('input[name="g"]').val(),
-                        h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0
+                        h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,
+                        i: $('input[name="i"]').val(),
+                        j: $('input[name="j"]').val(),
+                        k: $('input[name="k"]').val(),
+                        l: $('input[name="l"]').val(),
+                        m: $('textarea[name="m"]').val(),
+                        n: $('input[name="n"]').val(),
+                        o: $('input[name="o"]').val(),
+                        p: $('input[name="p"]').val(),
+                        q: $('input[name="q"]').val(),
+                        r: $('input[name="r"]').val(),
+                        s: $('input[name="s"]').val(),
+                        t: $('input[name="t"]').val(),
+                        u: $('select[name="u"]').val(),
+                        u: $('select[name="v"]').val()
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/user/insert',
+                        url: _base_extraweb_uri + '/master/uac/users/insert?a=2',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
