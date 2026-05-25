@@ -119,29 +119,11 @@
                 <div class="portlet-title"></div>
                 <div class="portlet-body">
                     <div class="row">
-                        <div class="col-md-12" style="min-height:800px">
+                        <div class="col-md-12" style="min-height:300px">
                             <div class="portlet-body form">
                                 <div class="form-body">
-                                    <div class="col-md-6" style="min-height:800px">
+                                    <div class="col-md-6">
                                         <div class="form-body">
-                                            <div class="form-group form-md-line-input">
-                                                <textarea class="form-control" name="m" rows="3" placeholder="Enter Address"></textarea>
-                                                <label for="m">Address</label>
-                                            </div>
-                                            <div class="form-group form-md-line-input">
-                                                <input type="text" name="n" class="form-control" id="n" placeholder="Enter Latitude">
-                                                <label for="n">Latitude</label>
-                                                <span class="help-block">Latitude</span>
-                                            </div>  
-                                            <div class="form-group form-md-line-input">
-                                                <input type="text" name="o" class="form-control" id="o" placeholder="Enter Longitude">
-                                                <label for="o">Longitude</label>
-                                                <span class="help-block">Longitude</span>
-                                            </div>
-                                            <div class="form-group form-md-line-input">
-                                                <input type="text" name="p" class="form-control" id="p" placeholder="Enter Zoom scalings">
-                                                <label for="p">Zoom</label>
-                                            </div>
                                             <div class="form-group form-md-line-input">
                                                 <input type="text" name="q" class="form-control" id="q" placeholder="Enter Facebook">
                                                 <label for="q">Facebook</label>
@@ -182,6 +164,48 @@
                                                 </select>
                                                 <label for="v">Module</label>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="portlet box blue">
+                <div class="portlet-title"></div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-12" style="min-height:500px">
+                            <div class="portlet-body form">
+                                <div class="form-body">
+                                    <div class="col-md-6">
+                                        <div class="form-body">
+                                            <div class="form-group form-md-line-input">
+                                                <textarea class="form-control" name="m" rows="3" placeholder="Enter Address"></textarea>
+                                                <label for="m">Address</label>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="n" class="form-control" id="n" placeholder="Enter Latitude">
+                                                <label for="n">Latitude</label>
+                                                <span class="help-block">Latitude</span>
+                                            </div>  
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="o" class="form-control" id="o" placeholder="Enter Longitude">
+                                                <label for="o">Longitude</label>
+                                                <span class="help-block">Longitude</span>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <input type="text" name="p" class="form-control" id="p" placeholder="Enter Zoom scalings">
+                                                <label for="p">Zoom</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="min-height:800px">
+                                        <div class="form-body">
+                                           
                                         </div>
                                     </div>
                                 </div>
