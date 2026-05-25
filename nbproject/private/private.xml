@@ -4,20 +4,18 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/UserController.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Libraries/Oreno/UploadFile.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_html.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Models/Entity/app/Tbl_d_app_assets_documents_p_en.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Controller.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/config/database.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_html.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Libraries/Oreno/Encrypter.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Models/Object/ObjectTable.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_html.blade.php</file>        </group>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_html.blade.php</file>
+        </group>
     </open-files>
 </project-private>
