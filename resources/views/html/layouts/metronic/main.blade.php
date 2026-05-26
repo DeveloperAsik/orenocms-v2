@@ -17,7 +17,7 @@
             <!-- BEGIN HEADER INNER -->
             <div class="page-header-inner">
                 <!-- BEGIN LOGO -->
-                
+
                 @include('html.layouts.metronic.includes.main.include_page_logo')
                 <!-- END LOGO -->
                 <!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -34,15 +34,24 @@
         <!-- BEGIN CONTAINER -->
         <div class="page-container">
             <!-- BEGIN SIDEBAR -->
-            @include('html.layouts.metronic.includes.main.include_sidebar')
+            <div class="page-sidebar-wrapper">
+                @include('html.layouts.metronic.includes.main.include_sidebar')
+            </div>
             <!-- END SIDEBAR -->
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper">
                 <div class="page-content">
                     <div class="row">
-                        @include('html.layouts.metronic.includes.main.include_breadcrumb')
-                        @include('html.widgets.main.sidebar_info')
-                        @include('html.components.content')
+                        <div class="page-bar">
+                            @include('html.layouts.metronic.includes.main.include_breadcrumb')
+                        </div>
+                        <div class="col-md-2">
+                            @include('html.widgets.main.sidebar_info')
+                        </div>
+                        <div class="col-md-10">
+                            @include('html.components.content')
+                        </div>
+
                     </div>
                     <!-- END PAGE CONTENT-->
                 </div>

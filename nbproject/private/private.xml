@@ -3,19 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Web-Labs/orenocms-v2/.env</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/routes/web.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/config/database.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Controller.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Auth/AppController.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/UserController.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_js.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_html.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_js.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_html.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_js.blade.php</file>
-            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_html.blade.php</file>
->>>>>>> de97da95c92f6bd5c163d86d595b8e27e53037b6
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Controller.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/UserController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_html.blade.php</file>
         </group>
     </open-files>
 </project-private>

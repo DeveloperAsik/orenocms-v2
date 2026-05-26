@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Models\Object\uac;
 
+namespace App\Models\Object\uac;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
  */
-
 use App\Models\Object\ObjectTable;
 
 /**
- * Description of Tbl_a_uac_permissions_schemes_p
+ * Description of Tbl_a_uac_user_locations_p
  *
  * @author 64146
  */
-class Tbl_a_uac_permissions_schemes_p extends ObjectTable {
+class Tbl_a_uac_user_locations_p extends ObjectTable {
 
     //put your code here
 
@@ -23,7 +22,7 @@ class Tbl_a_uac_permissions_schemes_p extends ObjectTable {
 
     public function __construct() {
         $this->ObjectTable = new ObjectTable;
-        $this->table_name = "tbl_a_uac_permissions_p";
+        $this->table_name = "tbl_a_uac_user_locations_p";
         $this->field = [
             [
                 'name' => 'id',
@@ -38,35 +37,34 @@ class Tbl_a_uac_permissions_schemes_p extends ObjectTable {
                 'length' => 32
             ],
             [
-                'name' => '__title',
-                'type' => 'varchar',
-                'length' => 255
-            ],
-            [
-                'name' => '__group_id',
-                'type' => 'int',
-                'length' => 32
-            ],
-            [
                 'name' => '__user_id',
                 'type' => 'int',
                 'length' => 32
             ],
             [
-                'name' => '__permission_id',
+                'name' => '__country_id',
                 'type' => 'int',
                 'length' => 32
             ],
             [
-                'name' => '__module_id',
+                'name' => '__province_id',
                 'type' => 'int',
                 'length' => 32
             ],
             [
-                'name' => '__is_allowed',
-                'type' => 'tinyint',
-                'length' => 1,
-                'default' => 0
+                'name' => '__city_id',
+                'type' => 'int',
+                'length' => 32
+            ],
+            [
+                'name' => '__district_id',
+                'type' => 'int',
+                'length' => 32
+            ],
+            [
+                'name' => '__area_id',
+                'type' => 'int',
+                'length' => 32
             ],
             [
                 'name' => 'is_active',
