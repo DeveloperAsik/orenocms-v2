@@ -16,7 +16,11 @@ use App\Libraries\Oreno\Date;
 use App\Libraries\Oreno\UploadFile;
 use App\Libraries\Oreno\Encrypter;
 use App\Models\Entity\uac\Tbl_a_uac_users_p_en;
+use App\Models\Entity\uac\Tbl_b_uac_user_group_c_en;
 use App\Models\Entity\uac\Tbl_a_uac_user_profiles_c_en;
+use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
+use App\Models\Entity\uac\Tbl_b_uac_user_permissions_r_en;
+use App\Models\Entity\uac\Tbl_a_uac_permissions_schemes_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_modules_p_en;
 use App\Models\Entity\uac\Tbl_c_uac_location_a_country_p_en;
@@ -43,7 +47,11 @@ class UserController extends Controller {
     protected $UploadFile;
     protected $Encrypter;
     protected $Tbl_a_uac_users_p_en;
+    protected $Tbl_b_uac_user_group_c_en;
     protected $Tbl_a_uac_user_profiles_c_en;
+    protected $Tbl_b_uac_group_permissions_r_en;
+    protected $Tbl_b_uac_user_permissions_r_en;
+    protected $Tbl_a_uac_permissions_schemes_p_en;
     protected $Tbl_a_uac_groups_p_en;
     protected $Tbl_a_uac_modules_p_en;
     protected $Tbl_c_uac_location_a_country_p_en;
@@ -64,7 +72,11 @@ class UserController extends Controller {
         $this->UploadFile = new UploadFile();
         $this->Encrypter = new Encrypter();
         $this->Tbl_a_uac_users_p_en = new Tbl_a_uac_users_p_en();
+        $this->Tbl_b_uac_user_group_c_en = new Tbl_b_uac_user_group_c_en();
         $this->Tbl_a_uac_user_profiles_c_en = new Tbl_a_uac_user_profiles_c_en();
+        $this->Tbl_b_uac_group_permissions_r_en = new Tbl_b_uac_group_permissions_r_en();
+        $this->Tbl_b_uac_user_permissions_r_en = new Tbl_b_uac_user_permissions_r_en();
+        $this->Tbl_a_uac_permissions_schemes_p_en = new Tbl_a_uac_permissions_schemes_p_en();
         $this->Tbl_a_uac_groups_p_en = new Tbl_a_uac_groups_p_en();
         $this->Tbl_a_uac_modules_p_en = new Tbl_a_uac_modules_p_en();
         $this->Tbl_c_uac_location_a_country_p_en = new Tbl_c_uac_location_a_country_p_en();
@@ -481,16 +493,19 @@ class UserController extends Controller {
         $data = $request->json()->all();
         $insertData = [];
         if (isset($data['d']) && !empty($data['d'])) {
-            dd($data);
             $password = $this->General->getRandomChar(8);
             $__password = $this->Encrypter->encrypt($password);
             $__salt = '';
             $__score = 0;
             $__uac_user_profile_id = 0;
-            $__uac_user_registered_type_id = 0;
+            $__uac_user_registered_type_id = 2; //superuser.manual.create
+            $validateEmail = $this->__check_exist_email($request, $data['e']);
+            if ($validateEmail && $validateEmail['data'] && $validateEmail['data'] != null) {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'email address (' . $data['e'] . ') already exist, please use different one', 'valid' => true]);
+            }
             $__uac_user_profile_id = $this->__insert_user_profile($request);
-            $__uac_user_registered_type_id = $this->__insert_user_registered_type_id($request);
             $__uac_user_location_id = $this->__insert_user_location($request);
+
             foreach ($data['d'] AS $key => $value) {
                 $insertData[] = [
                     'code' => $value['code'],
@@ -502,7 +517,7 @@ class UserController extends Controller {
                     '__phone_number' => $value['f'],
                     '__password' => $__password,
                     '__salt' => $__salt,
-                    '__description' => isset($value['g'],) ? $value['g'] : '-',
+                    '__description' => isset($value['g']) ? $value['g'] : '-',
                     '__score' => $__score,
                     '__uac_user_profile_id' => $__uac_user_profile_id,
                     '__uac_user_registered_type_id' => $__uac_user_registered_type_id,
@@ -525,7 +540,8 @@ class UserController extends Controller {
                 $this->__insert_group_user($request, $user_id);
             }
             if (isset($data['j']) && !empty($data['j'])) {
-                $this->__insert_module_user($request);
+                $this->__insert_group_permissions($request, $__module_id);
+                $this->__insert_user_permissions($request, $user_id);
             }
             return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
         } else {
@@ -533,11 +549,39 @@ class UserController extends Controller {
         }
     }
 
-    public function __insert_group_user($request) {
+    protected function __check_exist_email($request, $email = null) {
+        $responseMessage = 'Params Email cannot set empty, or your email address format is not corrected!';
+        $code = 500;
+        $valid = false;
+        if ($email != null) {
+            $params = [
+                'table_name' => 'tbl_a_uac_users_p',
+                'select' => ['a.id', '.code', 'a.__user_name', 'a.__user_ldap', 'a.__first_name', 'a.__last_name', 'a.__email'],
+                'conditions' => [
+                    'where' => [
+                        ['a.__email', 'like', '%' . $email . '%']
+                    ]
+                ]
+            ];
+            $response = $this->Tbl_a_uac_users_p_en->__find($request, 'first', $params);
+            if (isset($response['data']) && !empty($response['data'])) {
+                $code = 200;
+                $valid = true;
+                $responseMessage = 'Successfully find data.';
+            } else {
+                $code = 200;
+                $valid = true;
+                $responseMessage = 'Failed find data.';
+            }
+        }
+        return ['code' => $code, 'message' => $responseMessage, 'valid' => $valid, 'data' => $response['data']];
+    }
+
+    protected function __insert_user_profile($request) {
         $data = $request->json()->all();
         if (isset($data) && !empty($data)) {
             $photo_path = config('app.base_url_assets_media') . '/images/users/' . $data['code'] . '/001/original/default.jpg';
-            $insertData[] = [
+            $insertData = [
                 'code' => $data['code'],
                 '__address' => $data['s'],
                 '__lat' => $data['t'],
@@ -560,20 +604,128 @@ class UserController extends Controller {
                 'updated_date' => $this->Date->now()
             ];
             $insert = [
-                'table_name' => 'tbl_a_uac_user_registered_type_c',
+                'table_name' => 'tbl_a_uac_user_profiles_c',
                 'data' => $insertData
             ];
-            $response = $this->Tbl_a_uac_user_registered_type_c_en->__insert_get_id($request, $insert);
+            $response = $this->Tbl_a_uac_user_profiles_c_en->__insert_get_id($request, $insert);
             return $response;
         }
     }
 
-    public function __insert_photo($request) {
+    protected function __insert_user_location($request) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $insertData[] = [
+                'code' => $data['code'],
+                '__country_id' => (int) $data['w'],
+                '__province_id' => (int) $data['x'],
+                '__city_id' => (int) $data['y'],
+                '__district_id' => (int) $data['z'],
+                '__area_id' => (int) $data['aa'],
+                'is_active' => $data['h'],
+                'created_by' => (int) $this->__user_id,
+                'created_date' => $this->Date->now(),
+                'updated_by' => (int) $this->__user_id,
+                'updated_date' => $this->Date->now()
+            ];
+            $insert = [
+                'table_name' => 'tbl_a_uac_user_locations_p',
+                'data' => $insertData
+            ];
+            $response = $this->Tbl_a_uac_user_locations_p_en->__insert_get_id($request, $insert);
+            return $response;
+        }
+    }
+
+    protected function __insert_group_user($request) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $photo_path = config('app.base_url_assets_media') . '/images/users/' . $data['code'] . '/001/original/default.jpg';
+            $insertData[] = [
+                'code' => $data['code'],
+                '__uac_user_id' => $user_id,
+                '__uac_group_id' => $data['t'],
+                'is_active' => $data['h'],
+                'created_by' => (int) $this->__user_id,
+                'created_date' => $this->Date->now(),
+                'updated_by' => (int) $this->__user_id,
+                'updated_date' => $this->Date->now()
+            ];
+            $insert = [
+                'table_name' => 'tbl_b_uac_user_group_c',
+                'data' => $insertData
+            ];
+            $response = $this->Tbl_b_uac_user_group_c_en->__insert_get_id($request, $insert);
+            return $response;
+        }
+    }
+
+    protected function __insert_group_permissions($request) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $group_ids = [];
+            $photo_path = config('app.base_url_assets_media') . '/images/users/' . $data['code'] . '/001/original/default';
+            if (isset($data['i']) && !empty($data['i'])) {
+                foreach ($data['i'] AS $keyword => $value) {
+                    $ids[] = ['group_id' => $value];
+                    $permissions = $this->__get_permission_id($request, $value);
+                    $insertData[] = [
+                        'code' => $data['code'],
+                        '__group_id' => $value,
+                        '__permission_id' => $data['t'],
+                        '__module_id' => $data['t'],
+                        '__is_allowed' => 1,
+                        'is_active' => $data['h'],
+                        'created_by' => (int) $this->__user_id,
+                        'created_date' => $this->Date->now(),
+                        'updated_by' => (int) $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                    $insert = [
+                        'table_name' => 'tbl_b_uac_group_permissions_r',
+                        'data' => $insertData
+                    ];
+                    $response = $this->Tbl_b_uac_group_permissions_r_en->__insert_get_id($request, $insert);
+                }
+            }
+
+            return $response;
+        }
+    }
+
+    public function __get_permission_id($request, $group_id = null) {
+        if (isset($group_id) && !empty($group_id) && $group_id != null) {
+            $data = $request->json()->all();
+            if (isset($data['j']) && !empty($data['j'])) {
+                foreach($data['j'] AS $keyword => $value){
+                    
+                }
+            }
+            $params = [
+                'table_name' => 'tbl_a_uac_permissions_schemes_p',
+                'select' => ['a.id', 'a.__group_id', 'a.__permission_id', 'a.__module_id', 'a.__is_allowed'],
+                'conditions' => [
+                    'where' => [
+                        ['a.__group_id', '=', $group_id],
+                        ['a.__module_id', '=', $value]
+                    ]
+                ]
+            ];
+            $response = $this->Tbl_a_uac_permissions_schemes_p_en->__find($request, 'all', $params);
+            return $response;
+        }
+    }
+
+    public function __insert_user_permissions($request, $user_id) {
+        
+    }
+
+    protected function __insert_photo($request) {
         $data = $request->all();
         if (isset($data['file']) && !empty($data['file'])) {
             $options = array(
                 'id' => $data['code'],
-                'name' => $data['file']->getClientOriginalName(),
+                'name' => 'default', //$data['file']->getClientOriginalName(),
                 'origin_name' => $data['file']->getClientOriginalName(),
                 'tmp_name' => $data['file']->path(),
                 'img_path' => config('app.path_assets_media') . '/images/users',
@@ -620,101 +772,6 @@ class UserController extends Controller {
                 }
                 return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully upload documents', 'data' => ['code' => $data['code'], 'document_id' => $doc_ids]]);
             }
-        }
-    }
-
-    public function __insert_user_registered_type_id($request) {
-        $data = $request->json()->all();
-        if (isset($data) && !empty($data)) {
-            $photo_path = config('app.base_url_assets_media') . '/images/users/' . $data['code'] . '/001/original/default.jpg';
-            $insertData[] = [
-                'code' => $data['code'],
-                '__address' => $data['s'],
-                '__lat' => $data['t'],
-                '__lng' => $data['u'],
-                '__zoom' => $data['v'],
-                '__socmed_fb' => $data['o'],
-                '__socmed_tw' => $data['p'],
-                '__socmed_ins' => $data['q'],
-                '__socmed_lnkd' => $data['r'],
-                '__photos' => $photo_path,
-                '__last_education' => $data['k'],
-                '__last_education_institution' => $data['l'],
-                '__skill' => $data['m'],
-                '__notes' => $data['n'],
-                '__description' => '-',
-                'is_active' => $data['h'],
-                'created_by' => (int) $this->__user_id,
-                'created_date' => $this->Date->now(),
-                'updated_by' => (int) $this->__user_id,
-                'updated_date' => $this->Date->now()
-            ];
-            $insert = [
-                'table_name' => 'tbl_a_uac_user_registered_type_c',
-                'data' => $insertData
-            ];
-            $response = $this->Tbl_a_uac_user_registered_type_c_en->__insert_get_id($request, $insert);
-            return $response;
-        }
-    }
-
-    protected function __insert_user_profile($request) {
-        $data = $request->json()->all();
-        if (isset($data) && !empty($data)) {
-            $photo_path = config('app.base_url_assets_media') . '/images/users/' . $data['code'] . '/001/original/default.jpg';
-            $insertData[] = [
-                'code' => $data['code'],
-                '__address' => $data['s'],
-                '__lat' => $data['t'],
-                '__lng' => $data['u'],
-                '__zoom' => $data['v'],
-                '__socmed_fb' => $data['o'],
-                '__socmed_tw' => $data['p'],
-                '__socmed_ins' => $data['q'],
-                '__socmed_lnkd' => $data['r'],
-                '__photos' => $photo_path,
-                '__last_education' => $data['k'],
-                '__last_education_institution' => $data['l'],
-                '__skill' => $data['m'],
-                '__notes' => $data['n'],
-                '__description' => '-',
-                'is_active' => $data['h'],
-                'created_by' => (int) $this->__user_id,
-                'created_date' => $this->Date->now(),
-                'updated_by' => (int) $this->__user_id,
-                'updated_date' => $this->Date->now()
-            ];
-            $insert = [
-                'table_name' => 'tbl_a_uac_user_profiles_c',
-                'data' => $insertData
-            ];
-            $response = $this->Tbl_a_uac_user_profiles_c_en->__insert_get_id($request, $insert);
-            return $response;
-        }
-    }
-
-    public function __insert_user_location($request) {
-        $data = $request->json()->all();
-        if (isset($data) && !empty($data)) {
-            $insertData[] = [
-                'code' => $data['code'],
-                '__country_id' => (int) $data['v'],
-                '__province_id' => (int) $data['w'],
-                '__city_id' => (int) $data['x'],
-                '__district_id' => (int) $data['y'],
-                '__area_id' => (int) $data['z'],
-                'is_active' => $data['h'],
-                'created_by' => (int) $this->__user_id,
-                'created_date' => $this->Date->now(),
-                'updated_by' => (int) $this->__user_id,
-                'updated_date' => $this->Date->now()
-            ];
-            $insert = [
-                'table_name' => 'tbl_a_uac_user_locations_p',
-                'data' => $insertData
-            ];
-            $response = $this->Tbl_a_uac_user_locations_p_en->__insert_get_id($request, $insert);
-            return $response;
         }
     }
 

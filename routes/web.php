@@ -40,7 +40,6 @@ Route::prefix('extraweb')->group(function () {
         Route::post('/get/{method}', [AjaxController::class, 'fn_ajax_get'])->name('extraweb.global.ajax_get');
         Route::post('/post/{method}', [AjaxController::class, 'fn_ajax_post'])->name('extraweb.global.ajax_post');
     });
-
     Route::prefix('/master')->group(function () {
         Route::prefix('/uac')->group(function () {
             Route::prefix('/users')->group(function () {
