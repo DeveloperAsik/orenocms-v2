@@ -20,6 +20,7 @@ use App\Models\Entity\uac\Tbl_b_uac_user_group_c_en;
 use App\Models\Entity\uac\Tbl_a_uac_user_profiles_c_en;
 use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
 use App\Models\Entity\uac\Tbl_b_uac_user_permissions_r_en;
+use App\Models\Entity\uac\Tbl_a_uac_permissions_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_permissions_schemes_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_modules_p_en;
@@ -51,6 +52,7 @@ class UserController extends Controller {
     protected $Tbl_a_uac_user_profiles_c_en;
     protected $Tbl_b_uac_group_permissions_r_en;
     protected $Tbl_b_uac_user_permissions_r_en;
+    protected $Tbl_a_uac_permissions_p_en;
     protected $Tbl_a_uac_permissions_schemes_p_en;
     protected $Tbl_a_uac_groups_p_en;
     protected $Tbl_a_uac_modules_p_en;
@@ -76,6 +78,7 @@ class UserController extends Controller {
         $this->Tbl_a_uac_user_profiles_c_en = new Tbl_a_uac_user_profiles_c_en();
         $this->Tbl_b_uac_group_permissions_r_en = new Tbl_b_uac_group_permissions_r_en();
         $this->Tbl_b_uac_user_permissions_r_en = new Tbl_b_uac_user_permissions_r_en();
+        $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
         $this->Tbl_a_uac_permissions_schemes_p_en = new Tbl_a_uac_permissions_schemes_p_en();
         $this->Tbl_a_uac_groups_p_en = new Tbl_a_uac_groups_p_en();
         $this->Tbl_a_uac_modules_p_en = new Tbl_a_uac_modules_p_en();
@@ -498,6 +501,7 @@ class UserController extends Controller {
             $__salt = '';
             $__score = 0;
             $__uac_user_profile_id = 0;
+
             $__uac_user_registered_type_id = 2; //superuser.manual.create
             $validateEmail = $this->__check_exist_email($request, $data['e']);
             if ($validateEmail && $validateEmail['data'] && $validateEmail['data'] != null) {
@@ -505,30 +509,27 @@ class UserController extends Controller {
             }
             $__uac_user_profile_id = $this->__insert_user_profile($request);
             $__uac_user_location_id = $this->__insert_user_location($request);
-
-            foreach ($data['d'] AS $key => $value) {
-                $insertData[] = [
-                    'code' => $value['code'],
-                    '__user_name' => $value['a'],
-                    '__user_ldap' => $value['b'],
-                    '__first_name' => $value['c'],
-                    '__last_name' => $value['d'],
-                    '__email' => $value['e'],
-                    '__phone_number' => $value['f'],
-                    '__password' => $__password,
-                    '__salt' => $__salt,
-                    '__description' => isset($value['g']) ? $value['g'] : '-',
-                    '__score' => $__score,
-                    '__uac_user_profile_id' => $__uac_user_profile_id,
-                    '__uac_user_registered_type_id' => $__uac_user_registered_type_id,
-                    '__uac_user_location_id' => $__uac_user_location_id,
-                    'is_active' => $value['h'],
-                    'created_by' => (int) $this->__user_id,
-                    'created_date' => $this->Date->now(),
-                    'updated_by' => (int) $this->__user_id,
-                    'updated_date' => $this->Date->now()
-                ];
-            }
+            $insertData = [
+                'code' => $data['code'],
+                '__user_name' => $data['a'],
+                '__user_ldap' => $data['b'],
+                '__first_name' => $data['c'],
+                '__last_name' => $data['d'],
+                '__email' => $data['e'],
+                '__phone_number' => $data['f'],
+                '__password' => $__password,
+                '__salt' => $__salt,
+                '__description' => isset($data['g']) ? $data['g'] : '-',
+                '__score' => $__score,
+                '__uac_user_profile_id' => $__uac_user_profile_id,
+                '__uac_user_registered_type_id' => $__uac_user_registered_type_id,
+                '__uac_user_location_id' => $__uac_user_location_id,
+                'is_active' => $data['h'],
+                'created_by' => (int) $this->__user_id,
+                'created_date' => $this->Date->now(),
+                'updated_by' => (int) $this->__user_id,
+                'updated_date' => $this->Date->now()
+            ];
         }
         $insert = [
             'table_name' => 'tbl_a_uac_users_p',
@@ -540,7 +541,7 @@ class UserController extends Controller {
                 $this->__insert_group_user($request, $user_id);
             }
             if (isset($data['j']) && !empty($data['j'])) {
-                $this->__insert_group_permissions($request, $__module_id);
+                $this->__insert_group_permissions($request, $user_id);
                 $this->__insert_user_permissions($request, $user_id);
             }
             return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
@@ -607,15 +608,14 @@ class UserController extends Controller {
                 'table_name' => 'tbl_a_uac_user_profiles_c',
                 'data' => $insertData
             ];
-            $response = $this->Tbl_a_uac_user_profiles_c_en->__insert_get_id($request, $insert);
-            return $response;
+            return $this->Tbl_a_uac_user_profiles_c_en->__insert_get_id($request, $insert);
         }
     }
 
     protected function __insert_user_location($request) {
         $data = $request->json()->all();
         if (isset($data) && !empty($data)) {
-            $insertData[] = [
+            $insertData = [
                 'code' => $data['code'],
                 '__country_id' => (int) $data['w'],
                 '__province_id' => (int) $data['x'],
@@ -632,92 +632,100 @@ class UserController extends Controller {
                 'table_name' => 'tbl_a_uac_user_locations_p',
                 'data' => $insertData
             ];
-            $response = $this->Tbl_a_uac_user_locations_p_en->__insert_get_id($request, $insert);
-            return $response;
+            return $this->Tbl_a_uac_user_locations_p_en->__insert_get_id($request, $insert);
         }
     }
 
-    protected function __insert_group_user($request) {
+    protected function __insert_group_user($request, $user_id = null) {
         $data = $request->json()->all();
-        if (isset($data) && !empty($data)) {
-            $photo_path = config('app.base_url_assets_media') . '/images/users/' . $data['code'] . '/001/original/default.jpg';
-            $insertData[] = [
-                'code' => $data['code'],
-                '__uac_user_id' => $user_id,
-                '__uac_group_id' => $data['t'],
-                'is_active' => $data['h'],
-                'created_by' => (int) $this->__user_id,
-                'created_date' => $this->Date->now(),
-                'updated_by' => (int) $this->__user_id,
-                'updated_date' => $this->Date->now()
-            ];
+        if (isset($data) && !empty($data) && $user_id != null) {
+            $insertData = [];
+            foreach ($data['i'] AS $k => $v) {
+                $insertData[] = [
+                    'code' => $data['code'],
+                    '__uac_user_id' => $user_id,
+                    '__uac_group_id' => (int) $v,
+                    'is_active' => $data['h'],
+                    'created_by' => (int) $this->__user_id,
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->__user_id,
+                    'updated_date' => $this->Date->now()
+                ];
+            }
             $insert = [
                 'table_name' => 'tbl_b_uac_user_group_c',
                 'data' => $insertData
             ];
-            $response = $this->Tbl_b_uac_user_group_c_en->__insert_get_id($request, $insert);
-            return $response;
+            return $this->Tbl_b_uac_user_group_c_en->__insert($request, $insert);
         }
     }
 
-    protected function __insert_group_permissions($request) {
+    protected function __insert_group_permissions($request, $user_id = null) {
         $data = $request->json()->all();
         if (isset($data) && !empty($data)) {
             $group_ids = [];
-            $photo_path = config('app.base_url_assets_media') . '/images/users/' . $data['code'] . '/001/original/default';
+            //$photo_path = config('app.base_url_assets_media') . '/images/users/' . $data['code'] . '/001/original/default';
             if (isset($data['i']) && !empty($data['i'])) {
-                foreach ($data['i'] AS $keyword => $value) {
-                    $ids[] = ['group_id' => $value];
-                    $permissions = $this->__get_permission_id($request, $value);
-                    $insertData[] = [
-                        'code' => $data['code'],
-                        '__group_id' => $value,
-                        '__permission_id' => $data['t'],
-                        '__module_id' => $data['t'],
-                        '__is_allowed' => 1,
-                        'is_active' => $data['h'],
-                        'created_by' => (int) $this->__user_id,
-                        'created_date' => $this->Date->now(),
-                        'updated_by' => (int) $this->__user_id,
-                        'updated_date' => $this->Date->now()
-                    ];
-                    $insert = [
-                        'table_name' => 'tbl_b_uac_group_permissions_r',
-                        'data' => $insertData
-                    ];
-                    $response = $this->Tbl_b_uac_group_permissions_r_en->__insert_get_id($request, $insert);
+                $a1 = $data['i'];
+                $a2 = $data['j'];
+                $result = [];
+                foreach ($a1 as $item1) {
+                    foreach ($a2 as $item2) {
+                        $result[] = [$item1, $item2];
+                    }
+                }
+                $permutationResult = [];
+                if ($result) {
+                    foreach ($result AS $key => $value) {
+                        $permissions = $this->Tbl_a_uac_permissions_p_en->__get_all_permission($request);
+                        foreach ($permissions['data'] AS $k => $v) {
+                            $permutationResult[] = [
+                                '__user_id' => $user_id,
+                                '__group_id' => (int) $value[0],
+                                '__permission_id' => (int) $v->id,
+                                '__module_id' => (int) $value[1],
+                                '__is_allowed' => 1,
+                                'is_active' => 1,
+                                'created_by' => (int) $this->__user_id,
+                                'created_date' => $this->Date->now(),
+                                'updated_by' => (int) $this->__user_id,
+                                'updated_date' => $this->Date->now()
+                            ];
+                        }
+                    }
                 }
             }
-
-            return $response;
-        }
-    }
-
-    public function __get_permission_id($request, $group_id = null) {
-        if (isset($group_id) && !empty($group_id) && $group_id != null) {
-            $data = $request->json()->all();
-            if (isset($data['j']) && !empty($data['j'])) {
-                foreach($data['j'] AS $keyword => $value){
-                    
-                }
-            }
-            $params = [
-                'table_name' => 'tbl_a_uac_permissions_schemes_p',
-                'select' => ['a.id', 'a.__group_id', 'a.__permission_id', 'a.__module_id', 'a.__is_allowed'],
-                'conditions' => [
-                    'where' => [
-                        ['a.__group_id', '=', $group_id],
-                        ['a.__module_id', '=', $value]
-                    ]
-                ]
+            $insert = [
+                'table_name' => 'tbl_b_uac_group_permissions_r',
+                'data' => $permutationResult
             ];
-            $response = $this->Tbl_a_uac_permissions_schemes_p_en->__find($request, 'all', $params);
-            return $response;
+            return $this->Tbl_b_uac_group_permissions_r_en->__insert($request, $insert);
         }
     }
 
-    public function __insert_user_permissions($request, $user_id) {
-        
+    public function __insert_user_permissions($request, $user_id = null) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data) && $user_id != null) {
+            $permissions = $this->Tbl_a_uac_permissions_p_en->__get_all_permission($request);
+            foreach ($permissions['data'] AS $k => $v) {
+                $permutationResult[] = [
+                    '__user_id' => $user_id,
+                    '__permission_id' => $v->id,
+                    '__is_denied' => 0,
+                    'is_active' => 1,
+                    'created_by' => (int) $this->__user_id,
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->__user_id,
+                    'updated_date' => $this->Date->now()
+                ];
+            }
+            $insert = [
+                'table_name' => 'tbl_b_uac_user_permissions_r',
+                'data' => $permutationResult
+            ];
+            $response = $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert);
+            return $response;
+        }
     }
 
     protected function __insert_photo($request) {
@@ -793,27 +801,70 @@ class UserController extends Controller {
         ];
         $params = [
             'table_name' => 'tbl_a_uac_users_p',
-            'select' => ['a.*'],
+            'select' => ['a.id', 'a.code', 'a.__user_name', 'a.__user_ldap', 'a.__first_name', 'a.__last_name', 'a.__email', 'a.__phone_number', 'a.__description', 'a.__score', 'a.__uac_user_profile_id', 'a.__uac_user_registered_type_id', 'a.__uac_user_location_id', 'a.is_active'],
             'conditions' => [
                 'where' => [
                     ['a.id', '=', $id]
                 ]
             ],
-            'limit' => 100,
-            'offset' => 0
+            'limit' => 1
         ];
         $user = $this->Tbl_a_uac_users_p_en->__find($request, 'first', $params);
+        $paramUserProfiles = [
+            'table_name' => 'tbl_a_uac_user_profiles_c',
+            'select' => ['a.id', 'a.code', 'a.__address', 'a.__lat', 'a.__lng', 'a.__zoom', 'a.__socmed_fb', 'a.__socmed_tw', 'a.__socmed_ins', 'a.__socmed_lnkd', 'a.__photos', 'a.__last_education', 'a.__last_education_institution', 'a.__skill', 'a.__notes', 'a.__description', 'a.is_active'],
+            'conditions' => [
+                'where' => [
+                    ['a.id', '=', $user['data']->__uac_user_profile_id]
+                ]
+            ],
+            'limit' => 1
+        ];
+        $user_profile = $this->Tbl_a_uac_user_profiles_c_en->__find($request, 'first', $paramUserProfiles);
+        $paramUserLocations = [
+            'table_name' => 'tbl_a_uac_user_locations_p',
+            'select' => [
+                'a.id', 'a.is_active',
+                'b.id AS country_id', 'b.__name AS country_name',
+                'c.id AS province_id', 'c.__name AS province_name',
+                'd.id AS city_id', 'd.__name AS city_name',
+                'e.id AS district_id', 'e.__name AS district_name',
+                'f.id AS area_id', 'f.__name AS area_name'
+            ],
+            'join' => [
+                'leftJoin' => [
+                    ['tbl_c_uac_location_a_country_p AS b', 'b.id', '=', 'a.__country_id'],
+                    ['tbl_c_uac_location_b_provinces_p AS c', 'c.id', '=', 'a.__province_id'],
+                    ['tbl_c_uac_location_c_cities_p AS d', 'd.id', '=', 'a.__city_id'],
+                    ['tbl_c_uac_location_d_districts_p AS e', 'e.id', '=', 'a.__district_id'],
+                    ['tbl_c_uac_location_e_areas_p AS f', 'f.id', '=', 'a.__area_id']
+                ]
+            ],
+            'conditions' => [
+                'where' => [
+                    ['a.id', '=', $user['data']->__uac_user_location_id]
+                ]
+            ],
+            'limit' => 1
+        ];
+        $user_location = $this->Tbl_a_uac_user_locations_p_en->__find($request, 'first', $paramUserLocations);
+        $code = $user['data']->code;
+        $groupOptions = $this->__get_user_groups($request);
+        $moduleOptions = $this->__get_modules($request);
+        $countryOptions = $this->__get_countries($request);
         $this->load_css([
-                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
-                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
-                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/dropzone/css/dropzone.css"
         ]);
         $this->load_js([
-                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
-                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-                //config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/dropzone/dropzone.js"
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'user'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'code', 'user', 'user_profile', 'user_location', 'groupOptions', 'moduleOptions', 'countryOptions'));
     }
 
     public function update(Request $request, $params = null) {

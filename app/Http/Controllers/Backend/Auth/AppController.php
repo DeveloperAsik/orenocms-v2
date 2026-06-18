@@ -102,7 +102,7 @@ class AppController extends Controller {
     public function logout(Request $request) {
         $data = $request->session()->all();
         if (isset($data) && !empty($data)) {
-            $_user_id = $this->Converter->base64_basic($data['_auth']['_user_id'], 'decode', ['rep' => 3]);
+            $_user_id = $data['_authentification'][config('app.authVar.auth._user_id')];
             $this->Tbl_a_uac_user_token_c_en->__update_clear_user_token($request, ['id' => (int) $_user_id]);
             $this->Authentification->clear_session($request);
             return redirect('/extraweb/login');
@@ -113,7 +113,7 @@ class AppController extends Controller {
 
     public function dashboard(Request $request) {
         $title_for_layout = config('app.name');
-
+        $data = $request->session()->all();
         $loadCss = [
             config('app.base_url_assets_templates') . '/metronic/assets/admin/pages/css/todo.css'
         ];
@@ -147,7 +147,6 @@ class AppController extends Controller {
                     $validate_login = $this->__input_login_form($request);
                     if (isset($validate_login) && !empty($validate_login) && $validate_login['auth'] && $validate_login['user'] && $validate_login['isvalid'] == true) {
                         $generate_token = $this->__generate_token($request, $validate_login);
-                        $storing_token = $this->__store_token($request, $generate_token);
                         $response = [
                             'redirectTo' => '/dashboard',
                             'token' => $generate_token
@@ -168,50 +167,55 @@ class AppController extends Controller {
         if (isset($data) && !empty($data)) {
             $userid = base64_decode($data['d']);
             $passid = base64_decode($data['e']);
-            $getExistUser = $this->Tbl_a_uac_users_p_en->__get_user($request, $userid);
-            $getExistUser_pass = $this->Tbl_a_uac_users_p_en->__get_user_pass($request, $getExistUser['data']->id);
-            //get user group
-            $getUserGroup = $this->Tbl_b_uac_user_group_c_en->__get_user_group($request, $getExistUser['data']->id);
-            $paramGroupPermission = [
-                'userid' => $getExistUser['data']->id,
-                'groupid' => $getUserGroup['data']->__uac_group_id
-            ];
-            //get group permission
-            $getGroupPermission = $this->Tbl_b_uac_group_permissions_r_en->__get_permission_group_by_id($request, $paramGroupPermission);
-            //get user permission
-            $getUserPermission = $this->Tbl_b_uac_user_permissions_r_en->__get_permission_user_by_id($request, $paramGroupPermission);
-            //validate jwt
-            $validatePassDB = $this->Encrypter->decrypt($getExistUser_pass['data']->__password);
-            $statusResponse = [
-                'is_pass_valid' => 0,
-                'is_group_user_allowed' => 0,
-                'is_group_permission_allowed' => 0,
-                'is_user_permission_allowed' => 0,
-            ];
-            $userExist = [
-                'userid' => 0,
-                'groupid' => 0
-            ];
-            $isvalid = false;
-            if ($passid == $validatePassDB) {
-                $userExist = [
+            $getExistUser = $this->Tbl_a_uac_users_p_en->__get_user_byuserid($request, $userid);
+            if (isset($getExistUser['data']) && !empty($getExistUser['data'])) {
+                //validate pass in db with input form submit from user
+                $getExistUser_pass = $getExistUser['data']->__password;
+                //get user group
+                $getUserGroup = $this->Tbl_b_uac_user_group_c_en->__get_user_group($request, $getExistUser['data']->id);
+                $paramGroupPermission = [
                     'userid' => $getExistUser['data']->id,
-                    'username' => $getExistUser['data']->__user_name,
-                    'firstname' => $getExistUser['data']->__first_name,
-                    'lastname' => $getExistUser['data']->__last_name,
-                    'email' => $getExistUser['data']->__email,
-                    'groupid' => $getUserGroup['data']->id,
-                    'usergroup' => $getUserGroup['data']->__name
+                    'groupid' => $getUserGroup['data']->__uac_group_id
                 ];
-                if ($getGroupPermission['data']->__is_public == 1 && $getGroupPermission['data']->__is_allowed == 1 && $getUserPermission['data']->__is_denied == 0) {
-                    $statusResponse = [
-                        'is_pass_valid' => 1,
-                        'is_group_user_allowed' => 1,
-                        'is_group_permission_allowed' => 1,
-                        'is_user_permission_allowed' => 1,
+                //get group permission
+                $getGroupPermission = $this->Tbl_b_uac_group_permissions_r_en->__get_permission_group_by_id($request, $paramGroupPermission);
+                //get user permission
+                $getUserPermission = $this->Tbl_b_uac_user_permissions_r_en->__get_permission_user_by_id($request, $paramGroupPermission);
+                //validate jwt
+                $validatePassDB = $this->Encrypter->decrypt($getExistUser_pass);
+                $statusResponse = [
+                    'is_pass_valid' => 0,
+                    'is_group_user_allowed' => 0,
+                    'is_group_permission_allowed' => 0,
+                    'is_user_permission_allowed' => 0,
+                ];
+                $userExist = [
+                    'userid' => 0,
+                    'groupid' => 0
+                ];
+                $isvalid = false;
+                if ($passid == $validatePassDB) {
+                    $userExist = [
+                        'userid' => $getExistUser['data']->id,
+                        'username' => $getExistUser['data']->__user_name,
+                        'firstname' => $getExistUser['data']->__first_name,
+                        'lastname' => $getExistUser['data']->__last_name,
+                        'email' => $getExistUser['data']->__email,
+                        'groupid' => $getUserGroup['data']->id,
+                        'usergroup' => $getUserGroup['data']->__name,
+                        'moduleid' => $getGroupPermission['data']->__module_id
                     ];
+                    if ($getGroupPermission['data']->__is_public == 1 && $getGroupPermission['data']->__is_allowed == 1 && $getUserPermission['data']->__is_denied == 0) {
+                        $statusResponse = [
+                            'is_user_active' => $getExistUser['data']->is_active,
+                            'is_pass_valid' => 1,
+                            'is_group_user_allowed' => 1,
+                            'is_group_permission_allowed' => 1,
+                            'is_user_permission_allowed' => 1,
+                        ];
+                    }
+                    $isvalid = true;
                 }
-                $isvalid = true;
             }
             $response = [
                 'isvalid' => $isvalid,
@@ -226,6 +230,9 @@ class AppController extends Controller {
         if ($params && $params != '') {
             $sessiondata = $request->session()->all();
             $tokenExist = $this->Tbl_a_uac_user_token_c_en->__get_user($request, $params);
+            $responseVal = [];
+            $_session_is_logged_in = 0;
+            $_session_is_autologged_out = 0;
             if (isset($tokenExist['data']) && !empty($tokenExist['data'] && $tokenExist['data']->__token != '' && $tokenExist['data']->__is_expiry != 0)) {
                 //if token exist
                 $decryptToken = $this->Encrypter->shuffle('decrypt', $tokenExist['data']->__token);
@@ -239,13 +246,14 @@ class AppController extends Controller {
                     $groupid = $this->Converter->base64($request, $groupid, 'encode', ['rep' => 3]);
                     $newTOkenGen = 'userid->' . $userid . '&groupid->' . $groupid . '&createdate->' . $this->Date->now('Y-m-d|H:i:s') . '&expirydate->' . str_replace(' ', '|', $this->Date->after(4));
                     $newEncryptToken = $this->Encrypter->shuffle('encrypt', $newTOkenGen);
+                    $_session_is_logged_in = 1;
                     $updateData = [
                         '__token' => $newEncryptToken,
                         '__device_id' => $sessiondata['_uuid'],
                         '__expiry_date' => $this->Date->after(4),
                         '__uac_group_id' => $params['user']['groupid'],
                         '__uac_user_id' => $params['user']['userid'],
-                        '__is_logged_in' => 1,
+                        '__is_logged_in' => $_session_is_logged_in,
                         '__is_expiry' => 0,
                         'updated_by' => $params['user']['userid'],
                         'updated_date' => $this->Date->now('Y-m-d H:i:s')
@@ -259,10 +267,10 @@ class AppController extends Controller {
                     ];
                     $tokenInsert = $this->Tbl_a_uac_user_token_c_en->__update($request, $updateData, $paramData);
                     if ($tokenInsert) {
-                        return $newEncryptToken;
+                        $responseVal = $newEncryptToken;
                     }
                 } else {
-                    return $tokenExist['data']->__token;
+                    $responseVal = $tokenExist['data']->__token;
                 }
             } else {
                 //generate new token
@@ -273,6 +281,7 @@ class AppController extends Controller {
                 $tokenString = 'userid->' . $userid . '&groupid->' . $groupid . '&createdate->' . $datenow . '&expirydate->' . $expirydate;
                 $encryptToken = $this->Encrypter->shuffle('encrypt', $tokenString);
                 $decryptToken = $this->Encrypter->shuffle('decrypt', $encryptToken);
+                $_session_is_logged_in = 1;
                 //insert new token into db 
                 $insertData = [
                     '__token' => $encryptToken,
@@ -280,7 +289,7 @@ class AppController extends Controller {
                     '__expiry_date' => $expirydate,
                     '__uac_group_id' => $params['user']['groupid'],
                     '__uac_user_id' => $params['user']['userid'],
-                    '__is_logged_in' => 1,
+                    '__is_logged_in' => $_session_is_logged_in,
                     '__is_expiry' => 0,
                     'is_active' => 1,
                     'created_by' => $params['user']['userid'],
@@ -294,48 +303,25 @@ class AppController extends Controller {
                 ];
                 $tokenInsert = $this->Tbl_a_uac_user_token_c_en->__insert($request, $paramData);
                 if ($tokenInsert) {
-                    return $encryptToken;
+                    $responseVal = $encryptToken;
                 }
             }
+            $sessionAssignArr = [
+                '_authentification' => [
+                    config('app.authVar.session.is_logged_in') => $_session_is_logged_in, //_session_is_logged_in
+                    config('app.authVar.session.is_autologged_out') => $_session_is_autologged_out, //_session_is_autologged_out
+                    config('app.authVar.auth._user_id') => $params['user']['userid'],
+                    config('app.authVar.auth._group_id') => $params['user']['groupid'],
+                    config('app.authVar.auth._module_id') => $params['user']['moduleid'],
+                    config('app.authVar.permissions._is_user_active') => $params['auth']['is_user_active'],
+                    config('app.authVar.permissions._is_group_user_allowed') => $params['auth']['is_group_user_allowed'],
+                    config('app.authVar.permissions._is_group_permission_allowed') => $params['auth']['is_group_permission_allowed'],
+                    config('app.authVar.permissions._is_user_permission_allowed') => $params['auth']['is_user_permission_allowed']
+                ]
+            ];
+            session($sessionAssignArr);
+            session()->save();
+            return $responseVal;
         }
-    }
-
-    protected function __store_token($request, $generate_token) {
-        $urlpathonly = explode('/', request()->path());
-        $segment1 = $urlpathonly[0] . '/';
-        $getModuleName = $this->Tbl_a_uac_modules_p_en->__get_module($request, $segment1);
-        $_module_id = $this->Converter->base64($request, $getModuleName['data']->id, 'encode', ['rep' => 3]);
-        $decryptToken = $this->Encrypter->shuffle('decrypt', $generate_token);
-        $tokenDecrypt = explode('&', $decryptToken);
-        $_user_id = $this->Converter->base64($request, str_replace('userid->', '', $tokenDecrypt[0]), 'decode', ['rep' => 3]);
-        $_group_id = $this->Converter->base64($request, str_replace('groupid->', '', $tokenDecrypt[1]), 'decode', ['rep' => 3]);
-        $_is_group_allowed = 0;
-        $_is_user_allowed = 0;
-        $usergroup = $this->Tbl_b_uac_user_group_c_en->__get_user_group_by_id($request, $_user_id, $_group_id);
-        if ($usergroup && $usergroup['data'] && $usergroup['data']->is_active == 1) {
-            $userexist = $this->Tbl_a_uac_users_p_en->__get_user_pass($request, $_user_id);
-            if ($userexist['data']->is_active == 1) {
-                $_is_user_allowed = 1;
-            }
-            $groupexist = $this->Tbl_a_uac_groups_p_en->__get_group_by_id($request, $_group_id);
-            if ($groupexist['data']->is_active == 1) {
-                $_is_group_allowed = 1;
-            }
-        }
-        $sessionAssignArr = [
-            '_session_is_logged_in' => 1, //_session_is_logged_in
-            '_auth' => [//_auth            
-                '_user_id' => str_replace('userid->', '', $tokenDecrypt[0]), //_user_id
-                '_group_id' => str_replace('groupid->', '', $tokenDecrypt[1]), //_group_id
-                '_module_id' => $_module_id, //_module
-            ],
-            '_permissions' => [//_permissions
-                '_is_group_allowed' => $_is_group_allowed, //_is_group_allowed
-                '_is_user_allowed' => $_is_user_allowed                         //_is_user_allowed
-            ]
-        ];
-        session($sessionAssignArr);
-        session()->save();
-        return true;
     }
 }

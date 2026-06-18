@@ -199,7 +199,7 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
         return $this->Tbl_a_uac_permissions_p->__find($request, 'first', $paramCheckName);
     }
 
-    public function __get_all_permission(Request $request, $keyword) {
+    public function __get_all_permission(Request $request, $keyword = null) {
         $conditions = [
             'where' => [
                 ['a.is_active', '=', 1]

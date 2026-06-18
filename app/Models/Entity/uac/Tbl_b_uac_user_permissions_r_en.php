@@ -54,22 +54,40 @@ class Tbl_b_uac_user_permissions_r_en extends Tbl_b_uac_user_permissions_r {
         return $this->Tbl_b_uac_user_permissions_r->__find($request, 'first', $paramCheckName);
     }
 
-    public function __get_permission_user_by_id(Request $request, $param) {
-        if ($param && is_array($param)) {
+    public function __get_permission_user_by_id(Request $request, $params) {
+        if ($params && is_array($params)) {
+//            $paramCheckName = [
+//                'table_name' => 'tbl_a_uac_users_p',
+//                'select' => ['a.id', 'a.__user_name', 'a.__first_name', 'a.__last_name', 'a.__email', 'b.__permission_id', 'b.__is_denied'],
+//                'join' => [
+//                    'leftJoin' => [
+//                        ['tbl_b_uac_user_permissions_r AS b', 'b.__user_id', '=', 'a.id'],
+//                        ['tbl_a_uac_permissions_p AS c','c.id','=','b.__permission_id']
+//                    ]
+//                ],
+//                'conditions' => [
+//                    'where' => [
+//                        ['b.__user_id', '=', 1]
+//                    ],
+//                ]
+//            ];
+//            return $this->Tbl_b_uac_user_permissions_r->__find($request, 'first', $paramCheckName);
+            
             $paramCheckName = [
-                'table_name' => 'tbl_a_uac_users_p',
-                'select' => ['a.id', 'a.__user_name', 'a.__first_name', 'a.__last_name', 'a.__email', 'b.__permission_id', 'b.__is_denied'],
+                'table_name' => 'tbl_a_uac_permissions_p',
+                'select' => ['a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS permission_id', 'b.__is_denied'],
                 'join' => [
                     'leftJoin' => [
-                        ['tbl_b_uac_user_permissions_r AS b', 'b.__user_id', '=', 'a.id']
+                        ['tbl_b_uac_user_permissions_r AS b', 'b.__permission_id', '=', 'a.id']
                     ]
                 ],
                 'conditions' => [
                     'where' => [
-                        ['b.__user_id', '=', 1]
-                    ],
+                        ['b.__user_id', '=', $params['userid']]
+                    ]
                 ]
             ];
+            
             return $this->Tbl_b_uac_user_permissions_r->__find($request, 'first', $paramCheckName);
         }
     }
