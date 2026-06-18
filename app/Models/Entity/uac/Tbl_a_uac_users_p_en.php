@@ -65,6 +65,7 @@ class Tbl_a_uac_users_p_en extends Tbl_a_uac_users_p {
                 ],
                 'orWhere' => [
                     ['a.__user_name', 'like', '%' . $keyword],
+                    ['a.__user_ldap', 'like', '%' . $keyword],
                     ['a.__first_name', 'like', '%' . $keyword],
                     ['a.__last_name', 'like', '%' . $keyword],
                     ['a.__email', 'like', '%' . $keyword]
@@ -74,6 +75,32 @@ class Tbl_a_uac_users_p_en extends Tbl_a_uac_users_p {
         $paramCheckName = [
             'table_name' => 'tbl_a_uac_users_p',
             'select' => ['a.id', 'a.__user_name', 'a.__first_name', 'a.__last_name', 'a.__email'],
+            'conditions' => $conditions
+        ];
+        return $this->Tbl_a_uac_users_p->__find($request, 'first', $paramCheckName);
+    }
+
+    public function __get_user_byuserid(Request $request, $keyword) {
+        $conditions = [
+            'where' => [
+                ['a.is_active', '=', 1]
+            ]
+        ];
+        if (isset($keyword) && !empty($keyword)) {
+            $conditions = [
+                'where' => [
+                    ['a.is_active', '=', 1]
+                ],
+                'orWhere' => [
+                    ['a.__user_name', 'like', '%' . $keyword],
+                    ['a.__user_ldap', 'like', '%' . $keyword],
+                    ['a.__email', 'like', '%' . $keyword]
+                ]
+            ];
+        }
+        $paramCheckName = [
+            'table_name' => 'tbl_a_uac_users_p',
+            'select' => ['a.id', 'a.__user_name', 'a.__user_ldap', 'a.__first_name', 'a.__last_name', 'a.__email','a.__password', 'a.is_active'],
             'conditions' => $conditions
         ];
         return $this->Tbl_a_uac_users_p->__find($request, 'first', $paramCheckName);

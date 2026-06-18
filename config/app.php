@@ -20,7 +20,6 @@ switch (env('APP_ENV')) {
     default:
         $base_url = env('APP_URL_LOCAL');
         $base_path = env('APP_BASE_PATH_LOCAL');
-
         break;
 }
 $base_url_assets = $base_url . env('APP_CDN_ASSETS');
@@ -31,10 +30,25 @@ $base_url_assets_media = $base_url . env('APP_CDN_ASSETS_MEDIA');
 $path_assets = $base_path . env('APP_CDN_ASSETS');
 $path_assets_media = $base_path . env('APP_CDN_ASSETS_MEDIA');
 
-
 $base_extraweb_uri = $base_url . '/extraweb';
 $base_api_uri = $base_url . '/api/v1';
 $base_json_uri = $base_url_assets_components . '/json';
+$authVar = [
+    'session' => [
+        'is_logged_in' => $Converter->base64_basic(env('AUTH_VAR_SESSION_LOGGEDIN'), 'encode', ['rep' => 3]),
+        'is_autologged_out' => $Converter->base64_basic(env('AUTH_VAR_SESSION_AUTOLOGGEDOUT'), 'encode', ['rep' => 3])
+    ],
+    'auth' => [
+        '_user_id' => $Converter->base64_basic(env('AUTH_VAR_USER_ID'), 'encode', ['rep' => 3]),
+        '_group_id' => $Converter->base64_basic(env('AUTH_VAR_GROUPID'), 'encode', ['rep' => 3]),
+        '_module_id' => $Converter->base64_basic(env('AUTH_VAR_MODULEID'), 'encode', ['rep' => 3])
+    ],
+    'permissions' => [
+        '_is_user_active' => $Converter->base64_basic(env('AUTH_VAR_ISUSERACTIVE'), 'encode', ['rep' => 3]),
+        '_is_group_allowed' => $Converter->base64_basic(env('AUTH_VAR_ISGROUPALLOWED'), 'encode', ['rep' => 3]),
+        '_is_user_allowed' => $Converter->base64_basic(env('AUTH_VAR_ISUSERALLOWED'), 'encode', ['rep' => 3])
+    ]
+];
 return [
     'name' => env('APP_NAME', 'The Seeds of OrenoCMS :: Welcome'),
     'env' => env('APP_ENV', 'local'),
@@ -51,6 +65,23 @@ return [
     'base_json_uri' => $base_json_uri,
     'path_assets' => $path_assets,
     'path_assets_media' => $path_assets_media,
+    'authVar' => [
+        'session' => [
+            'is_logged_in' => $Converter->base64_basic(env('AUTH_VAR_SESSION_LOGGEDIN'), 'encode', ['rep' => 3]),
+            'is_autologged_out' => $Converter->base64_basic(env('AUTH_VAR_SESSION_AUTOLOGGEDOUT'), 'encode', ['rep' => 3])
+        ],
+        'auth' => [
+            '_user_id' => $Converter->base64_basic(env('AUTH_VAR_USER_ID'), 'encode', ['rep' => 3]),
+            '_group_id' => $Converter->base64_basic(env('AUTH_VAR_GROUPID'), 'encode', ['rep' => 3]),
+            '_module_id' => $Converter->base64_basic(env('AUTH_VAR_MODULEID'), 'encode', ['rep' => 3])
+        ],
+        'permissions' => [
+            '_is_user_active' => $Converter->base64_basic(env('AUTH_VAR_ISUSERACTIVE'), 'encode', ['rep' => 3]),
+            '_is_group_user_allowed' => $Converter->base64_basic(env('AUTH_VAR_ISGROUPUSERALLOWED'), 'encode', ['rep' => 3]),
+            '_is_group_permission_allowed' => $Converter->base64_basic(env('AUTH_VAR_ISGROUPALLOWED'), 'encode', ['rep' => 3]),
+            '_is_user_permission_allowed' => $Converter->base64_basic(env('AUTH_VAR_ISUSERALLOWED'), 'encode', ['rep' => 3])
+        ]
+    ],
     'jenkins_url' => env('JENKINS_URL'),
     'jenkins_ciso_path' => env('JENKINS_CISO_PATH'),
     'jenkins_ciso_path_original' => env('JENKINS_CISO_PATH_ORIGINAL'),

@@ -4,17 +4,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Controller.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/UserController.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Auth/AppController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Libraries/Oreno/Authentification.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Permission/create_html.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_html.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_html.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/config/app.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Models/Entity/uac/Tbl_b_uac_group_permissions_r_en.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Middleware/AuthentificationMD.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Auth/App/login_js.blade.php</file>
         </group>
     </open-files>
 </project-private>

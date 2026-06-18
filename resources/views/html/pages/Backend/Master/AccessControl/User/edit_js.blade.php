@@ -1,9 +1,112 @@
 <script>
+    var code = "{{$code}}";
     var EditJS = function () {
         return {
             //main function to initiate the module
             init: function () {
                 __fn_alert_message('EditJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
+                $('#i').multiSelect({
+                    selectableOptgroup: true
+                });
+                $('#j').multiSelect({
+                    selectableOptgroup: true
+                });
+                $('select#w').on('change', function () {
+                    var id = $(this).val();
+                    console.log(id);
+                    if (id) {
+                        var formdata = {
+                            country_id: id
+                        }
+                        var options = {
+                            url: _base_extraweb_uri + '/master/uac/users/get_list?a=2',
+                            methodType: 'POST',
+                            dataType: 'json',
+                            file: false,
+                            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            async: false,
+                            timeout: 2000
+                        };
+                        var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                        if (response && response.responseText) {
+                            $('select#x').html(response.responseText);
+                        }
+                    }
+                });
+                $('select#x').on('change', function () {
+                    var id = $(this).val();
+                    console.log(id);
+                    if (id) {
+                        var formdata = {
+                            province_id: id
+                        }
+                        var options = {
+                            url: _base_extraweb_uri + '/master/uac/users/get_list?a=3',
+                            methodType: 'POST',
+                            dataType: 'json',
+                            file: false,
+                            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            async: false,
+                            timeout: 2000
+                        };
+                        var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                        if (response && response.responseText) {
+                            $('select#y').html(response.responseText);
+                        }
+                    }
+                });
+                $('select#y').on('change', function () {
+                    var id = $(this).val();
+                    console.log(id);
+                    if (id) {
+                        var formdata = {
+                            city_id: id
+                        }
+                        var options = {
+                            url: _base_extraweb_uri + '/master/uac/users/get_list?a=4',
+                            methodType: 'POST',
+                            dataType: 'json',
+                            file: false,
+                            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            async: false,
+                            timeout: 2000
+                        };
+                        var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                        if (response && response.responseText) {
+                            $('select#z').html(response.responseText);
+                        }
+                    }
+                });
+                $('select#z').on('change', function () {
+                    var id = $(this).val();
+                    console.log(id);
+                    if (id) {
+                        var formdata = {
+                            district_id: id
+                        }
+                        var options = {
+                            url: _base_extraweb_uri + '/master/uac/users/get_list?a=5',
+                            methodType: 'POST',
+                            dataType: 'json',
+                            file: false,
+                            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            async: false,
+                            timeout: 2000
+                        };
+                        var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                        if (response && response.responseText) {
+                            $('select#aa').html(response.responseText);
+                        }
+                    }
+                });
+                Dropzone.autoDiscover = false;
+                var myDropzone = new Dropzone("#uploadPicture", {
+                    url: _base_extraweb_uri + "/master/uac/users/insert?a=1&code=" + code,
+                    // Add the CSRF token to headers
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                });
                 $('#submitForm').on('click', function () {
                     var formdata = {
                         a: $('input[name="a"]').val(),

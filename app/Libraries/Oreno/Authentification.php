@@ -28,13 +28,34 @@ class Authentification {
     protected $Tbl_a_uac_modules_p_en;
     protected $Tbl_b_uac_group_permissions_r_en;
     protected $Tbl_b_uac_user_permissions_r_en;
+    
+    
+    public function __encr_to_var($keyword = null) {
+        if ($keyword != null) {
+            $sessionAssignArr = [
+                '_authentification' => [
+                    'is_logged_in' => config('app.authVar.session.is_logged_in'), //_session_is_logged_in
+                    'is_autologged_out' => config('app.authVar.session.is_autologged_out'), //_session_is_autologged_out
+                    '_user_id' => config('app.authVar.auth._user_id'),
+                    '_group_id' => config('app.authVar.auth._group_id'),
+                    '_module_id' => config('app.authVar.auth._module_id'),
+                    '_is_user_active' => config('app.authVar.permissions._is_user_active'),
+                    '_is_group_user_allowed' => config('app.authVar.permissions._is_group_user_allowed'),
+                    '_is_group_permission_allowed' => config('app.authVar.permissions._is_group_permission_allowed'),
+                    '_is_user_permission_allowed' => config('app.authVar.permissions._is_user_permission_allowed')
+                ]
+            ];
+        }
+        return $sessionAssignArr['_authentification'][$keyword];
+    }
+
 
     public function init_session_check($request, $next) {
         $sessionData = $request->session()->all();
         $response = false;
-        if (isset($sessionData['_session_is_logged_in']) && !empty($sessionData['_session_is_logged_in']) && $sessionData['_session_is_logged_in'] == 1) {
-            if (isset($sessionData['_permissions']['_is_group_allowed']) && !empty($sessionData['_permissions']['_is_group_allowed']) && $sessionData['_permissions']['_is_group_allowed'] == 1) {
-                if (isset($sessionData['_permissions']['_is_user_allowed']) && !empty($sessionData['_permissions']['_is_user_allowed']) && $sessionData['_permissions']['_is_user_allowed'] == 1) {
+        if (isset($sessionData['_authentification'][$this->__encr_to_var('is_logged_in')]) && !empty($sessionData['_authentification'][$this->__encr_to_var('is_logged_in')]) && $sessionData['_authentification'][$this->__encr_to_var('is_logged_in')] == 1) {
+            if (isset($sessionData['_authentification'][$this->__encr_to_var('_is_group_user_allowed')]) && !empty($sessionData['_authentification'][$this->__encr_to_var('_is_group_user_allowed')]) && $sessionData['_authentification'][$this->__encr_to_var('_is_group_user_allowed')] == 1) {
+                if (isset($sessionData['_authentification'][$this->__encr_to_var('_is_group_permission_allowed')]) && !empty($sessionData['_authentification'][$this->__encr_to_var('_is_group_permission_allowed')]) && $sessionData['_authentification'][$this->__encr_to_var('_is_group_permission_allowed')] == 1) {
                     $response = true;
                 }
             }
@@ -97,6 +118,8 @@ class Authentification {
         $getModuleName = $this->Tbl_a_uac_modules_p_en->__get_module($request, $segment1);
         $_session_is_logged_in = 0;
         $_session_is_autologged_out = (int) config('app.auto_logout');
+        $_is_user_active = 0;
+        $_is_group_user_allowed = 0;
         $_user_id = 0;
         $_group_id = 0;
         $this->Converter = new Converter();
@@ -107,16 +130,16 @@ class Authentification {
             $_session_is_autologged_out = 1;
         }
         $sessionAssignArr = [
-            '_session_is_logged_in' => $_session_is_logged_in, //_session_is_logged_in
-            '_session_is_autologged_out' => $_session_is_autologged_out, //_session_is_autologged_out
-            '_auth' => [//_auth            
-                '_user_id' => $_user_id, //_user_id
-                '_group_id' => $_group_id, //_group_id
-                '_module_id' => $_module_id, //_module
-            ],
-            '_permissions' => [//_permissions
-                '_is_group_allowed' => $_is_group_allowed, //_is_group_allowed
-                '_is_user_allowed' => $_is_user_allowed                         //_is_user_allowed
+            '_authentification' => [
+                config('app.authVar.session.is_logged_in') => $_session_is_logged_in, //_session_is_logged_in
+                config('app.authVar.session.is_autologged_out') => $_session_is_autologged_out, //_session_is_autologged_out
+                config('app.authVar.auth._user_id') => $_user_id,
+                config('app.authVar.auth._group_id') => $_group_id,
+                config('app.authVar.auth._module_id') => $_module_id,
+                config('app.authVar.permissions._is_user_active') => $_is_user_active,
+                config('app.authVar.permissions._is_group_user_allowed') => $_is_group_user_allowed,
+                config('app.authVar.permissions._is_group_permission_allowed') => $_is_group_allowed,
+                config('app.authVar.permissions._is_user_permission_allowed') => $_is_user_allowed
             ]
         ];
         session($sessionAssignArr);
@@ -125,16 +148,16 @@ class Authentification {
 
     public function clear_session($request) {
         $sessionAssignArr = [
-            '_session_is_logged_in' => 0,
-            '_session_is_autologged_out' => 0,
-            '_auth' => [//_auth            
-                '_user_id' => 0,
-                '_group_id' => 0,
-                '_module_id' => 0,
-            ],
-            '_permissions' => [//_permissions
-                '_is_group_allowed' => 0,
-                '_is_user_allowed' => 0,
+            '_authentification' => [
+                config('app.authVar.session.is_logged_in') => 0, //_session_is_logged_in
+                config('app.authVar.session.is_autologged_out') => 0, //_session_is_autologged_out
+                config('app.authVar.auth._user_id') => 0,
+                config('app.authVar.auth._group_id') => 0,
+                config('app.authVar.auth._module_id') => 0,
+                config('app.authVar.permissions._is_user_active') => 0,
+                config('app.authVar.permissions._is_group_user_allowed') => 0,
+                config('app.authVar.permissions._is_group_permission_allowed') => 0,
+                config('app.authVar.permissions._is_user_permission_allowed') => 0
             ]
         ];
         session($sessionAssignArr);

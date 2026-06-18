@@ -165,7 +165,7 @@ class Tbl_b_uac_group_permissions_r_en extends Tbl_b_uac_group_permissions_r {
         if ($params && is_array($params)) {
             $paramCheckName = [
                 'table_name' => 'tbl_a_uac_permissions_p',
-                'select' => ['a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS permission_id', 'b.__is_allowed'],
+                'select' => ['a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS permission_id', 'b.__user_id', 'b.__module_id', 'b.__is_allowed'],
                 'join' => [
                     'leftJoin' => [
                         ['tbl_b_uac_group_permissions_r AS b', 'b.__permission_id', '=', 'a.id']
@@ -173,6 +173,7 @@ class Tbl_b_uac_group_permissions_r_en extends Tbl_b_uac_group_permissions_r {
                 ],
                 'conditions' => [
                     'where' => [
+                        ['b.__user_id', '=', $params['userid']],
                         ['b.__group_id', '=', $params['groupid']]
                     ]
                 ]
