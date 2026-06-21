@@ -28,8 +28,7 @@ class Authentification {
     protected $Tbl_a_uac_modules_p_en;
     protected $Tbl_b_uac_group_permissions_r_en;
     protected $Tbl_b_uac_user_permissions_r_en;
-    
-    
+
     public function __encr_to_var($keyword = null) {
         if ($keyword != null) {
             $sessionAssignArr = [
@@ -49,7 +48,6 @@ class Authentification {
         return $sessionAssignArr['_authentification'][$keyword];
     }
 
-
     public function init_session_check($request, $next) {
         $sessionData = $request->session()->all();
         $response = false;
@@ -68,10 +66,26 @@ class Authentification {
     public function init_url_check($request, $next) {
         $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
         $urlpathonly = request()->path() . '/';
+        $urlCorrect = $this->init_url_excception($urlpathonly);
+        if ($urlCorrect == true) {
+            return true;
+        }
         $permissionCheck = $this->Tbl_a_uac_permissions_p_en->__get_permission($request, $urlpathonly);
         $response = false;
         if (isset($permissionCheck['data']) && !empty($permissionCheck['data']) && $permissionCheck['data']->__is_allowed == 1) {
             $response = true;
+        }
+        return $response;
+    }
+
+    public function init_url_excception($keyword = null) {
+        $response = false;
+        if ($keyword != null) {
+            $key1 = explode('/', $keyword);
+            $key2 = $key1[0];
+            if ($key2 == config('app.white_list_assets_prefix')) {
+                $response = true;
+            }
         }
         return $response;
     }

@@ -99,6 +99,9 @@
                         }
                     }
                 });
+                @if(isset($user_profile['data']->__photos) && !empty($user_profile['data']->__photos) && $user_profile['data']->__photos)
+                    console.log('no drag n drop enabled');
+                @else
                 Dropzone.autoDiscover = false;
                 var myDropzone = new Dropzone("#uploadPicture", {
                     url: _base_extraweb_uri + "/master/uac/users/insert?a=1&code=" + code,
@@ -107,6 +110,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                 });
+                @endif
                 $('#submitForm').on('click', function () {
                     var formdata = {
                         a: $('input[name="a"]').val(),

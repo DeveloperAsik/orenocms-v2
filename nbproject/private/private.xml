@@ -5,6 +5,7 @@
         <group>
             <file>file:/D:/Web-Labs/orenocms-v2/.env</file>
             <file>file:/D:/Web-Labs/orenocms-v2/routes/web.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/config/app.php</file>
             <file>file:/D:/Web-Labs/orenocms-v2/config/database.php</file>
             <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Controller.php</file>
             <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Auth/AppController.php</file>
@@ -15,6 +16,8 @@
             <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_html.blade.php</file>
             <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_js.blade.php</file>
             <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_html.blade.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Middleware/AuthentificationMD.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/app/Libraries/Oreno/Authentification.php</file>
         </group>
     </open-files>
 </project-private>

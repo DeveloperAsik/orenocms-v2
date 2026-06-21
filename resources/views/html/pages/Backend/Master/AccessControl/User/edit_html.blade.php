@@ -82,12 +82,19 @@
                             <div class="form-body">
                                 <div class="form-group form-md-line-input">
                                     <label for="i" style="top: 0;  margin-bottom: 0;  font-size: 13px;  color: #888888;  opacity: 1;">Photo Profile</label>
+                                    @if(isset($user_profile['data']->__photos) && !empty($user_profile['data']->__photos) && $user_profile['data']->__photos)
+                                    <div>
+                                        <img src="{{config('app.base_url_assets_media') .'/images'. $user_profile['data']->__photos}}" style="width:128px" />
+                                    </div>
+                                    @else
                                     <div class="dropzone" id="uploadPicture" style="min-height: 200px !important"></div>
                                     <p>
                                         <span class="label label-danger">
                                             NOTE: </span>
                                         &nbsp; This plugins works only on Latest Chrome, Firefox, Safari, Opera & Internet Explorer 10.
                                     </p>
+                                    @endif
+
                                 </div>
                                 <div class="form-group form-md-line-input">
                                     <input type="text" name="k" class="form-control" value="{{$user_profile['data']->__last_education}}"  id="k" placeholder="Enter Controller Name">
@@ -201,19 +208,19 @@
                 <div class="table-toolbar">
                     <div class="row">
                         <div class="col-md-6" style="min-height:200px!important">
-                            <div class="form-group form-md-line-input form-md-floating-label">
+                            <div class="form-group form-md-line-input">
                                 <textarea class="form-control" name="s" rows="3" id="s">{{$user_profile['data']->__address}}</textarea>
                                 <label for="s">Address</label>
                             </div>
-                            <div class="form-group form-md-line-input form-md-floating-label has-success">
+                            <div class="form-group form-md-line-input">
                                 <input type="text" class="form-control" value="{{$user_profile['data']->__lat}}"  id="t" name="t">
                                 <label for="t">Latitude</label>
                             </div>
-                            <div class="form-group form-md-line-input form-md-floating-label has-success">
+                            <div class="form-group form-md-line-input">
                                 <input type="text" class="form-control" value="{{$user_profile['data']->__lng}}"  id="u" name="u">
                                 <label for="u">Longitude</label>
                             </div>
-                            <div class="form-group form-md-line-input form-md-floating-label has-success">
+                            <div class="form-group form-md-line-input">
                                 <input type="text" class="form-control" value="{{$user_profile['data']->__zoom}}"  id="v" name="v">
                                 <label for="v">Zoom</label>
                             </div>

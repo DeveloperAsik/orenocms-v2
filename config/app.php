@@ -65,6 +65,7 @@ return [
     'base_json_uri' => $base_json_uri,
     'path_assets' => $path_assets,
     'path_assets_media' => $path_assets_media,
+    'white_list_assets_prefix' => env('APP_WHITELIST_ASSETS_PREFIX'),
     'authVar' => [
         'session' => [
             'is_logged_in' => $Converter->base64_basic(env('AUTH_VAR_SESSION_LOGGEDIN'), 'encode', ['rep' => 3]),

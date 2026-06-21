@@ -24,7 +24,9 @@ class UploadFile {
         $MAX_SIZE = 4000;
         $image = $options["name"];
         if (isset($options['origin_name']) && !empty($options['origin_name'])) {
-            $image = $options["origin_name"];
+            $img_ext_0 = explode('.',$options["origin_name"]);
+            $img_ext_1 = $img_ext_0[1];
+            $image = strtolower($image . '.' . $img_ext_1);
         }
         $uploadedfile = $options['tmp_name'];
         $first3digit = '';
