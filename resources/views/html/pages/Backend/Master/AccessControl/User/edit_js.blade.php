@@ -1,5 +1,16 @@
 <script>
     var code = "{{$code}}";
+    var init_drop_zone = function () {
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("#uploadPicture", {
+            url: _base_extraweb_uri + "/master/uac/users/insert?a=1&code=" + code,
+            // Add the CSRF token to headers
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        });
+        return myDropzone;
+    }
     var EditJS = function () {
         return {
             //main function to initiate the module
@@ -99,18 +110,11 @@
                         }
                     }
                 });
-                @if(isset($user_profile['data']->__photos) && !empty($user_profile['data']->__photos) && $user_profile['data']->__photos)
-                    console.log('no drag n drop enabled');
-                @else
-                Dropzone.autoDiscover = false;
-                var myDropzone = new Dropzone("#uploadPicture", {
-                    url: _base_extraweb_uri + "/master/uac/users/insert?a=1&code=" + code,
-                    // Add the CSRF token to headers
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                $('#change_photo').on('click', function () {
+                    $('#show_upload').css({'display': ''});
+                    console.log('show upload block');
                 });
-                @endif
+                init_drop_zone();
                 $('#submitForm').on('click', function () {
                     var formdata = {
                         a: $('input[name="a"]').val(),

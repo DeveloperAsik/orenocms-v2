@@ -78,7 +78,6 @@ class ObjectTable extends Model {
         $total = 0;
         $select = '*';
         if (isset($params['select']) && !empty($params['select'])) {
-
             $arrSelect = [];
             foreach ($params['select'] AS $k => $v) {
                 if (is_array($v)) {

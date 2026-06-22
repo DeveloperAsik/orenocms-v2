@@ -47,7 +47,7 @@ class Tbl_b_uac_user_group_c_en extends Tbl_b_uac_user_group_c {
     public function __get_user_group_by_id(Request $request, $userid, $groupid) {
         $conditions = [
             'where' => [
-                ['a.__uac_group_id', '=',$groupid],
+                ['a.__uac_group_id', '=', $groupid],
                 ['a.__uac_user_id', '=', $userid]
             ]
         ];
@@ -81,5 +81,31 @@ class Tbl_b_uac_user_group_c_en extends Tbl_b_uac_user_group_c {
             ]
         ];
         return $this->Tbl_b_uac_user_group_c->__find($request, 'all', $paramCheckName);
+    }
+
+    public function __find_selected_value($request, $id) {
+        $paramCheckName = [
+            'table_name' => 'tbl_b_uac_user_group_c',
+            'select' => ['a.__uac_group_id AS group_id'],
+             'join' => [
+                'leftJoin' => [
+                    ['tbl_a_uac_groups_p AS b', 'b.id', '=', 'a.__uac_group_id']
+                ]
+            ],
+            'conditions' => [
+                'where' => [
+                    ['a.__uac_user_id', '=', $id]
+                ]
+            ]
+        ];
+        $user_goups = $this->Tbl_b_uac_user_group_c->__find($request, 'all', $paramCheckName);
+        $response = [];
+        if(isset($user_goups['data']) && !empty($user_goups['data'])){
+            foreach($user_goups['data'] AS $key => $value){
+                $response[] = $value->group_id;
+                
+            }
+        }
+        return $response;
     }
 }

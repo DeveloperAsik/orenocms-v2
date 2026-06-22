@@ -99,14 +99,8 @@
                         }
                     }
                 });
-                Dropzone.autoDiscover = false;
-                var myDropzone = new Dropzone("#uploadPicture", {
-                    url: _base_extraweb_uri + "/master/uac/users/insert?a=1&code=" + code,
-                    // Add the CSRF token to headers
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                });
+              
+                
                 $('#submitForm').on('click', function () {
                     var formdata = {
                         code: $('input[name="code"]').val(),

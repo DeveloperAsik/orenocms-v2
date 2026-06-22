@@ -20,6 +20,7 @@ use App\Models\Entity\uac\Tbl_b_uac_user_group_c_en;
 use App\Models\Entity\uac\Tbl_a_uac_user_profiles_c_en;
 use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
 use App\Models\Entity\uac\Tbl_b_uac_user_permissions_r_en;
+use App\Models\Entity\uac\Tbl_a_uac_users_module_c_en;
 use App\Models\Entity\uac\Tbl_a_uac_permissions_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_permissions_schemes_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
@@ -54,6 +55,7 @@ class UserController extends Controller {
     protected $Tbl_b_uac_user_permissions_r_en;
     protected $Tbl_a_uac_permissions_p_en;
     protected $Tbl_a_uac_permissions_schemes_p_en;
+    protected $Tbl_a_uac_users_module_c_en;
     protected $Tbl_a_uac_groups_p_en;
     protected $Tbl_a_uac_modules_p_en;
     protected $Tbl_c_uac_location_a_country_p_en;
@@ -78,6 +80,7 @@ class UserController extends Controller {
         $this->Tbl_a_uac_user_profiles_c_en = new Tbl_a_uac_user_profiles_c_en();
         $this->Tbl_b_uac_group_permissions_r_en = new Tbl_b_uac_group_permissions_r_en();
         $this->Tbl_b_uac_user_permissions_r_en = new Tbl_b_uac_user_permissions_r_en();
+        $this->Tbl_a_uac_users_module_c_en = new Tbl_a_uac_users_module_c_en();
         $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
         $this->Tbl_a_uac_permissions_schemes_p_en = new Tbl_a_uac_permissions_schemes_p_en();
         $this->Tbl_a_uac_groups_p_en = new Tbl_a_uac_groups_p_en();
@@ -402,7 +405,7 @@ class UserController extends Controller {
         return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'code', 'groupOptions', 'moduleOptions', 'countryOptions'));
     }
 
-    protected function __get_user_groups($request) {
+    protected function __get_user_groups($request, $selectedArr = []) {
         $params = [
             'table_name' => 'tbl_a_uac_groups_p',
             'conditions' => [
@@ -423,13 +426,17 @@ class UserController extends Controller {
         $responseOptions = '';
         if (isset($response['data']) && !empty($response['data'])) {
             foreach ($response['data'] AS $key => $value) {
-                $responseOptions .= "<option value=" . $value->id . ">" . $value->__name . "</option>";
+                $selectedOptions = '';
+                if (isset($selectedArr) && !empty($selectedArr) && in_array($value->id, $selectedArr)) {
+                    $selectedOptions = ' selected';
+                }
+                $responseOptions .= '<option value="' . $value->id . '"' . $selectedOptions . '>' . $value->__name . '</option>';
             }
         }
         return $responseOptions;
     }
 
-    protected function __get_modules($request) {
+    protected function __get_modules($request, $selectedArr = []) {
         $params = [
             'table_name' => 'tbl_a_uac_modules_p',
             'conditions' => [
@@ -447,7 +454,11 @@ class UserController extends Controller {
         $responseOptions = '';
         if (isset($response['data']) && !empty($response['data'])) {
             foreach ($response['data'] AS $key => $value) {
-                $responseOptions .= "<option value=" . $value->id . ">" . $value->__name . "</option>";
+                $selectedOptions = '';
+                if (isset($selectedArr) && !empty($selectedArr) && in_array($value->id, $selectedArr)) {
+                    $selectedOptions = ' selected';
+                }
+                $responseOptions .= '<option value="' . $value->id . '"' . $selectedOptions . '>' . $value->__name . '</option>';
             }
         }
         return $responseOptions;
@@ -505,7 +516,7 @@ class UserController extends Controller {
             $__uac_user_registered_type_id = 2; //superuser.manual.create
             $validateEmail = $this->__check_exist_email($request, $data['e']);
             if ($validateEmail && $validateEmail['data'] && $validateEmail['data'] != null) {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'email address (' . $data['e'] . ') already exist, please use different one', 'valid' => true]);
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'email address(' . $data['e'] . ') already exist, please use different one', 'valid' => true]);
             }
             $__uac_user_profile_id = $this->__insert_user_profile($request);
             $__uac_user_location_id = $this->__insert_user_location($request);
@@ -541,6 +552,7 @@ class UserController extends Controller {
                 $this->__insert_group_user($request, $user_id);
             }
             if (isset($data['j']) && !empty($data['j'])) {
+                $this->__insert_user_module($request, $user_id);
                 $this->__insert_group_permissions($request, $user_id);
                 $this->__insert_user_permissions($request, $user_id);
             }
@@ -657,6 +669,28 @@ class UserController extends Controller {
                 'data' => $insertData
             ];
             return $this->Tbl_b_uac_user_group_c_en->__insert($request, $insert);
+        }
+    }
+
+    protected function __insert_user_module($request, $user_id = null) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $module_id = $data['j'];
+            $insertData[] = [
+                'code' => $data['code'],
+                '__user_id' => $user_id,
+                '__module_id' => (int) $module_id,
+                'is_active' => $data['h'],
+                'created_by' => (int) $this->__user_id,
+                'created_date' => $this->Date->now(),
+                'updated_by' => (int) $this->__user_id,
+                'updated_date' => $this->Date->now()
+            ];
+            $insert = [
+                'table_name' => 'tbl_a_uac_users_module_c',
+                'data' => $insertData
+            ];
+            return $this->Tbl_a_uac_users_module_c_en->__insert($request, $insert);
         }
     }
 
@@ -784,18 +818,18 @@ class UserController extends Controller {
     }
 
     public function edit(Request $request, $params = null) {
-        $id = base64_decode($params);
+        $id = (int) base64_decode($params);
         $title_for_layout = config('app.default_variables.title_for_layout');
         $_config = [
             'title_for_header' => '<b>User</b> master data management page',
             'pages' => [
                 'title' => 'Edit Page Master Data Users',
-                'icon' => '<i class="fa fa-list"></i>',
+                'icon' => '<i class = "fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/master/uac/users/edit/' . $params
             ],
             'header' => [
                 'title' => 'View',
-                'icon' => '<i class="fa fa-list"></i>',
+                'icon' => '<i class = "fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/master/uac/users/view'
             ]
         ];
@@ -848,10 +882,12 @@ class UserController extends Controller {
             'limit' => 1
         ];
         $user_location = $this->Tbl_a_uac_user_locations_p_en->__find($request, 'first', $paramUserLocations);
+        $user_groups = $this->Tbl_b_uac_user_group_c_en->__find_selected_value($request, $id);
+        $user_modules = $this->Tbl_a_uac_users_module_c_en->__find_selected_value($request, $id);
         $code = $user['data']->code;
-        $groupOptions = $this->__get_user_groups($request);
-        $moduleOptions = $this->__get_modules($request);
-        $countryOptions = $this->__get_countries($request);
+        $groupOptions = $this->__get_user_groups($request, $user_groups);
+        $moduleOptions = $this->__get_modules($request, $user_modules);
+        $countryOptions = $this->__get_countries($request);        
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -864,7 +900,7 @@ class UserController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/dropzone/dropzone.js"
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'code', 'user', 'user_profile', 'user_location', 'groupOptions', 'moduleOptions', 'countryOptions'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'code', 'user', 'user_profile', 'user_location', 'user_groups', 'groupOptions', 'moduleOptions', 'countryOptions'));
     }
 
     public function update(Request $request, $params = null) {
@@ -961,7 +997,7 @@ class UserController extends Controller {
                 'select' => ['a.*'],
                 'conditions' => [
                     'where' => [
-                        ['a.id', '=', $id]
+                        ['a.id', ' = ', $id]
                     ]
                 ]
             ];

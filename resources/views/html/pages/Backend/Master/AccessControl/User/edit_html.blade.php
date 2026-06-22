@@ -82,19 +82,24 @@
                             <div class="form-body">
                                 <div class="form-group form-md-line-input">
                                     <label for="i" style="top: 0;  margin-bottom: 0;  font-size: 13px;  color: #888888;  opacity: 1;">Photo Profile</label>
+                                    @php $show_photo = ' display:none';  $show_upload = ''; @endphp
                                     @if(isset($user_profile['data']->__photos) && !empty($user_profile['data']->__photos) && $user_profile['data']->__photos)
-                                    <div>
-                                        <img src="{{config('app.base_url_assets_media') .'/images'. $user_profile['data']->__photos}}" style="width:128px" />
-                                    </div>
-                                    @else
-                                    <div class="dropzone" id="uploadPicture" style="min-height: 200px !important"></div>
-                                    <p>
-                                        <span class="label label-danger">
-                                            NOTE: </span>
-                                        &nbsp; This plugins works only on Latest Chrome, Firefox, Safari, Opera & Internet Explorer 10.
-                                    </p>
+                                    @php $show_photo = '';  $show_upload = ' display:none'; @endphp
                                     @endif
-
+                                    <div style="{{$show_photo}}" id="show_photo">
+                                        <img src="{{config('app.base_url_assets_media') . '/images/users/' . $user_profile['data']->__photos}}" style="width:128px" />
+                                        <a href="javascript:;" class="btn btn-icon-only red" id="change_photo">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                    <div style="{{$show_upload}}" id="show_upload">
+                                        <div class="dropzone" id="uploadPicture" style="min-height: 200px !important"></div>
+                                        <p>
+                                            <span class="label label-danger">
+                                                NOTE: </span>
+                                            &nbsp; This plugins works only on Latest Chrome, Firefox, Safari, Opera & Internet Explorer 10.
+                                        </p>
+                                    </div>
                                 </div>
                                 <div class="form-group form-md-line-input">
                                     <input type="text" name="k" class="form-control" value="{{$user_profile['data']->__last_education}}"  id="k" placeholder="Enter Controller Name">
@@ -228,32 +233,52 @@
                         <div class="col-md-6" style="min-height:200px!important">
                             <div class="form-group form-md-line-input ">
                                 <select class="form-control" id="w" name="w">
+                                    @if(isset($user_location['data']) && !empty($user_location['data']) && $user_location['data']->country_id != null)
+                                    <option value="{{$user_location['data']->country_id}}">{{$user_location['data']->country_name}}</option>
+                                    @else
                                     <option value="0">-- select one --</option>
                                     {!! $countryOptions !!}
+                                    @endif
                                 </select>
                                 <label for="w">Country</label>
                             </div>
                             <div class="form-group form-md-line-input ">
                                 <select class="form-control" id="x" name="x">
+                                    @if(isset($user_location['data']) && !empty($user_location['data']) && $user_location['data']->province_id != null)
+                                    <option value="{{$user_location['data']->province_id}}">{{$user_location['data']->province_name}}</option>
+                                    @else
                                     <option value="0">-- select country first --</option>
+                                    @endif
                                 </select>
                                 <label for="x">Province</label>
                             </div>
                             <div class="form-group form-md-line-input ">
                                 <select class="form-control" id="y" name="y">
+                                    @if(isset($user_location['data']) && !empty($user_location['data']) && $user_location['data']->city_id != null)
+                                    <option value="{{$user_location['data']->city_id}}">{{$user_location['data']->city_name}}</option>
+                                    @else
                                     <option value="0">-- select provinces first --</option>
+                                    @endif
                                 </select>
                                 <label for="y">City</label>
                             </div>
                             <div class="form-group form-md-line-input ">
                                 <select class="form-control" id="z" name="z">
-                                    <option value="0">-- select City first --</option>
+                                    @if(isset($user_location['data']) && !empty($user_location['data']) && $user_location['data']->district_id != null)
+                                    <option value="{{$user_location['data']->district_id}}">{{$user_location['data']->district_name}}</option>
+                                    @else
+                                    <option value="0">-- select City first --</option>                                    
+                                    @endif
                                 </select>
                                 <label for="z">District</label>
                             </div>
                             <div class="form-group form-md-line-input ">
                                 <select class="form-control" id="aa" name="aa">
-                                    <option value="0">-- select district first --</option>
+                                    @if(isset($user_location['data']) && !empty($user_location['data']) && $user_location['data']->area_id != null)
+                                    <option value="{{$user_location['data']->area_id}}">{{$user_location['data']->area_name}}</option>
+                                    @else
+                                    <option value="0">-- select district first --</option>                                 
+                                    @endif
                                 </select>
                                 <label for="aa">Area</label>
                             </div>
