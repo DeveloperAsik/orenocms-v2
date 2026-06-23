@@ -1,15 +1,547 @@
 <?php
 
+namespace App\Http\Controllers\Backend\Master\AccessControl;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
  */
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
+use App\Libraries\Oreno\General;
+use App\Libraries\Oreno\Converter;
+use App\Libraries\Oreno\Date;
 
 /**
  * Description of MenuController
  *
  * @author 64146
  */
-class MenuController {
+class MenuController extends Controller {
+
     //put your code here
+    protected $General;
+    protected $Converter;
+    protected $Date;
+
+    public function __construct(Request $request) {
+        parent::__construct($request);
+        $this->General = new General();
+        $this->Converter = new Converter();
+        $this->Date = new Date();
+    }
+
+    public function view(Request $request) {
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Menu</b> master data management page',
+            'pages' => [
+                'title' => 'View Page Master Data Menus',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/create'
+            ],
+            'header' => [
+                'title' => 'Create',
+                'icon' => '<i class="fa fa-plus-square"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/create'
+            ],
+            'tables' => [
+                'el-id' => 'dt_tbl_menus',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Name </th>',
+                    '<th> Path </th>',
+                    '<th> Icon </th>',
+                    '<th> Level </th>',
+                    '<th> Rank </th>',
+                    '<th> Basic </th>',
+                    '<th> Is Dashboard </th>',
+                    '<th> Is Head </th>',
+                    '<th> Is Basic </th>',
+                    '<th> Is Open</th>',
+                    '<th> Status </th>'
+                ]
+            ]
+        ];
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+    }
+
+    public function get_list(Request $request) {
+        $data = $request->all();
+        if (isset($data) && !empty($data)) {
+            if (isset($data['a']) && !empty($data['a'])) {
+                switch ($data['a']) {
+                    case 1:
+                        return null;
+                        break;
+                }
+            } else {
+                return $this->__get_list_default($request);
+            }
+        }
+    }
+
+    public function __get_list_default($request) {
+        $draw = $request->draw;
+        $limit = ($request->length) ? $request->length : 10;
+        if ($request->length == '-1') {
+            $limit = 1000;
+        }
+        $offset = ($request->start) ? $request->start : 0;
+        $search = $request->search['value'];
+        $conditions = [];
+        if (isset($search) && !empty($search)) {
+            $conditions = [
+                'orWhere' => [
+                    ['a.__code', 'like', '%' . $search . '%'],
+                    ['a.__name', 'like', '%' . $search . '%'],
+                    ['a.__path', 'like', '%' . $search . '%'],
+                    ['a.__level', 'like', '%' . $search . '%'],
+                    ['a.__rank', 'like', '%' . $search . '%']
+                ]
+            ];
+        }
+        $params = [
+            'table_name' => 'tbl_a_uac_menus_p',
+            'select' => ['a.*'],
+            'conditions' => $conditions,
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $data = $this->Tbl_a_uac_menus_p_en->__find($request, 'all', $params);
+        if (isset($data['data']) && !empty($data['data'])) {
+            if ($offset == 0) {
+                $i = 1;
+            } else {
+                $i = ($offset + 1);
+            }
+            $arrData = array();
+            foreach ($data['data'] AS $keyword => $value) {
+                $is_basic = '';
+                if ($value->__is_basic == 1) {
+                    $is_basic = ' checked';
+                }
+                $is_public = '';
+                if ($value->__is_public == 1) {
+                    $is_public = ' checked';
+                }
+                $is_active = '';
+                if ($value->is_active == 1) {
+                    $is_active = ' checked';
+                }
+                $arrData[] = [
+                    'id' => $i,
+                    '__name' => $value->__name,
+                    '__path' => $value->__path,
+                    '__controller' => $value->__controller,
+                    '__action' => $value->__action,
+                    '__method' => $value->__method,
+                    'basic' => '<input type="checkbox"' . $is_basic . ' name="is_basic" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    'public' => '<input type="checkbox"' . $is_public . ' name="is_public" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    'action' => '<div class="btn-group">
+                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menus/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
+                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menus/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
+                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menus/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
+                      </div>',
+                ];
+                if ($i <= $data['meta']['total']) {
+                    $i++;
+                }
+            }
+            $output = array(
+                'draw' => $draw,
+                'recordsTotal' => $data['meta']['total'],
+                'recordsFiltered' => $data['meta']['total'],
+                'data' => $arrData,
+            );
+            echo json_encode($output);
+        } else {
+            echo json_encode(array());
+        }
+    }
+
+    public function create(Request $request) {
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Menu</b> master data management page',
+            'pages' => [
+                'title' => 'Create Page Master Data Menus',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/create'
+            ],
+            'header' => [
+                'title' => 'View',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/view'
+            ],
+            'form' => [
+                'el-id' => 'frm_create_permission',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Name </th>',
+                    '<th> Path </th>',
+                    '<th> Controller </th>',
+                    '<th> Action Cont </th>',
+                    '<th> Method </th>',
+                    '<th> Basic </th>',
+                    '<th> Public </th>',
+                    '<th> Status </th>',
+                    '<th> Action </th>'
+                ]
+            ]
+        ];
+        $controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
+        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
+        $StrHtmlActions = '';
+        if (isset($actions['data']) && !empty($actions['data'])) {
+            foreach ($actions['data'] AS $key => $val) {
+                $param = $val->__param;
+                if (isset($param) && !empty($param)) {
+                    $param = ' - ' . $param;
+                }
+                $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . $param . '</option>';
+            }
+        }
+        $users = $this->Tbl_a_uac_users_p_en->__get_all($request);
+        $groups = $this->Tbl_a_uac_groups_p_en->__get_all($request);
+        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
+
+        $StrHtmlUsers = '';
+        if (isset($users['data']) && !empty($users['data'])) {
+            foreach ($users['data'] AS $key1 => $val1) {
+                $StrHtmlUsers .= '<option value="' . $val1->id . '" title="' . $val1->__email . '">' . $val1->__user_name . '</option>';
+            }
+        }
+        $StrHtmlMenus = '';
+        if (isset($groups['data']) && !empty($groups['data'])) {
+            foreach ($groups['data'] AS $key2 => $val2) {
+                $StrHtmlMenus .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
+            }
+        }
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlMenus'));
+    }
+
+    public function insert(Request $request) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $code = $this->General->getRandomChar(20);
+            $insertData = [];
+            if (isset($data['d']) && !empty($data['d'])) {
+                foreach ($data['d'] AS $key => $value) {
+                    $action = $this->Tbl_d_app_assets_master_method_p_en->__find_by_id($request, $value);
+                    $__segment1 = $__segment2 = $__segment3 = $__segment4 = $__segment5 = $__segment6 = $__segment7 = $__segment8 = '';
+                    $param = '';
+                    if (isset($action['data'][0]->__param) && !empty($action['data'][0]->__param)) {
+                        $param = '/' . $action['data'][0]->__param;
+                    }
+                    $classPath = strtolower(str_replace('Controller', '', $data['c']));
+                    $__path = $data['b'] . '/' . $classPath . '/' . $action['data'][0]->__name . $param;
+
+                    $get_segment_by_url = $this->General->getSegmentByUrl($__path);
+                    $segmented = explode('/', $get_segment_by_url);
+                    if ($segmented) {
+                        $n = 1;
+                        foreach ($segmented AS $k => $v) {
+                            ${'__segment' . $n} = $v;
+                            $n++;
+                        }
+                    }
+                    $insertData[] = [
+                        'code' => $code,
+                        '__alias' => $data['a'],
+                        '__name' => $__path,
+                        '__path' => $__path,
+                        '__controller' => $data['c'],
+                        '__action' => $action['data'][0]->__name,
+                        '__method' => $action['data'][0]->__method,
+                        '__segment1' => $__segment1,
+                        '__segment2' => $__segment2,
+                        '__segment3' => $__segment3,
+                        '__segment4' => $__segment4,
+                        '__segment5' => $__segment5,
+                        '__segment6' => $__segment6,
+                        '__segment7' => $__segment7,
+                        '__segment8' => $__segment8,
+                        '__description' => isset($data['f']) ? $data['f'] : '-',
+                        '__is_basic' => $data['f'],
+                        '__is_public' => $data['g'],
+                        'is_active' => $data['h'],
+                        'created_by' => (int) $this->__user_id,
+                        'created_date' => $this->Date->now(),
+                        'updated_by' => (int) $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                }
+            }
+            $insert = [
+                'table_name' => 'tbl_a_uac_menus_p',
+                'data' => $insertData
+            ];
+            $response = true; //$this->Tbl_a_uac_menus_p_en->__insert($request, $insert);
+            if ($response) {
+                $menus = $this->__get_list_by_controller($request, $data['c']);
+                $arrUserMenus = [];
+                $arrMenuMenus = [];
+                foreach ($menus['data'] AS $key1 => $permission) {
+                    //apply to user
+                    if (isset($data['r']) && !empty($data['r'])) {
+                        foreach ($data['r'] AS $key => $user) {
+                            $arrUserMenus[] = [
+                                '__user_id' => (int) $user,
+                                '__permission_id' => $permission->id,
+                                '__is_denied' => 0,
+                                'is_active' => $data['h'],
+                                'created_by' => (int) $this->__user_id,
+                                'created_date' => $this->Date->now(),
+                                'updated_by' => (int) $this->__user_id,
+                                'updated_date' => $this->Date->now()
+                            ];
+                        }
+                    }
+                    //apply to group
+                    if (isset($data['t']) && !empty($data['t'])) {
+                        foreach ($data['t'] AS $key => $group) {
+                            $arrMenuMenus[] = [
+                                '__group_id' => (int) $group,
+                                '__permission_id' => $permission->id,
+                                '__module_id' => isset($data['u']) ? $data['s'] : 3,
+                                '__is_allowed' => 0,
+                                'is_active' => $data['h'],
+                                'created_by' => (int) $this->__user_id,
+                                'created_date' => $this->Date->now(),
+                                'updated_by' => (int) $this->__user_id,
+                                'updated_date' => $this->Date->now()
+                            ];
+                        }
+                    }
+                }
+                $insertUserMenus = [
+                    'table_name' => 'tbl_b_uac_user_menus_r',
+                    'data' => $arrUserMenus
+                ];
+                $this->Tbl_b_uac_user_menus_r_en->__insert($request, $insertUserMenus);
+                $insertMenuMenus = [
+                    'table_name' => 'tbl_b_uac_group_menus_r',
+                    'data' => $arrMenuMenus
+                ];
+                $this->Tbl_b_uac_group_menus_r_en->__insert($request, $insertMenuMenus);
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
+            } else {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
+            }
+        }
+    }
+
+    public function edit(Request $request, $params = null) {
+        $id = base64_decode($params);
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Menu</b> master data management page',
+            'pages' => [
+                'title' => 'Edit Page Master Data Menus',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/edit/' . $params
+            ],
+            'header' => [
+                'title' => 'View',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/view'
+            ],
+            'form' => [
+                'el-id' => 'frm_create_permission',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Name </th>',
+                    '<th> Path </th>',
+                    '<th> Controller </th>',
+                    '<th> Action Cont </th>',
+                    '<th> Method </th>',
+                    '<th> Basic </th>',
+                    '<th> Public </th>',
+                    '<th> Status </th>',
+                    '<th> Action </th>'
+                ]
+            ]
+        ];
+        $params = [
+            'table_name' => 'tbl_a_uac_menus_p',
+            'select' => ['a.*'],
+            'conditions' => [
+                'where' => [
+                    ['a.id', '=', $id]
+                ]
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $permission = $this->Tbl_a_uac_menus_p_en->__find($request, 'first', $params);
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'permission'));
+    }
+
+    public function update(Request $request, $params = null) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $id = base64_decode($params);
+            switch ($data['a']) {
+                case 'is_basic':
+                    $update_data = [
+                        '__is_basic' => $data['b'],
+                        'updated_by' => $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                    break;
+                case 'is_public':
+                    $update_data = [
+                        '__is_public' => $data['b'],
+                        'updated_by' => $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                    break;
+                case 'is_active':
+                    $update_data = [
+                        'is_active' => $data['b'],
+                        'updated_by' => $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                    break;
+                default:
+                    $alias = strtolower(str_replace(' ', '-', $data['name']));
+                    $update_data = [
+                        '__alias' => $data['a'],
+                        '__name' => $__path,
+                        '__path' => $__path,
+                        '__controller' => $data['c'],
+                        '__action' => $action['data'][0]->__name,
+                        '__method' => $action['data'][0]->__method,
+                        '__segment1' => $__segment1,
+                        '__segment2' => $__segment2,
+                        '__segment3' => $__segment3,
+                        '__segment4' => $__segment4,
+                        '__segment5' => $__segment5,
+                        '__segment6' => $__segment6,
+                        '__segment7' => $__segment7,
+                        '__segment8' => $__segment8,
+                        '__description' => isset($data['f']) ? $data['f'] : '-',
+                        '__is_basic' => $data['f'],
+                        '__is_public' => $data['g'],
+                        'is_active' => $data['h'],
+                        'updated_by' => (int) $this->__user_id,
+                        'updated_date' => $this->Date->now()
+                    ];
+                    break;
+            }
+            $paramsUpdate = [
+                'table_name' => 'tbl_a_uac_menus_p',
+                'conditions' => [
+                    'keyword' => 'id',
+                    'value' => $id
+                ]
+            ];
+            $response = $this->Tbl_a_uac_menus_p_en->__update($request, $update_data, $paramsUpdate);
+            if ($response) {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
+            } else {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
+            }
+        }
+    }
+
+    public function remove(Request $request, $params = null) {
+        if ($params != null) {
+            $data = (['a' => 'is_active']);
+            //$request->request->add($data);
+            $request->json()->replace([
+                'a' => 'is_active',
+                'b' => 0
+            ]);
+            $resp = $this->update($request, $params);
+            $response = json_decode($resp);
+            if ($response && $response->status->code == 200) {
+                return redirect()->back()->with('success', 'successfully update data');
+            } else {
+                return redirect()->back()->with('error', 'failed update data.');
+            }
+        }
+    }
+
+    public function delete(Request $request, $params = null) {
+        if ($params != null) {
+            $id = base64_decode($params);
+            $params = [
+                'table_name' => 'tbl_a_uac_menus_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.id', '=', $id]
+                    ]
+                ]
+            ];
+            $existData = $this->Tbl_a_uac_menus_p_en->__find($request, 'first', $params);
+            if ($existData && $existData['data']) {
+                $insertUserMenusBackup = [
+                    'table_name' => 'tbl_a_uac_menus_p',
+                    'data' => (array) $existData['data']
+                ];
+                $this->Tbl_b_uac_user_menus_r_en->__insert($request, $insertUserMenusBackup, 'mysql_bak');
+                $deleteParams = [
+                    'table_name' => 'tbl_a_uac_menus_p',
+                    'conditions' => [
+                        'keyword' => 'id',
+                        'value' => $id
+                    ]
+                ];
+                $response = $this->Tbl_a_uac_menus_p_en->__delete($request, $deleteParams, 'mysql');
+                return redirect()->back()->with('success', 'successfully delete data');
+            } else {
+                return redirect()->back()->with('error', 'failed delete data.');
+            }
+        }
+    }
 }
