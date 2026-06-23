@@ -7,7 +7,7 @@
                 $('input[name="b"]').on('change', function () {
                     var val = $(this).val();
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/get_list?a=1',
+                        url: _base_extraweb_uri + '/master/uac/menus/get_list?a=1',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
@@ -82,7 +82,7 @@
 
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/insert',
+                        url: _base_extraweb_uri + '/master/uac/menus/insert',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,

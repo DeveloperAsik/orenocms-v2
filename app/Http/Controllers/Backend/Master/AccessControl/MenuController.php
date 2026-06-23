@@ -13,6 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Date;
+use App\Models\Entity\uac\Tbl_a_uac_menu_p_en;
 
 /**
  * Description of MenuController
@@ -21,16 +22,18 @@ use App\Libraries\Oreno\Date;
  */
 class MenuController extends Controller {
 
-    //put your code here
+//put your code here
     protected $General;
     protected $Converter;
     protected $Date;
+    protected $Tbl_a_uac_menu_p_en;
 
     public function __construct(Request $request) {
         parent::__construct($request);
         $this->General = new General();
         $this->Converter = new Converter();
         $this->Date = new Date();
+        $this->Tbl_a_uac_menu_p_en = new Tbl_a_uac_menu_p_en();
     }
 
     public function view(Request $request) {
@@ -88,7 +91,10 @@ class MenuController extends Controller {
             if (isset($data['a']) && !empty($data['a'])) {
                 switch ($data['a']) {
                     case 1:
-                        return null;
+                        return $this->__get_tree_view_list($request);
+                        break;
+                    case 2:
+                        return $this->__get_data_by_id($request);
                         break;
                 }
             } else {
@@ -118,13 +124,13 @@ class MenuController extends Controller {
             ];
         }
         $params = [
-            'table_name' => 'tbl_a_uac_menus_p',
+            'table_name' => 'tbl_a_uac_menu_p',
             'select' => ['a.*'],
             'conditions' => $conditions,
             'limit' => 100,
             'offset' => 0
         ];
-        $data = $this->Tbl_a_uac_menus_p_en->__find($request, 'all', $params);
+        $data = $this->Tbl_a_uac_menu_p_en->__find($request, 'all', $params);
         if (isset($data['data']) && !empty($data['data'])) {
             if ($offset == 0) {
                 $i = 1;
@@ -133,13 +139,21 @@ class MenuController extends Controller {
             }
             $arrData = array();
             foreach ($data['data'] AS $keyword => $value) {
-                $is_basic = '';
-                if ($value->__is_basic == 1) {
-                    $is_basic = ' checked';
+                $__is_dashboard = '';
+                if ($value->__is_dashboard == 1) {
+                    $__is_dashboard = ' checked';
                 }
-                $is_public = '';
-                if ($value->__is_public == 1) {
-                    $is_public = ' checked';
+                $__is_selected = '';
+                if ($value->__is_selected == 1) {
+                    $__is_selected = ' checked';
+                }
+                $__is_basic = '';
+                if ($value->__is_basic == 1) {
+                    $__is_basic = ' checked';
+                }
+                $__is_open = '';
+                if ($value->__is_open == 1) {
+                    $__is_open = ' checked';
                 }
                 $is_active = '';
                 if ($value->is_active == 1) {
@@ -149,11 +163,13 @@ class MenuController extends Controller {
                     'id' => $i,
                     '__name' => $value->__name,
                     '__path' => $value->__path,
-                    '__controller' => $value->__controller,
-                    '__action' => $value->__action,
-                    '__method' => $value->__method,
-                    'basic' => '<input type="checkbox"' . $is_basic . ' name="is_basic" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
-                    'public' => '<input type="checkbox"' . $is_public . ' name="is_public" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    '__icon' => $value->__icon,
+                    '__level' => $value->__level,
+                    '__rank' => $value->__rank,
+                    '__is_dashboard' => '<input type="checkbox"' . $__is_dashboard . ' name="__is_dashboard" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    '__is_selected' => '<input type="checkbox"' . $__is_selected . ' name="__is_selected" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    '__is_basic' => '<input type="checkbox"' . $__is_basic . ' name="__is_basic" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    '__is_open' => '<input type="checkbox"' . $__is_open . ' name="__is_open" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                     'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                     'action' => '<div class="btn-group">
                         <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menus/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
@@ -177,6 +193,292 @@ class MenuController extends Controller {
         }
     }
 
+    public function __fetch_tree_view_data($request, $level = '', $parent = '') {
+        $response = null;
+        if ($level != '') {
+            $cond1 = [
+                ['a.__level', '=', $level]
+            ];
+            $cond2 = [];
+            if ($parent != '') {
+                $cond2 = [
+                    ['a.__uac_menu_parent_id', '=', $parent]
+                ];
+            }
+            $conditions = [
+                'where' => array_merge($cond1, $cond2)
+            ];
+            $params = [
+                'table_name' => 'tbl_a_uac_menu_p',
+                'select' => ['a.*'],
+                'conditions' => $conditions
+            ];
+            $data = $this->Tbl_a_uac_menu_p_en->__find($request, 'all', $params);
+            if (isset($data['data']) && !empty($data['data'])) {
+                $response = $data['data'];
+            }
+        }
+        return $response;
+    }
+
+    public function __get_data_by_id($request) {
+        $data = $request->json()->all();
+        $dataArrTreeView = [];
+        if ($data['id'] == 0) {
+            $dataArrTreeView = [
+                '__name' => 'Root Menu',
+                '__path' => '/',
+                '__icon' => 'fa fa-folder icon-state-default',
+                '__level' => 0,
+                '__rank' => 0,
+                '__badge' => '',
+                '__badge_value' => '',
+                '__badge_id' => '',
+                '__is_badge' => 0,
+                '__is_dashboard' => 0,
+                '__is_selected' => 0,
+                '__is_basic' => 1,
+                '__is_open' => 1,
+                '__is_disabled' => 0,
+                'is_active' => 1,
+            ];
+        } else {
+            $params = [
+                'table_name' => 'tbl_a_uac_menu_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.id', '=', $data['id']]
+                    ]
+                ]
+            ];
+            $dataDB = $this->Tbl_a_uac_menu_p_en->__find($request, 'first', $params);
+            if (isset($dataDB['data']) && !empty($dataDB['data'])) {
+                $dataArrTreeView = $dataDB['data'];
+            }
+        }
+        return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching data', 'valid' => true, 'data' => $dataArrTreeView]);
+    }
+
+    public function __get_tree_view_list($request) {
+        $params = [
+            'table_name' => 'tbl_a_uac_menu_p',
+            'select' => ['a.id', 'a.__level'],
+            'conditions' => [
+                'where' => [
+                    ['a.is_active', '=', 1]
+                ]
+            ],
+            'group' => 'a.__level'
+        ];
+        $data = $this->Tbl_a_uac_menu_p_en->__find($request, 'all', $params);
+        $data_child_1 = [];
+        if (isset($data['data']) && !empty($data['data']) && count($data['data']) >= 1) {
+            $lvl_start = $data['data'][0]->__level;
+            $lvl_end = count($data['data']);
+            foreach ($data['data'] AS $keyword => $value) {
+                $data_level_1 = $this->__fetch_tree_view_data($request, (int) $value->__level);
+                if ($value->__level == 1) {
+                    foreach ($data_level_1 AS $key1 => $value1) {
+                        $child_level_2 = [];
+                        $new_level2 = $value->__level + 1;
+                        $data_level_2 = $this->__fetch_tree_view_data($request, (int) $new_level2, (int) $value1->id);
+                        if (isset($data_level_2) && !empty($data_level_2)) {
+                            foreach ($data_level_2 AS $key2 => $value2) {
+                                $child_level_3 = [];
+                                $new_level3 = $value2->__level + 1;
+                                $data_level_3 = $this->__fetch_tree_view_data($request, (int) $new_level3, (int) $value2->id);
+                                if (isset($data_level_3) && !empty($data_level_3)) {
+                                    foreach ($data_level_3 AS $key2 => $value3) {
+                                        $child_level_4 = [];
+                                        $new_level4 = $value3->__level + 1;
+                                        $data_level_4 = $this->__fetch_tree_view_data($request, (int) $new_level4, (int) $value3->id);
+                                        if (isset($data_level_4) && !empty($data_level_4)) {
+                                            $child_level_4 = [];
+                                            foreach ($data_level_4 AS $key4 => $value4) {
+                                                $child_level_5 = [];
+                                                $new_level5 = $value4->__level + 1;
+                                                $data_level_5 = $this->__fetch_tree_view_data($request, (int) $new_level5, (int) $value4->id);
+                                                if (isset($data_level_4) && !empty($data_level_4)) {
+                                                    $child_level_5 = [];
+                                                    foreach ($data_level_5 AS $key5 => $value5) {
+                                                        $child_level_6 = [];
+                                                        $new_level6 = $value5->__level + 1;
+                                                        $data_level_6 = $this->__fetch_tree_view_data($request, (int) $new_level6, (int) $value5->id);
+                                                        if (isset($data_level_6) && !empty($data_level_6)) {
+                                                            $child_level_6 = [];
+                                                            foreach ($data_level_6 AS $key6 => $value6) {
+                                                                $child_level_7 = [];
+                                                                $__is_selected6 = ($value6->__is_selected == 1) ? true : false;
+                                                                $__is_open6 = ($value6->__is_open) ? true : false;
+                                                                $__is_disabled6 = ($value6->__is_disabled) ? true : false;
+                                                                $child_level_5[] = [
+                                                                    'id' => $value6->id,
+                                                                    'text' => $value6->__name,
+                                                                    'icon' => $value6->__icon,
+                                                                    'level' => $value6->__level,
+                                                                    'state' => [
+                                                                        'selected' => $__is_selected6,
+                                                                        'opened' => $__is_open6,
+                                                                        'disabled' => $__is_disabled6
+                                                                    ],
+                                                                    'children' => $child_level_7
+                                                                ];
+                                                            }
+                                                        }
+                                                        $__is_selected5 = ($value5->__is_selected == 1) ? true : false;
+                                                        $__is_open5 = ($value5->__is_open) ? true : false;
+                                                        $__is_disabled5 = ($value5->__is_disabled) ? true : false;
+                                                        $child_level_5[] = [
+                                                            'id' => $value5->id,
+                                                            'text' => $value5->__name,
+                                                            'icon' => $value5->__icon,
+                                                            'level' => $value5->__level,
+                                                            'state' => [
+                                                                'selected' => $__is_selected5,
+                                                                'opened' => $__is_open5,
+                                                                'disabled' => $__is_disabled5
+                                                            ],
+                                                            'children' => $child_level_6
+                                                        ];
+                                                    }
+                                                }
+                                                $__is_selected4 = ($value4->__is_selected == 1) ? true : false;
+                                                $__is_open4 = ($value4->__is_open) ? true : false;
+                                                $__is_disabled4 = ($value4->__is_disabled) ? true : false;
+                                                $child_level_4[] = [
+                                                    'id' => $value4->id,
+                                                    'text' => $value4->__name,
+                                                    'icon' => $value4->__icon,
+                                                    'level' => $value4->__level,
+                                                    'state' => [
+                                                        'selected' => $__is_selected4,
+                                                        'opened' => $__is_open4,
+                                                        'disabled' => $__is_disabled4
+                                                    ],
+                                                    'children' => $child_level_5
+                                                ];
+                                            }
+                                        }
+                                        $__is_selected3 = ($value3->__is_selected == 1) ? true : false;
+                                        $__is_open3 = ($value3->__is_open) ? true : false;
+                                        $__is_disabled3 = ($value3->__is_disabled) ? true : false;
+                                        $child_level_3[] = [
+                                            'id' => $value3->id,
+                                            'text' => $value3->__name,
+                                            'icon' => $value3->__icon,
+                                            'level' => $value3->__level,
+                                            'state' => [
+                                                'selected' => $__is_selected2,
+                                                'opened' => $__is_open2,
+                                                'disabled' => $__is_disabled2
+                                            ],
+                                            'children' => $child_level_4
+                                        ];
+                                    }
+                                }
+                                $__is_selected2 = ($value2->__is_selected == 1) ? true : false;
+                                $__is_open2 = ($value2->__is_open) ? true : false;
+                                $__is_disabled2 = ($value2->__is_disabled) ? true : false;
+                                $child_level_2[] = [
+                                    'id' => $value2->id,
+                                    'text' => $value2->__name,
+                                    'icon' => $value2->__icon,
+                                    'level' => $value2->__level,
+                                    'state' => [
+                                        'selected' => $__is_selected2,
+                                        'opened' => $__is_open2,
+                                        'disabled' => $__is_disabled2
+                                    ],
+                                    'children' => $child_level_3
+                                ];
+                            }
+                        }
+                        $__is_selected = ($value1->__is_selected == 1) ? true : false;
+                        $__is_open = ($value1->__is_open) ? true : false;
+                        $__is_disabled = ($value1->__is_disabled) ? true : false;
+                        $data_child_1[] = [
+                            'id' => $value1->id,
+                            'text' => $value1->__name,
+                            'icon' => $value1->__icon,
+                            'level' => $value->__level,
+                            'state' => [
+                                'selected' => $__is_selected,
+                                'opened' => $__is_open,
+                                'disabled' => $__is_disabled
+                            ],
+                            'children' => $child_level_2
+                        ];
+                    }
+                }
+            }
+        }
+        $dataArrTreeView = [
+            'id' => 0,
+            'text' => 'Root Menu',
+            'icon' => 'fa fa-folder icon-state-default',
+            'level' => 0,
+            'state' => [
+                'selected' => false,
+                'opened' => true,
+                'disabled' => false
+            ],
+            'children' => $data_child_1
+        ];
+        return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching data', 'valid' => true, 'data' => $dataArrTreeView]);
+    }
+
+    public function tree_view(Request $request) {
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Tree View Menu</b> master data management page',
+            'pages' => [
+                'title' => 'View Page Master Data Menus',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/tree-view'
+            ],
+            'header' => [
+                'title' => 'Create',
+                'icon' => '<i class="fa fa-plus-square"></i>',
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/create'
+            ],
+            'tables' => [
+                'el-id' => 'dt_tbl_menus',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Name </th>',
+                    '<th> Path </th>',
+                    '<th> Icon </th>',
+                    '<th> Level </th>',
+                    '<th> Rank </th>',
+                    '<th> Basic </th>',
+                    '<th> Is Dashboard </th>',
+                    '<th> Is Head </th>',
+                    '<th> Is Basic </th>',
+                    '<th> Is Open</th>',
+                    '<th> Status </th>'
+                ]
+            ]
+        ];
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jstree/dist/jstree.min.js"
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+    }
+
     public function create(Request $request) {
         $title_for_layout = config('app.default_variables.title_for_layout');
         $_config = [
@@ -194,9 +496,12 @@ class MenuController extends Controller {
             'form' => [
                 'el-id' => 'frm_create_permission',
                 'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                    '<li><a href="javascript:;
+                    "> Print </a></li>',
+                    '<li><a href="javascript:;
+                ">Save as PDF </a></li>',
+                    '<li><a href="javascript:;
+                    ">Export to Excel </a></li>'
                 ],
                 'dt_tbl_th' => [
                     '<th> ID </th>',
@@ -382,9 +687,12 @@ class MenuController extends Controller {
             'form' => [
                 'el-id' => 'frm_create_permission',
                 'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                    '<li><a href="javascript:;
+"> Print </a></li>',
+                    '<li><a href="javascript:;
+">Save as PDF </a></li>',
+                    '<li><a href="javascript:;
+">Export to Excel </a></li>'
                 ],
                 'dt_tbl_th' => [
                     '<th> ID </th>',

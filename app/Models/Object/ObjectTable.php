@@ -207,7 +207,6 @@ class ObjectTable extends Model {
 
                     if (isset($params['group']) && !empty($params['group'])) {
                         $data = $sequence->select($select)->groupBy($params['group'])->distinct()->get();
-
                         $total = count($sequence->select($select)->get());
                     }
                     if (isset($params['debug']) && !empty($params['debug'])) {

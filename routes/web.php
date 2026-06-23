@@ -74,6 +74,7 @@ Route::prefix('extraweb')->group(function () {
             });
             Route::prefix('/menus')->group(function () {
                 Route::get('/view', [MenuController::class, 'view'])->name('extraweb.master.uac.menus.view');
+                Route::get('/tree-view', [MenuController::class, 'tree_view'])->name('extraweb.master.uac.menus.tree.view');
                 Route::post('/get_list', [MenuController::class, 'get_list'])->name('extraweb.master.uac.menus.get_list');
                 Route::get('/edit/{id}', [MenuController::class, 'edit'])->name('extraweb.master.uac.menus.edit');
                 Route::post('/update/{id}', [MenuController::class, 'update'])->name('extraweb.master.uac.menus.update');
