@@ -19,32 +19,38 @@
 
     var fetch_data_by_id = function (id) {
         response = null;
-        var formdata = {
-            'id': id
-        };
-        var options = {
-            url: _base_extraweb_uri + '/master/uac/menus/get_list?a=2',
-            methodType: 'POST',
-            dataType: 'json',
-            file: false,
-            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            async: false,
-            timeout: ''
-        };
-        var responseAll = __fn_ajax_send(JSON.stringify(formdata), options);
-        if (responseAll.responseJSON.status.code && responseAll.responseJSON.status.code == 200) {
-            response = responseAll.responseJSON.data;
+        if (id != null) {
+            var formdata = {
+                'id': id
+            };
+            var options = {
+                url: _base_extraweb_uri + '/master/uac/menus/get_list?a=2',
+                methodType: 'POST',
+                dataType: 'json',
+                file: false,
+                header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                async: false,
+                timeout: ''
+            };
+            var responseAll = __fn_ajax_send(JSON.stringify(formdata), options);
+            if (responseAll.responseJSON.status.code && responseAll.responseJSON.status.code == 200) {
+                response = responseAll.responseJSON.data;
+            }
         }
         return response;
     }
+
+
     var init_tree_js = function (treedata) {
-        $('#tree_2').jstree({
-            'plugins': ["wholerow", "checkbox", "types"],
-            'core': {
+        $('#tree_view_menus').jstree("state.clear");
+        $('#tree_view_menus').jstree({
+            "plugins": ["contextmenu", "checkbox", "dnd", "state", "types"],
+            "core": {
                 "themes": {
                     "responsive": true
                 },
-                'data': treedata
+                "check_callback": true,
+                "data": treedata
             },
             "types": {
                 "default": {
@@ -64,20 +70,12 @@
             $('input[name="d"]').val(formdata.__level);
             $('input[name="e"]').val(formdata.__rank);
             $('input[name="f"]').val(formdata.__badge);
-
-            console.log((formdata.__is_badge == 1) ? true : false);
             $('checkbox[id="g"]').prop('checked', (formdata.__is_badge == 1) ? true : false).trigger('change');
-            console.log(formdata.__is_dashboard);
             $('checkbox[id="h"]').prop('checked', (formdata.__is_dashboard == 1) ? true : false).trigger('change');
-            console.log(formdata.__is_selected);
             $('checkbox[id="i"]').prop('checked', (formdata.__is_selected == 1) ? true : false).trigger('change');
-            console.log(formdata.__is_basic);
             $('checkbox[id="j"]').prop('checked', (formdata.__is_basic == 1) ? true : false).trigger('change');
-            console.log(formdata.__is_open);
             $('checkbox[id="k"]').prop('checked', (formdata.__is_open == 1) ? true : false).trigger('change');
-            console.log(formdata.__is_disabled);
             $('checkbox[id="l"]').prop('checked', (formdata.__is_disabled == 1) ? true : false).trigger('change');
-            console.log(formdata.is_active);
             $('checkbox[id="m"]').prop('checked', (formdata.is_active == 1) ? true : false).trigger('change');
         }
     }
@@ -86,12 +84,13 @@
             //main function to initiate the module
             init: function () {
                 __fn_alert_message('TreeViewJS successfully load', 'success', {type: 'toastr', timeOut: 2000});
-                var treedata = fetch_tree_data(this);
+                var treedata = fetch_tree_data();
                 init_tree_js(treedata);
-                $('#tree_2').on('click', '.jstree-anchor', function (e) {
+                $('#tree_view_menus').on('click', '.jstree-anchor', function (e) {
+                    e.preventDefault();
                     let node_id = $(this).jstree(true).get_node(this);//.id;
                     let id = $(this).jstree(true).get_node(this).original.id;
-                    let level = $(this).jstree(true).get_node(this).original.level
+                    let level = $(this).jstree(true).get_node(this).original.level_id;
                     console.log("Clicked Node :");
                     console.log(node_id);
                     console.log("Clicked ID :");
@@ -108,6 +107,47 @@
                         $('#updateTreeForm').css({'display': 'none'});
                     }
 
+                });
+                $('#tree_view_menus').on('rename_node.jstree', function (e, data) {
+                    e.preventDefault();
+                    let parent = data.node.parent;
+                    var formdata = {
+                        'a': 1,
+                        'id': parseInt(data.node.id),
+                        'is_insert': false,
+                        'is_update': true,
+                        'parent_id': parent,
+                        'value': data.node.text
+                    };
+                    if (data.node.original.text == 'New node') {
+                        formdata = {
+                            'a': 1,
+                            'id': data.node.id,
+                            'is_insert': true,
+                            'is_update': false,
+                            'parent_id': parseInt(parent),
+                            'value': data.node.text
+                        };
+                    }
+                    var options = {
+                        url: _base_extraweb_uri + '/master/uac/menus/insert/',
+                        methodType: 'POST',
+                        dataType: 'json',
+                        file: false,
+                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        async: false,
+                        timeout: ''
+                    };
+                    console.log(formdata);
+                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var msg = 'error';
+                    if (response.responseJSON.status.code == 200) {
+                        msg = 'success';
+                    }
+                    setTimeout(function () {
+                        __fn_loading_img('img-loading', 'stop');
+                        __fn_alert_message(response.responseJSON.status.message, msg, {type: 'toastr', timeOut: 2000});
+                    }, 1500);
                 });
             }
         }

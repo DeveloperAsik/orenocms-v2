@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="portlet-body">
-            <div id="tree_2" class="tree-demo"></div>
+            <div id="tree_view_menus" ></div>
         </div>
     </div>
 </div>
@@ -27,9 +27,9 @@
                     <a href="javascript:;" class="reload"></a>
                 </div>
             </div>
-            <div class="portlet-body" style="display:none" id="updateTreeForm">
+            <div class="portlet-body">
                 <div class="form-body">
-                    <div class="row">
+                    <div class="row" style="display:none" id="updateTreeForm">
                         <div class="col-md-12">
                             <div class="form-group form-md-line-input">
                                 <input type="text" name="a" class="form-control" id="a" placeholder="Enter Menu name">

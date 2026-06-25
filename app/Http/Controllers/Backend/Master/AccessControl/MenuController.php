@@ -309,16 +309,16 @@ class MenuController extends Controller {
                                                             $child_level_6 = [];
                                                             foreach ($data_level_6 AS $key6 => $value6) {
                                                                 $child_level_7 = [];
-                                                                $__is_selected6 = ($value6->__is_selected == 1) ? true : false;
+                                                                //$__is_selected6 = ($value6->__is_selected == 1) ? true : false;
                                                                 $__is_open6 = ($value6->__is_open) ? true : false;
                                                                 $__is_disabled6 = ($value6->__is_disabled) ? true : false;
                                                                 $child_level_5[] = [
                                                                     'id' => $value6->id,
                                                                     'text' => $value6->__name,
                                                                     'icon' => $value6->__icon,
-                                                                    'level' => $value6->__level,
+                                                                    'level_id' => $value6->__level,
+                                                                    'parent_id' => $value6->__uac_menu_parent_id,
                                                                     'state' => [
-                                                                        'selected' => $__is_selected6,
                                                                         'opened' => $__is_open6,
                                                                         'disabled' => $__is_disabled6
                                                                     ],
@@ -326,16 +326,16 @@ class MenuController extends Controller {
                                                                 ];
                                                             }
                                                         }
-                                                        $__is_selected5 = ($value5->__is_selected == 1) ? true : false;
+                                                        //$__is_selected5 = ($value5->__is_selected == 1) ? true : false;
                                                         $__is_open5 = ($value5->__is_open) ? true : false;
                                                         $__is_disabled5 = ($value5->__is_disabled) ? true : false;
                                                         $child_level_5[] = [
                                                             'id' => $value5->id,
                                                             'text' => $value5->__name,
                                                             'icon' => $value5->__icon,
-                                                            'level' => $value5->__level,
+                                                            'level_id' => $value5->__level,
+                                                            'parent_id' => $value5->__uac_menu_parent_id,
                                                             'state' => [
-                                                                'selected' => $__is_selected5,
                                                                 'opened' => $__is_open5,
                                                                 'disabled' => $__is_disabled5
                                                             ],
@@ -343,16 +343,16 @@ class MenuController extends Controller {
                                                         ];
                                                     }
                                                 }
-                                                $__is_selected4 = ($value4->__is_selected == 1) ? true : false;
+                                                //$__is_selected4 = ($value4->__is_selected == 1) ? true : false;
                                                 $__is_open4 = ($value4->__is_open) ? true : false;
                                                 $__is_disabled4 = ($value4->__is_disabled) ? true : false;
                                                 $child_level_4[] = [
                                                     'id' => $value4->id,
                                                     'text' => $value4->__name,
                                                     'icon' => $value4->__icon,
-                                                    'level' => $value4->__level,
+                                                    'level_id' => $value4->__level,
+                                                    'parent_id' => $value4->__uac_menu_parent_id,
                                                     'state' => [
-                                                        'selected' => $__is_selected4,
                                                         'opened' => $__is_open4,
                                                         'disabled' => $__is_disabled4
                                                     ],
@@ -360,16 +360,16 @@ class MenuController extends Controller {
                                                 ];
                                             }
                                         }
-                                        $__is_selected3 = ($value3->__is_selected == 1) ? true : false;
+                                        //$__is_selected3 = ($value3->__is_selected == 1) ? true : false;
                                         $__is_open3 = ($value3->__is_open) ? true : false;
                                         $__is_disabled3 = ($value3->__is_disabled) ? true : false;
                                         $child_level_3[] = [
                                             'id' => $value3->id,
                                             'text' => $value3->__name,
                                             'icon' => $value3->__icon,
-                                            'level' => $value3->__level,
+                                            'level_id' => $value3->__level,
+                                            'parent_id' => $value3->__uac_menu_parent_id,
                                             'state' => [
-                                                'selected' => $__is_selected2,
                                                 'opened' => $__is_open2,
                                                 'disabled' => $__is_disabled2
                                             ],
@@ -377,16 +377,16 @@ class MenuController extends Controller {
                                         ];
                                     }
                                 }
-                                $__is_selected2 = ($value2->__is_selected == 1) ? true : false;
+                                //$__is_selected2 = ($value2->__is_selected == 1) ? true : false;
                                 $__is_open2 = ($value2->__is_open) ? true : false;
                                 $__is_disabled2 = ($value2->__is_disabled) ? true : false;
                                 $child_level_2[] = [
                                     'id' => $value2->id,
                                     'text' => $value2->__name,
                                     'icon' => $value2->__icon,
-                                    'level' => $value2->__level,
+                                    'level_id' => $value2->__level,
+                                    'parent_id' => $value2->__uac_menu_parent_id,
                                     'state' => [
-                                        'selected' => $__is_selected2,
                                         'opened' => $__is_open2,
                                         'disabled' => $__is_disabled2
                                     ],
@@ -394,16 +394,16 @@ class MenuController extends Controller {
                                 ];
                             }
                         }
-                        $__is_selected = ($value1->__is_selected == 1) ? true : false;
+                        //$__is_selected = ($value1->__is_selected == 1) ? true : false;
                         $__is_open = ($value1->__is_open) ? true : false;
                         $__is_disabled = ($value1->__is_disabled) ? true : false;
                         $data_child_1[] = [
                             'id' => $value1->id,
                             'text' => $value1->__name,
                             'icon' => $value1->__icon,
-                            'level' => $value->__level,
+                            'level_id' => $value1->__level,
+                            'parent_id' => $value1->__uac_menu_parent_id,
                             'state' => [
-                                'selected' => $__is_selected,
                                 'opened' => $__is_open,
                                 'disabled' => $__is_disabled
                             ],
@@ -414,12 +414,12 @@ class MenuController extends Controller {
             }
         }
         $dataArrTreeView = [
-            'id' => 0,
+            'id' => '0',
             'text' => 'Root Menu',
             'icon' => 'fa fa-folder icon-state-default',
-            'level' => 0,
+            'level_id' => 0,
+            'parent_id' => 0,
             'state' => [
-                'selected' => false,
                 'opened' => true,
                 'disabled' => false
             ],
@@ -466,14 +466,9 @@ class MenuController extends Controller {
             ]
         ];
         $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css"
         ]);
         $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jstree/dist/jstree.min.js"
         ]);
         return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
@@ -560,6 +555,18 @@ class MenuController extends Controller {
 
     public function insert(Request $request) {
         $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            if (isset($data['a']) && !empty($data['a']) && $data['a'] != null) {
+                return $this->__insert_update_menu_tree($request);
+            } else {
+                return $this->__insert_default($request);
+            }
+        }
+    }
+
+    public function __insert_default($request) {
+        $data = $request->json()->all();
+        dd($data);
         if (isset($data) && !empty($data)) {
             $code = $this->General->getRandomChar(20);
             $insertData = [];
@@ -653,10 +660,10 @@ class MenuController extends Controller {
                     }
                 }
                 $insertUserMenus = [
-                    'table_name' => 'tbl_b_uac_user_menus_r',
+                    'table_name' => 'tbl_a_uac_menu_p',
                     'data' => $arrUserMenus
                 ];
-                $this->Tbl_b_uac_user_menus_r_en->__insert($request, $insertUserMenus);
+                $this->Tbl_a_uac_menu_p_en->__insert($request, $insertUserMenus);
                 $insertMenuMenus = [
                     'table_name' => 'tbl_b_uac_group_menus_r',
                     'data' => $arrMenuMenus
@@ -665,6 +672,83 @@ class MenuController extends Controller {
                 return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
             } else {
                 return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
+            }
+        }
+    }
+
+    public function __insert_update_menu_tree($request) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $new_level = 0;
+            if ($data['parent_id'] == 0) {
+                $parent_menu = [
+                    'id' => 0,
+                    '__name' => 'Root Menu',
+                    '__path' => '/',
+                    '__icon' => 'fa fa-folder icon-state-default',
+                    '__level' => 0,
+                    '__rank' => 0,
+                    '__badge' => '',
+                    '__badge_value' => '',
+                    '__badge_id' => '',
+                    '__is_badge' => 0,
+                    '__is_dashboard' => 0,
+                    '__is_selected' => 0,
+                    '__is_basic' => 1,
+                    '__is_open' => 1,
+                    '__is_disabled' => 0,
+                ];
+                $parent_id = $parent_menu['id'];
+                $new_level = $parent_menu['__level'] + 1;
+                $new_rank = 0;
+            } else {
+                $params = [
+                    'table_name' => 'tbl_a_uac_menu_p',
+                    'select' => ['a.id', 'a.__name', 'a.__path', 'a.__icon', 'a.__level', 'a.__rank', 'a.__badge', 'a.__badge_value', 'a.__badge_id', 'a.__is_badge', 'a.__uac_menu_parent_id', 'a.__is_dashboard', 'a.__is_selected', 'a.__is_basic', 'a.__is_open', 'a.__is_disabled'],
+                    'conditions' => [
+                        'where' => [
+                            ['a.id', '=', $data['parent_id']]
+                        ]
+                    ]
+                ];
+                $parent_menu = $this->Tbl_a_uac_menu_p_en->__find($request, 'first', $params);
+                if (isset($parent_menu['data']) && !empty($parent_menu['data'])) {
+                    $parent_id = $parent_menu['data']->id;
+                    $new_level = $parent_menu['data']->__level + 1;
+                    $new_rank = 0;
+                }
+            }
+             $code = $this->General->getRandomChar(32);
+            $param_data = [
+                'code' => $code,
+                '__name' => $data['value'],
+                '__path' => '-',
+                '__icon' => 'fa fa-folder icon-state-default',
+                '__level' => $new_level,
+                '__rank' => $new_rank,
+                '__badge' => '-',
+                '__badge_value' => '-',
+                '__badge_id' => '-',
+                '__is_badge' => 0,
+                '__uac_menu_parent_id' => $parent_id,
+                '__is_dashboard' => 0,
+                '__is_selected' => 0,
+                '__is_basic' => 1,
+                '__is_open' => 1,
+                '__is_disabled' => 0,
+                'is_active' => 1,
+                'created_by' => (int) $this->__user_id,
+                'created_date' => $this->Date->now(),
+                'updated_by' => (int) $this->__user_id,
+                'updated_date' => $this->Date->now()
+            ];
+            $param_insert = [
+                'table_name' => 'tbl_a_uac_menu_p',
+                'data' => $param_data
+            ];
+            $response = $this->Tbl_a_uac_menu_p_en->__insert($request, $param_insert);
+            if ($response) {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
             }
         }
     }
@@ -687,12 +771,9 @@ class MenuController extends Controller {
             'form' => [
                 'el-id' => 'frm_create_permission',
                 'btn-tools' => [
-                    '<li><a href="javascript:;
-"> Print </a></li>',
-                    '<li><a href="javascript:;
-">Save as PDF </a></li>',
-                    '<li><a href="javascript:;
-">Export to Excel </a></li>'
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
                 ],
                 'dt_tbl_th' => [
                     '<th> ID </th>',
@@ -837,7 +918,7 @@ class MenuController extends Controller {
                     'table_name' => 'tbl_a_uac_menus_p',
                     'data' => (array) $existData['data']
                 ];
-                $this->Tbl_b_uac_user_menus_r_en->__insert($request, $insertUserMenusBackup, 'mysql_bak');
+                $this->Tbl_a_uac_menu_p_en->__insert($request, $insertUserMenusBackup, 'mysql_bak');
                 $deleteParams = [
                     'table_name' => 'tbl_a_uac_menus_p',
                     'conditions' => [
