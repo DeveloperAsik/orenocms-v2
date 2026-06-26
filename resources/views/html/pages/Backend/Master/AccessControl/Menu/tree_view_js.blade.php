@@ -2,7 +2,7 @@
     var fetch_tree_data = function () {
         response = null;
         var options = {
-            url: _base_extraweb_uri + '/master/uac/menus/get_list?a=1',
+            url: _base_extraweb_uri + '/master/uac/menu/get_list?a=1',
             methodType: 'POST',
             dataType: 'json',
             file: false,
@@ -24,7 +24,7 @@
                 'id': id
             };
             var options = {
-                url: _base_extraweb_uri + '/master/uac/menus/get_list?a=2',
+                url: _base_extraweb_uri + '/master/uac/menu/get_list?a=2',
                 methodType: 'POST',
                 dataType: 'json',
                 file: false,
@@ -70,13 +70,13 @@
             $('input[name="d"]').val(formdata.__level);
             $('input[name="e"]').val(formdata.__rank);
             $('input[name="f"]').val(formdata.__badge);
-            $('checkbox[id="g"]').prop('checked', (formdata.__is_badge == 1) ? true : false).trigger('change');
-            $('checkbox[id="h"]').prop('checked', (formdata.__is_dashboard == 1) ? true : false).trigger('change');
-            $('checkbox[id="i"]').prop('checked', (formdata.__is_selected == 1) ? true : false).trigger('change');
-            $('checkbox[id="j"]').prop('checked', (formdata.__is_basic == 1) ? true : false).trigger('change');
-            $('checkbox[id="k"]').prop('checked', (formdata.__is_open == 1) ? true : false).trigger('change');
-            $('checkbox[id="l"]').prop('checked', (formdata.__is_disabled == 1) ? true : false).trigger('change');
-            $('checkbox[id="m"]').prop('checked', (formdata.is_active == 1) ? true : false).trigger('change');
+            $('input[type="checkbox"][name="g"]').prop('checked', (formdata.__is_badge == 1) ? true : false).trigger('change');
+            $('input[type="checkbox"][name="h"]').prop('checked', (formdata.__is_dashboard == 1) ? true : false).trigger('change');
+            $('input[type="checkbox"][name="i"]').prop('checked', (formdata.__is_selected == 1) ? true : false).trigger('change');
+            $('input[type="checkbox"][name="j"]').prop('checked', (formdata.__is_basic == 1) ? true : false).trigger('change');
+            $('input[type="checkbox"][name="k"]').prop('checked', (formdata.__is_open == 1) ? true : false).trigger('change');
+            $('input[type="checkbox"][name="l"]').prop('checked', (formdata.__is_disabled == 1) ? true : false).trigger('change');
+            $('input[type="checkbox"][name="m"]').prop('checked', (formdata.is_active == 1) ? true : false).trigger('change');
         }
     }
     var ViewJS = function () {
@@ -130,7 +130,7 @@
                         };
                     }
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/menus/insert/',
+                        url: _base_extraweb_uri + '/master/uac/menu/insert/',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
@@ -139,6 +139,41 @@
                         timeout: ''
                     };
                     console.log(formdata);
+                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var msg = 'error';
+                    if (response.responseJSON.status.code == 200) {
+                        msg = 'success';
+                    }
+                    setTimeout(function () {
+                        __fn_loading_img('img-loading', 'stop');
+                        __fn_alert_message(response.responseJSON.status.message, msg, {type: 'toastr', timeOut: 2000});
+                    }, 1500);
+                });
+                $('#submitForm').on('click', function () {
+                    var formdata = {
+                        a: $('input[name="a"]').val(),
+                        b: $('input[name="b"]').val(),
+                        c: $('input[name="c"]').val(),
+                        d: $('input[name="d"]').val(),
+                        a: $('input[name="e"]').val(),
+                        b: $('input[name="f"]').val(),
+                        c: $('input[name="g"]').val(),
+                        f: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,
+                        g: ($('input[type="checkbox"][name="i"]:checked').val()) ? 1 : 0,
+                        g: ($('input[type="checkbox"][name="j"]:checked').val()) ? 1 : 0,
+                        g: ($('input[type="checkbox"][name="k"]:checked').val()) ? 1 : 0,
+                        g: ($('input[type="checkbox"][name="l"]:checked').val()) ? 1 : 0,
+                        h: ($('input[type="checkbox"][name="m"]:checked').val()) ? 1 : 0
+                    };
+                    var options = {
+                        url: _base_extraweb_uri + 'master/uac/menus/insert/',
+                        methodType: 'POST',
+                        dataType: 'json',
+                        file: false,
+                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        async: false,
+                        timeout: 2000
+                    };
                     var response = __fn_ajax_send(JSON.stringify(formdata), options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {

@@ -20,7 +20,7 @@
                         processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
                     },
                     "ajax": {
-                        url: _base_extraweb_uri + '/master/uac/menus/get_list',
+                        url: _base_extraweb_uri + '/master/uac/menu/get_list',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -34,7 +34,7 @@
                         {"data": "__level"},
                         {"data": "__rank"},
                         {"data": "__is_dashboard"},
-                        {"data": "__is_head"},
+                        {"data": "__is_selected"},
                         {"data": "__is_basic"},
                         {"data": "__is_open"},
                         {"data": "status", width: "8%", className: "dt-center", targets: '_all'},
@@ -48,7 +48,7 @@
                     var id = $(this).attr('data-id');
                     var formdata = {a: 'is_basic', b: (checked == true) ? 1 : 0};
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/menus/update/' + id,
+                        url: _base_extraweb_uri + '/master/uac/menu/update/' + id,
                         type: 'POST',
                         dataType: 'json',
                         file: false,
@@ -72,7 +72,7 @@
                     var id = $(this).attr('data-id');
                     var formdata = {a: 'is_public', b: (checked == true) ? 1 : 0};
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/menus/update/' + id,
+                        url: _base_extraweb_uri + '/master/uac/menu/update/' + id,
                         type: 'POST',
                         dataType: 'json',
                         file: false,
@@ -96,7 +96,7 @@
                     var id = $(this).attr('data-id');
                     var formdata = {a: 'is_active', b: (checked == true) ? 1 : 0};
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/menus/update/' + id,
+                        url: _base_extraweb_uri + '/master/uac/menu/update/' + id,
                         type: 'POST',
                         dataType: 'json',
                         file: false,

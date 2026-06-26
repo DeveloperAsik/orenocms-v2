@@ -43,12 +43,19 @@ class MenuController extends Controller {
             'pages' => [
                 'title' => 'View Page Master Data Menus',
                 'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/create'
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menu/create'
             ],
             'header' => [
-                'title' => 'Create',
-                'icon' => '<i class="fa fa-plus-square"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/create'
+                [
+                    'title' => 'Create',
+                    'icon' => '<i class="fa fa-plus-square"></i>',
+                    'link' => config('app.base_extraweb_uri') . '/master/uac/menu/create'
+                ],
+                [
+                    'title' => 'Tree View',
+                    'icon' => '<i class="fa fa-list"></i>',
+                    'link' => config('app.base_extraweb_uri') . '/master/uac/menu/tree-view'
+                ]
             ],
             'tables' => [
                 'el-id' => 'dt_tbl_menus',
@@ -66,7 +73,7 @@ class MenuController extends Controller {
                     '<th> Rank </th>',
                     '<th> Basic </th>',
                     '<th> Is Dashboard </th>',
-                    '<th> Is Head </th>',
+                    '<th> Is Selected </th>',
                     '<th> Is Basic </th>',
                     '<th> Is Open</th>',
                     '<th> Status </th>'
@@ -172,9 +179,9 @@ class MenuController extends Controller {
                     '__is_open' => '<input type="checkbox"' . $__is_open . ' name="__is_open" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                     'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                     'action' => '<div class="btn-group">
-                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menus/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
-                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menus/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
-                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menus/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
+                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menu/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
+                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menu/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
+                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/master/uac/menu/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
                       </div>',
                 ];
                 if ($i <= $data['meta']['total']) {
@@ -435,12 +442,19 @@ class MenuController extends Controller {
             'pages' => [
                 'title' => 'View Page Master Data Menus',
                 'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/tree-view'
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menu/tree-view'
             ],
             'header' => [
-                'title' => 'Create',
-                'icon' => '<i class="fa fa-plus-square"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/create'
+                [
+                    'title' => 'Create',
+                    'icon' => '<i class="fa fa-plus-square"></i>',
+                    'link' => config('app.base_extraweb_uri') . '/master/uac/menu/create'
+                ],
+                [
+                    'title' => 'List View',
+                    'icon' => '<i class="fa fa-list"></i>',
+                    'link' => config('app.base_extraweb_uri') . '/master/uac/menu/view'
+                ]
             ],
             'tables' => [
                 'el-id' => 'dt_tbl_menus',
@@ -481,12 +495,19 @@ class MenuController extends Controller {
             'pages' => [
                 'title' => 'Create Page Master Data Menus',
                 'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/create'
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menu/create'
             ],
             'header' => [
-                'title' => 'View',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/view'
+                [
+                    'title' => 'List View',
+                    'icon' => '<i class="fa fa-list"></i>',
+                    'link' => config('app.base_extraweb_uri') . '/master/uac/menu/view'
+                ],
+                [
+                    'title' => 'Tree View',
+                    'icon' => '<i class="fa fa-list"></i>',
+                    'link' => config('app.base_extraweb_uri') . '/master/uac/menu/tree-view'
+                ]
             ],
             'form' => [
                 'el-id' => 'frm_create_permission',
@@ -512,34 +533,7 @@ class MenuController extends Controller {
                 ]
             ]
         ];
-        $controllers = $this->Tbl_d_app_assets_master_controller_p_en->__get_all($request);
-        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
-        $StrHtmlActions = '';
-        if (isset($actions['data']) && !empty($actions['data'])) {
-            foreach ($actions['data'] AS $key => $val) {
-                $param = $val->__param;
-                if (isset($param) && !empty($param)) {
-                    $param = ' - ' . $param;
-                }
-                $StrHtmlActions .= '<option value="' . $val->id . '">' . $val->__name . $param . '</option>';
-            }
-        }
-        $users = $this->Tbl_a_uac_users_p_en->__get_all($request);
-        $groups = $this->Tbl_a_uac_groups_p_en->__get_all($request);
-        $actions = $this->Tbl_d_app_assets_master_method_p_en->__get_all($request);
 
-        $StrHtmlUsers = '';
-        if (isset($users['data']) && !empty($users['data'])) {
-            foreach ($users['data'] AS $key1 => $val1) {
-                $StrHtmlUsers .= '<option value="' . $val1->id . '" title="' . $val1->__email . '">' . $val1->__user_name . '</option>';
-            }
-        }
-        $StrHtmlMenus = '';
-        if (isset($groups['data']) && !empty($groups['data'])) {
-            foreach ($groups['data'] AS $key2 => $val2) {
-                $StrHtmlMenus .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
-            }
-        }
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -550,7 +544,7 @@ class MenuController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlMenus'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
     }
 
     public function insert(Request $request) {
@@ -718,7 +712,7 @@ class MenuController extends Controller {
                     $new_rank = 0;
                 }
             }
-             $code = $this->General->getRandomChar(32);
+            $code = $this->General->getRandomChar(32);
             $param_data = [
                 'code' => $code,
                 '__name' => $data['value'],
@@ -761,12 +755,19 @@ class MenuController extends Controller {
             'pages' => [
                 'title' => 'Edit Page Master Data Menus',
                 'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/edit/' . $params
+                'link' => config('app.base_extraweb_uri') . '/master/uac/menu/edit/' . $params
             ],
             'header' => [
-                'title' => 'View',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/uac/menus/view'
+                [
+                    'title' => 'List View',
+                    'icon' => '<i class="fa fa-list"></i>',
+                    'link' => config('app.base_extraweb_uri') . '/master/uac/menu/view'
+                ],
+                [
+                    'title' => 'Tree View',
+                    'icon' => '<i class="fa fa-list"></i>',
+                    'link' => config('app.base_extraweb_uri') . '/master/uac/menu/tree-view'
+                ]
             ],
             'form' => [
                 'el-id' => 'frm_create_permission',
@@ -790,7 +791,7 @@ class MenuController extends Controller {
             ]
         ];
         $params = [
-            'table_name' => 'tbl_a_uac_menus_p',
+            'table_name' => 'tbl_a_uac_menu_p',
             'select' => ['a.*'],
             'conditions' => [
                 'where' => [
@@ -800,7 +801,7 @@ class MenuController extends Controller {
             'limit' => 100,
             'offset' => 0
         ];
-        $permission = $this->Tbl_a_uac_menus_p_en->__find($request, 'first', $params);
+        $menu = $this->Tbl_a_uac_menu_p_en->__find($request, 'first', $params);
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -811,7 +812,7 @@ class MenuController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'permission'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'menu'));
     }
 
     public function update(Request $request, $params = null) {

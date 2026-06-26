@@ -1,9 +1,13 @@
 <form role="form">
     <div class="col-md-12" style="padding-left:0px !important">   
-        <div class="btn-group" style="margin: 0px 0px 5px 0px">
-            <a href="{!! $_config['header']['link'] !!}" id="sample_editable_1_new" class="btn green">
-                {!! $_config['header']['title'] !!} {!! $_config['header']['icon'] !!}
+        <div class="btn-group" style="margin:0px 0px 5px 0px">
+            @if(isset($_config['header']) && !empty($_config['header']))
+            @foreach($_config['header'] AS $k => $v)
+            <a href="{!! $v['link'] !!}" class="btn green" style="margin:0px 0px 0px 5px">
+                {!! $v['title'] !!} {!! $v['icon'] !!}
             </a>
+            @endforeach
+            @endif
         </div>
         <div class="portlet box blue">
             <div class="portlet-title">
@@ -27,44 +31,33 @@
                         <div class="col-md-6" style="min-height:600px!important">
                             <div class="form-body">
                                 <div class="form-group form-md-line-input">
-                                    <input type="text" name="a" class="form-control" id="a" placeholder="Enter Permision Title">
+                                    <input type="text" name="a" class="form-control" id="a" placeholder="Enter Menu name">
                                     <label for="a">Name</label>
-                                    <span class="help-block">Free format, you could use same as path below</span>
                                 </div>
                                 <div class="form-group form-md-line-input">
-                                    <input type="text" name="b" class="form-control" id="b" placeholder="Enter Permision Path">
+                                    <input type="text" name="b" class="form-control" id="b" placeholder="Enter Menu Path">
                                     <label for="b">Path</label>
-                                    <span class="help-block">e.g. : extraweb/[segment2]/[segment3]/[segment4]/...</span>
                                 </div>
                                 <div class="form-group form-md-line-input">
-                                    <input type="text" name="c" class="form-control" id="c" placeholder="Enter Controller Name">
-                                    <label for="c">Controller</label>
-                                    <span class="help-block">Use case sensitif and add suffix <b>'Controller'</b> at the end of controller name, e.g (UserController)</span>
-                                </div>
-                                <div class="form-group form-md-line-input has-info">
-                                    <select multiple="multiple" class="form-control" name="d[]" id="d">
-                                        @if(isset($StrHtmlActions) && !empty($StrHtmlActions))
-                                        {!! $StrHtmlActions !!}
-                                        @endif
-                                    </select>
-                                    <label for="d">Action Controller</label>
+                                    <input type="text" name="c" class="form-control" id="c" placeholder="Enter Icon Tags">
+                                    <label for="c">Icon</label>
                                 </div>
                                 <div class="form-group form-md-line-input">
-                                    <textarea class="form-control" name="e" rows="3" placeholder="Enter Description"></textarea>
-                                    <label for="e">Description</label>
+                                    <input type="text" name="d" class="form-control" id="d" placeholder="Enter Menu Level">
+                                    <label for="d">Level</label>
                                 </div>
-                                <div class="form-group form-md-checkboxes">
-                                    <div class="md-checkbox-inline">
-                                        <div class="md-checkbox">
-                                            <input type="checkbox" name="f" id="f" class="md-check">
-                                            <label for="f">
-                                                <span></span>
-                                                <span class="check"></span>
-                                                <span class="box"></span>
-                                                Basic Permissions </label>
-                                        </div>
-                                    </div>
+                                <div class="form-group form-md-line-input">
+                                    <input type="text" name="e" class="form-control" id="e" placeholder="Enter Menu Rank">
+                                    <label for="e">Rank</label>
                                 </div>
+                                <div class="form-group form-md-line-input">
+                                    <input type="text" name="f" class="form-control" id="f" placeholder="Enter Badge type">
+                                    <label for="f">Badge</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="min-height:800px">
+                            <div class="form-body">
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
@@ -73,7 +66,7 @@
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
-                                                Public Permissions </label>
+                                                Is Badge </label>
                                         </div>
                                     </div>
                                 </div>
@@ -85,45 +78,33 @@
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
-                                                Active </label>
+                                                Is Dashboard </label>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="min-height:800px">
-                            <div class="form-body">
-                                <div class="form-group form-md-line-input">
-                                    <input type="text" name="__segment1" readonly="" class="form-control" id="__segment1" placeholder="Automatic generate from path to input field">
-                                    <label for="__segment1">Segment 1</label>
+                                <div class="form-group form-md-checkboxes">
+                                    <div class="md-checkbox-inline">
+                                        <div class="md-checkbox">
+                                            <input type="checkbox" name="i" id="i" class="md-check">
+                                            <label for="i">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                Is Selected </label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group form-md-line-input">
-                                    <input type="text" name="__segment2" readonly="" class="form-control" id="__segment2" placeholder="Automatic generate from path to input field">
-                                    <label for="__segment2">Segment 2</label>
-                                </div>
-                                <div class="form-group form-md-line-input">
-                                    <input type="text" name="__segment3" readonly="" class="form-control" id="__segment3" placeholder="Automatic generate from path to input field">
-                                    <label for="__segment3">Segment 3</label>
-                                </div>
-                                <div class="form-group form-md-line-input">
-                                    <input type="text" name="__segment4" readonly="" class="form-control" id="__segment4" placeholder="Automatic generate from path to input field">
-                                    <label for="__segment4">Segment 4</label>
-                                </div>
-                                <div class="form-group form-md-line-input">
-                                    <input type="text" name="__segment5" readonly="" class="form-control" id="__segment5" placeholder="Automatic generate from path to input field">
-                                    <label for="__segment5">Segment 5</label>
-                                </div>
-                                <div class="form-group form-md-line-input">
-                                    <input type="text" name="__segment6" readonly="" class="form-control" id="__segment6" placeholder="Automatic generate from path to input field">
-                                    <label for="__segment6">Segment 6</label>
-                                </div>
-                                <div class="form-group form-md-line-input">
-                                    <input type="text" name="__segment7" readonly="" class="form-control" id="__segment7" placeholder="Automatic generate from path to input field">
-                                    <label for="__segment7">Segment 7</label>
-                                </div>
-                                <div class="form-group form-md-line-input">
-                                    <input type="text" name="__segment8" readonly="" class="form-control" id="__segment8" placeholder="Automatic generate from path to input field">
-                                    <label for="__segment8">Segment 8</label>
+                                <div class="form-group form-md-checkboxes">
+                                    <div class="md-checkbox-inline">
+                                        <div class="md-checkbox">
+                                            <input type="checkbox" name="j" id="j" class="md-check">
+                                            <label for="j">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                Is Basic </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -132,46 +113,38 @@
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
-                                            <input type="checkbox" name="q" id="q" class="md-check">
-                                            <label for="q">
+                                            <input type="checkbox" name="k" id="k" class="md-check">
+                                            <label for="k">
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
-                                                Apply to All Users </label>
+                                                Is Open </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group form-md-line-input has-info">
-                                    <select multiple="multiple" class="form-control" name="r[]" id="r">
-                                        @if(isset($StrHtmlUsers) && !empty($StrHtmlUsers))
-                                        {!! $StrHtmlUsers !!}
-                                        @endif
-                                    </select>
-                                    <label for="r">Select User</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-body">
                                 <div class="form-group form-md-checkboxes">
                                     <div class="md-checkbox-inline">
                                         <div class="md-checkbox">
-                                            <input type="checkbox" name="s" id="s" class="md-check">
-                                            <label for="s">
+                                            <input type="checkbox" name="l" id="l" class="md-check">
+                                            <label for="l">
                                                 <span></span>
                                                 <span class="check"></span>
                                                 <span class="box"></span>
-                                                Apply to All Groups </label>
+                                                Is Disabled </label>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group form-md-line-input has-info">
-                                    <select multiple="multiple" class="form-control" name="t[]" id="t">
-                                        @if(isset($StrHtmlGroups) && !empty($StrHtmlGroups))
-                                        {!! $StrHtmlGroups !!}
-                                        @endif
-                                    </select>
-                                    <label for="t">Select User</label>
+                                </div>                 
+                                <div class="form-group form-md-checkboxes">
+                                    <div class="md-checkbox-inline">
+                                        <div class="md-checkbox">
+                                            <input type="checkbox" name="m" id="m" class="md-check">
+                                            <label for="m">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                Is Active </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

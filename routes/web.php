@@ -72,7 +72,7 @@ Route::prefix('extraweb')->group(function () {
                 Route::get('/delete/{id}', [PermissionController::class, 'delete'])->name('extraweb.master.uac.permissions.delete');
                 Route::get('/remove/{id}', [PermissionController::class, 'remove'])->name('extraweb.master.uac.permissions.remove');
             });
-            Route::prefix('/menus')->group(function () {
+            Route::prefix('/menu')->group(function () {
                 Route::get('/view', [MenuController::class, 'view'])->name('extraweb.master.uac.menus.view');
                 Route::get('/tree-view', [MenuController::class, 'tree_view'])->name('extraweb.master.uac.menus.tree.view');
                 Route::post('/get_list', [MenuController::class, 'get_list'])->name('extraweb.master.uac.menus.get_list');

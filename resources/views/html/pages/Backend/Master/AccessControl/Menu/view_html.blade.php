@@ -1,8 +1,12 @@
 <div class="col-md-12" style="padding-left:0px !important">
     <div class="btn-group" style="margin:0px 0px 5px 0px">
-        <a href="{!! $_config['header']['link'] !!}" id="sample_editable_1_new" class="btn green">
-            {!! $_config['header']['title'] !!} {!! $_config['header']['icon'] !!}
+        @if(isset($_config['header']) && !empty($_config['header']))
+        @foreach($_config['header'] AS $k => $v)
+        <a href="{!! $v['link'] !!}" class="btn green" style="margin:0px 0px 0px 5px">
+            {!! $v['title'] !!} {!! $v['icon'] !!}
         </a>
+        @endforeach
+        @endif
     </div>
     <div class="portlet box blue">
         <div class="portlet-title">
