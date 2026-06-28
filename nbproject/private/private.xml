@@ -3,17 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Controller.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/UserController.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Menu/tree_view_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Menu/edit_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Auth/AppController.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Menu/tree_view_html.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Models/Entity/uac/Tbl_a_uac_menu_p_en.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/config/app.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/MenuController.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/.env</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/routes/web.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/config/app.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/config/database.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Controller.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Auth/AppController.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/UserController.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_js.blade.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/view_html.blade.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_js.blade.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/create_html.blade.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_js.blade.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_html.blade.php</file>
+            <file>file:/D:/Web-Labs/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/MenuController.php</file>
         </group>
     </open-files>
 </project-private>
