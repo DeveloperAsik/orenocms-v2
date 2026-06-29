@@ -40,11 +40,10 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
         $is_open1 = ($raw_menu->data->state->opened == true) ? 'open' : '';
         $path1 = ($raw_menu->data->path) ? $raw_menu->data->path : 'javascript:;';
         $is_arrow1 = ($raw_menu->data->children) ? 'arrow' : '';
-        $icon1 = ($raw_menu->data->icon) ? $raw_menu->data->icon : '';
+        $icon1 = ($raw_menu->data->icon) ? '<i class="' . $raw_menu->data->icon . '"></i>' : '';
         $text1 = ($raw_menu->data->text) ? $raw_menu->data->text : '';
-
         $strHtmlMenu = '<li class="' . $is_active1 . ' ' . $is_open1 . '">';
-        $strHtmlMenu .= '<a data-txt="lvl-1" href="' . $path1 . '" style="padding: 5px 15px 6px 15px !important"><i class="' . $icon1 . '"></i><span class="title">' . $text1 . '</span><span class="' . $is_arrow1 . '"></span></a>';
+        $strHtmlMenu .= '<a data-txt="lvl-1" href="' . $path1 . '" style="padding: 5px 15px 6px 15px !important">' . $icon1 . '<span class="title">' . $text1 . '</span><span class="' . $is_arrow1 . '"></span></a>';
         $strHtmlMenu .= '<ul class="sub-menu">';
         if (isset($raw_menu->data->children) && !empty($raw_menu->data->children)) {
             foreach ($raw_menu->data->children AS $key2 => $value2) {
@@ -52,10 +51,10 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                 $is_open2 = ($value2->state->opened == true) ? 'active open' : '';
                 $path2 = ($value2->path) ? $value2->path : 'javascript:;';
                 $is_arrow2 = ($value2->children) ? 'arrow' : '';
-                $icon2 = ($value2->icon) ? $value2->icon : '';
+                $icon2 = ($value2->icon) ? '<i class="' . $value2->icon . '"></i>' : '';
                 $text2 = ($value2->text) ? $value2->text : '';
                 $strHtmlMenu .= '<li class="' . $is_active2 . ' ' . $is_open2 . '">';
-                    $strHtmlMenu .= '<a data-txt="lvl-2" href="' . $path2 . '"><i class="' . $icon2 . '"></i><span class="title">' . $text2 . '</span><span class="' . $is_arrow2 . '"></span></a>';
+                $strHtmlMenu .= '<a data-txt="lvl-2" href="' . $path2 . '">' . $icon2 . '<span class="title">' . $text2 . '</span><span class="' . $is_arrow2 . '"></span></a>';
                 $strHtmlMenu .= '<ul class="sub-menu">';
                 if (isset($value2->children) && !empty($value2->children)) {
                     foreach ($value2->children AS $key3 => $value3) {
@@ -63,10 +62,10 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                         $is_open3 = ($value3->state->opened == true) ? 'active open' : '';
                         $path3 = ($value3->path) ? $value3->path : 'javascript:;';
                         $is_arrow3 = ($value3->children) ? 'arrow' : '';
-                        $icon3 = ($value3->icon) ? $value3->icon : '';
+                        $icon3 = ($value3->icon) ? '<i class="' . $value3->icon . '"></i>' : '';
                         $text3 = ($value3->text) ? $value3->text : '';
                         $strHtmlMenu .= '<li class="' . $is_active3 . ' ' . $is_open3 . '">';
-                        $strHtmlMenu .= '<a data-txt="lvl-2" href="' . $path3 . '"><i class="' . $icon3 . '"></i><span class="title">' . $text3 . '</span><span class="' . $is_arrow3 . '"></span></a>';
+                        $strHtmlMenu .= '<a data-txt="lvl-2" href="' . $path3 . '">' . $icon3 . '<span class="title">' . $text3 . '</span><span class="' . $is_arrow3 . '"></span></a>';
                         $strHtmlMenu .= '<ul class="sub-menu">';
                         if (isset($value3->children) && !empty($value3->children)) {
                             foreach ($value3->children AS $key4 => $value4) {
@@ -74,10 +73,10 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                 $is_open4 = ($value4->state->opened == true) ? 'active open' : '';
                                 $path4 = ($value4->path) ? $value4->path : 'javascript:;';
                                 $is_arrow4 = ($value4->children) ? 'arrow' : '';
-                                $icon4 = ($value4->icon) ? $value4->icon : '';
+                                $icon4 = ($value4->icon) ? '<i class="' . $value4->icon . '"></i>' : '';
                                 $text4 = ($value4->text) ? $value4->text : '';
                                 $strHtmlMenu .= '<li class="' . $is_active4 . ' ' . $is_open4 . '">';
-                                $strHtmlMenu .= '<a data-txt="lvl-3" href="' . $path4 . '"><i class="' . $icon4 . '"></i><span class="title">' . $text4 . '</span><span class="' . $is_arrow4 . '"></span></a>';
+                                $strHtmlMenu .= '<a data-txt="lvl-3" href="' . $path4 . '">' . $icon4 . '<span class="title">' . $text4 . '</span><span class="' . $is_arrow4 . '"></span></a>';
                                 $strHtmlMenu .= '<ul class="sub-menu">';
                                 if (isset($value4->children) && !empty($value4->children)) {
                                     foreach ($value4->children AS $key5 => $value5) {
@@ -85,10 +84,10 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                         $is_open5 = ($value5->state->opened == true) ? 'active open' : '';
                                         $path5 = ($value5->path) ? $value5->path : 'javascript:;';
                                         $is_arrow5 = ($value5->children) ? 'arrow' : '';
-                                        $icon5 = ($value5->icon) ? $value5->icon : '';
+                                        $icon5 = ($value5->icon) ? '<i class="' . $value5->icon . '"></i>' : '';
                                         $text5 = ($value5->text) ? $value5->text : '';
                                         $strHtmlMenu .= '<li class="' . $is_active5 . ' ' . $is_open5 . '">';
-                                        $strHtmlMenu .= '<a data-txt="lvl-4" href="' . $path5 . '"><i class="' . $icon5 . '"></i><span class="title">' . $text5 . '</span><span class="' . $is_arrow5 . '"></span></a>';
+                                        $strHtmlMenu .= '<a data-txt="lvl-4" href="' . $path5 . '">' . $icon5 . '<span class="title">' . $text5 . '</span><span class="' . $is_arrow5 . '"></span></a>';
                                         $strHtmlMenu .= '<ul class="sub-menu">';
                                         if (isset($value5->children) && !empty($value5->children)) {
                                             foreach ($value5->children AS $key6 => $value6) {
@@ -96,10 +95,10 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                                 $is_open6 = ($value6->state->opened == true) ? 'active open' : '';
                                                 $path6 = ($value6->path) ? $value6->path : 'javascript:;';
                                                 $is_arrow6 = ($value6->children) ? 'arrow' : '';
-                                                $icon6 = ($value6->icon) ? $value6->icon : '';
+                                                $icon6 = ($value6->icon) ? '<i class="' . $value6->icon . '"></i>' : '';
                                                 $text6 = ($value6->text) ? $value6->text : '';
                                                 $strHtmlMenu .= '<li class="' . $is_active6 . ' ' . $is_open6 . '">';
-                                                $strHtmlMenu .= '<a data-txt="lvl-5" href="' . $path6 . '"><i class="' . $icon6 . '"></i><span class="title">' . $text6 . '</span><span class="' . $is_arrow6 . '"></span></a>';
+                                                $strHtmlMenu .= '<a data-txt="lvl-5" href="' . $path6 . '">' . $icon6 . '<span class="title">' . $text6 . '</span><span class="' . $is_arrow6 . '"></span></a>';
                                                 $strHtmlMenu .= '<ul class="sub-menu">';
                                                 if (isset($value6->children) && !empty($value6->children)) {
                                                     foreach ($value6->children AS $key7 => $value7) {
@@ -107,10 +106,10 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                                         $is_open7 = ($value7->state->opened == true) ? 'active open' : '';
                                                         $path7 = ($value7->path) ? $value7->path : 'javascript:;';
                                                         $is_arrow7 = ($value7->children) ? 'arrow' : '';
-                                                        $icon7 = ($value7->icon) ? $value7->icon : '';
+                                                        $icon7 = ($value7->icon) ? '<i class="' . $value7->icon . '"></i>' : '';
                                                         $text7 = ($value7->text) ? $value7->text : '';
                                                         $strHtmlMenu .= '<li class="' . $is_active7 . ' ' . $is_open7 . '">';
-                                                        $strHtmlMenu .= '<a data-txt="lvl-6" href="' . $path7 . '"><i class="' . $icon7 . '"></i><span class="title">' . $text7 . '</span><span class="' . $is_arrow7 . '"></span></a>';
+                                                        $strHtmlMenu .= '<a data-txt="lvl-6" href="' . $path7 . '">' . $icon7 . '<span class="title">' . $text7 . '</span><span class="' . $is_arrow7 . '"></span></a>';
                                                         //$strHtmlMenu .= '<ul class="sub-menu">';
                                                         //$strHtmlMenu .= '</ul>';
                                                         $strHtmlMenu .= '</li>';
