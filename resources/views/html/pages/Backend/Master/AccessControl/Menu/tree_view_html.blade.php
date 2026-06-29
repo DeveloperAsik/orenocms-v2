@@ -157,6 +157,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-actions noborder">
+                                <input type="text" name="__id" class="form-control" style="display:none">
                                 <button type="button" class="btn blue" id="submitForm">Submit</button>
                                 <button type="button" class="btn default">Cancel</button>
                             </div>

@@ -64,6 +64,7 @@
     }
     var __fn__assign_val_to_form = function (formdata) {
         if (formdata) {
+            $('input[name="__id"]').val(formdata.id);
             $('input[name="a"]').val(formdata.__name);
             $('input[name="b"]').val(formdata.__path);
             $('input[name="c"]').val(formdata.__icon);
@@ -77,6 +78,8 @@
             $('input[type="checkbox"][name="k"]').prop('checked', (formdata.__is_open == 1) ? true : false).trigger('change');
             $('input[type="checkbox"][name="l"]').prop('checked', (formdata.__is_disabled == 1) ? true : false).trigger('change');
             $('input[type="checkbox"][name="m"]').prop('checked', (formdata.is_active == 1) ? true : false).trigger('change');
+
+            $('input[name="__id"]').attr("value", formdata.id);
         }
     }
     var ViewJS = function () {
@@ -88,7 +91,7 @@
                 init_tree_js(treedata);
                 $('#tree_view_menus').on('click', '.jstree-anchor', function (e) {
                     e.preventDefault();
-                    let node_id = $(this).jstree(true).get_node(this);//.id;
+                    let node_id = $(this).jstree(true).get_node(this);
                     let id = $(this).jstree(true).get_node(this).original.id;
                     let level = $(this).jstree(true).get_node(this).original.level_id;
                     console.log("Clicked Node :");
@@ -150,23 +153,24 @@
                     }, 1500);
                 });
                 $('#submitForm').on('click', function () {
+                    var id = $('input[name="__id"]').val();
                     var formdata = {
                         a: $('input[name="a"]').val(),
                         b: $('input[name="b"]').val(),
                         c: $('input[name="c"]').val(),
                         d: $('input[name="d"]').val(),
-                        a: $('input[name="e"]').val(),
-                        b: $('input[name="f"]').val(),
-                        c: $('input[name="g"]').val(),
-                        f: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,
-                        g: ($('input[type="checkbox"][name="i"]:checked').val()) ? 1 : 0,
-                        g: ($('input[type="checkbox"][name="j"]:checked').val()) ? 1 : 0,
-                        g: ($('input[type="checkbox"][name="k"]:checked').val()) ? 1 : 0,
-                        g: ($('input[type="checkbox"][name="l"]:checked').val()) ? 1 : 0,
-                        h: ($('input[type="checkbox"][name="m"]:checked').val()) ? 1 : 0
+                        e: $('input[name="e"]').val(),
+                        f: $('input[name="f"]').val(),
+                        g: ($('input[type="checkbox"][name="g"]:checked').val()) ? 1 : 0,
+                        h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,
+                        i: ($('input[type="checkbox"][name="i"]:checked').val()) ? 1 : 0,
+                        j: ($('input[type="checkbox"][name="j"]:checked').val()) ? 1 : 0,
+                        k: ($('input[type="checkbox"][name="k"]:checked').val()) ? 1 : 0,
+                        l: ($('input[type="checkbox"][name="l"]:checked').val()) ? 1 : 0,
+                        m: ($('input[type="checkbox"][name="m"]:checked').val()) ? 1 : 0
                     };
                     var options = {
-                        url: _base_extraweb_uri + 'master/uac/menus/insert/',
+                        url: _base_extraweb_uri + '/master/uac/menu/update/' + id,
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
@@ -175,6 +179,9 @@
                         timeout: 2000
                     };
                     var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    console.log('response : ');
+                    console.log(response);
+                    return false;
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';

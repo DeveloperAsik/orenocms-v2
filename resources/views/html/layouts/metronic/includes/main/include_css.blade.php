@@ -29,4 +29,24 @@
 <link href="{{$values}}" rel="stylesheet" type="text/css"/>
 @endforeach
 @endif
+
+<style>
+    .page-sidebar .page-sidebar-menu .sub-menu li > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu li > a{
+        display: block;
+        margin: 0;
+        padding: 6px 15px 6px 15px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 300;
+    }
+    .start > ul > li > ul > li > a{
+        padding-left: 28px !important;
+    }
+    .start > ul > li > ul > li > ul > li > a{
+        padding-left: 38px !important;
+    }
+    .start > ul > li > ul > li > ul > li > ul > li > a{
+        padding-left: 48px !important;
+    }
+</style>
 <!-- load css lib / class / library from controller end here -->

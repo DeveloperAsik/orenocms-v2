@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Libraries\Oreno\Authentification;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Loader;
+use App\Models\Entity\uac\Tbl_a_uac_menu_p_en;
 use View;
 
 class Controller extends BaseController {
@@ -17,16 +18,18 @@ class Controller extends BaseController {
     use DispatchesJobs,
         ValidatesRequests;
 
-    protected $Authentification;
     protected $Loader;
     protected $Converter;
+    protected $Authentification;
+    protected $Tbl_a_uac_menu_p_en;
 
     public function __construct(Request $request) {
-        $this->Authentification = new Authentification();
         $this->Converter = new Converter();
         $this->Loader = new Loader;
         $this->Loader->init($request);
+        $this->Authentification = new Authentification();
         $this->__load_data_to_object($request);
+        $this->__load_data_menu($request);
     }
 
     public function __load_data_to_object($request) {
@@ -36,15 +39,26 @@ class Controller extends BaseController {
             $_session_is_logged_in = (int) $data['_authentification'][$this->Authentification->__encr_to_var('is_logged_in')];
             $this->__is_logged_in = $_session_is_logged_in;
             $this->__is_autologged_out = (int) $data['_authentification'][$this->Authentification->__encr_to_var('is_autologged_out')];
-            $this->__user_id = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_user_id')], 'decode', ['rep' => 3]);
-            $this->__group_id = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_group_id')], 'decode', ['rep' => 3]);
-            $this->__module_id = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_module_id')], 'decode', ['rep' => 3]);
 
-            $this->_is_group_user_allowed = $data['_authentification'][$this->Authentification->__encr_to_var('_is_group_user_allowed')];
-            $this->_is_group_permission_allowed = $data['_authentification'][$this->Authentification->__encr_to_var('_is_group_permission_allowed')];
-            $this->_is_user_permission_allowed = $data['_authentification'][$this->Authentification->__encr_to_var('_is_user_permission_allowed')];
+            $this->__user_id = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_user_id')], 'encode', ['rep' => 3]);
+            $this->__group_id = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_group_id')], 'encode', ['rep' => 3]);
+            $this->__module_id = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_module_id')], 'encode', ['rep' => 3]);
+
+            $this->_is_group_user_allowed = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_is_group_user_allowed')], 'encode', ['rep' => 3]);
+            $this->_is_group_permission_allowed = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_is_group_permission_allowed')], 'encode', ['rep' => 3]);
+            $this->_is_user_permission_allowed = $this->Converter->base64($request, $data['_authentification'][$this->Authentification->__encr_to_var('_is_user_permission_allowed')], 'encode', ['rep' => 3]);
         }
         View::share('_session_is_logged_in', $_session_is_logged_in);
+    }
+
+    public function __load_data_menu($request) {
+        $this->Tbl_a_uac_menu_p_en = new Tbl_a_uac_menu_p_en();
+        $data = $request->session()->all();
+        $strHtmlMenu = '';
+        if (isset($data['_authentification'][$this->Authentification->__encr_to_var('is_logged_in')]) && !empty($data['_authentification'][$this->Authentification->__encr_to_var('is_logged_in')]) && $data['_authentification'][$this->Authentification->__encr_to_var('is_logged_in')] == 1) {
+            $strHtmlMenu = $this->Tbl_a_uac_menu_p_en->__get_tree_data($request);
+        }
+        View::share('_menus', $strHtmlMenu);
     }
 
     public function load_css($class = array()) {

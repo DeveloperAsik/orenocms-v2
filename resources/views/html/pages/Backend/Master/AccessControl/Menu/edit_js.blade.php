@@ -10,18 +10,18 @@
                         b: $('input[name="b"]').val(),
                         c: $('input[name="c"]').val(),
                         d: $('input[name="d"]').val(),
-                        a: $('input[name="e"]').val(),
-                        b: $('input[name="f"]').val(),
-                        c: $('input[name="g"]').val(),
-                        f: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,
-                        g: ($('input[type="checkbox"][name="i"]:checked').val()) ? 1 : 0,
-                        g: ($('input[type="checkbox"][name="j"]:checked').val()) ? 1 : 0,
-                        g: ($('input[type="checkbox"][name="k"]:checked').val()) ? 1 : 0,
-                        g: ($('input[type="checkbox"][name="l"]:checked').val()) ? 1 : 0,
-                        h: ($('input[type="checkbox"][name="m"]:checked').val()) ? 1 : 0
+                        e: $('input[name="e"]').val(),
+                        f: $('input[name="f"]').val(),
+                        g: ($('input[type="checkbox"][name="g"]:checked').val()) ? 1 : 0,
+                        h: ($('input[type="checkbox"][name="h"]:checked').val()) ? 1 : 0,
+                        i: ($('input[type="checkbox"][name="i"]:checked').val()) ? 1 : 0,
+                        j: ($('input[type="checkbox"][name="j"]:checked').val()) ? 1 : 0,
+                        k: ($('input[type="checkbox"][name="k"]:checked').val()) ? 1 : 0,
+                        l: ($('input[type="checkbox"][name="l"]:checked').val()) ? 1 : 0,
+                        m: ($('input[type="checkbox"][name="m"]:checked').val()) ? 1 : 0
                     };
                     var options = {
-                        url: _base_extraweb_uri + 'master/uac/menu/update/',
+                        url: _base_extraweb_uri + '/master/uac/menu/update/',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
