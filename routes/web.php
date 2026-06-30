@@ -54,6 +54,7 @@ Route::prefix('extraweb')->group(function () {
             });
             Route::prefix('/groups')->group(function () {
                 Route::get('/view', [GroupController::class, 'view'])->name('extraweb.master.uac.groups.view');
+                Route::get('/tree-view', [GroupController::class, 'tree_view'])->name('extraweb.master.uac.groups.tree.view');
                 Route::post('/get_list', [GroupController::class, 'get_list'])->name('extraweb.master.uac.groups.get_list');
                 Route::get('/edit/{id}', [GroupController::class, 'edit'])->name('extraweb.master.uac.groups.edit');
                 Route::post('/update/{id}', [GroupController::class, 'update'])->name('extraweb.master.uac.groups.update');

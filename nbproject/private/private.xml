@@ -7,6 +7,7 @@
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Menu/create_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Menu/tree_view_html.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/layouts/metronic/includes/main/include_css.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/config/app.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/MenuController.php</file>
@@ -17,7 +18,8 @@
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Menu/create_html.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/Menu/edit_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Auth/AppController.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Master/AccessControl/User/edit_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/layouts/metronic/includes/main/include_sidebar.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Models/Entity/uac/Tbl_a_uac_menu_p_en.php</file>
         </group>
     </open-files>
 </project-private>

@@ -2,7 +2,7 @@
     var fetch_tree_data = function () {
         response = null;
         var options = {
-            url: _base_extraweb_uri + '/master/uac/menu/get_list?a=1',
+            url: _base_extraweb_uri + '/master/uac/groups/get_list?a=1',
             methodType: 'POST',
             dataType: 'json',
             file: false,
@@ -24,7 +24,7 @@
                 'id': id
             };
             var options = {
-                url: _base_extraweb_uri + '/master/uac/menu/get_list?a=2',
+                url: _base_extraweb_uri + '/master/uac/groups/get_list?a=2',
                 methodType: 'POST',
                 dataType: 'json',
                 file: false,
@@ -42,8 +42,8 @@
 
 
     var init_tree_js = function (treedata) {
-        $('#tree_view_menus').jstree("state.clear");
-        $('#tree_view_menus').on('before.jstree', function (e, data) {
+        $('#tree_view_groups').jstree("state.clear");
+        $('#tree_view_groups').on('before.jstree', function (e, data) {
             if (data.plugin === 'checkbox') {
                 // Check if the target is a branch (has children)
                 if (data.inst.is_parent(data.args[0])) {
@@ -108,15 +108,15 @@
                 init_tree_js(treedata);
                 //__fn_uncheck_tree_node();
 
-                $('#tree_view_menus').on('click', '.jstree-anchor', function (e) {
+                $('#tree_view_groups').on('click', '.jstree-anchor', function (e) {
                     e.preventDefault();
                     let currentNodeId = $(this).jstree(true).get_node(this);
                     console.log('currentNodeId : ');
                     console.log(currentNodeId);
-                    var bottomCheckedIds = $('#tree_view_menus').jstree("get_bottom_checked");
+                    var bottomCheckedIds = $('#tree_view_groups').jstree("get_bottom_checked");
                     console.log("bottomCheckedIds");
                     console.log(bottomCheckedIds);
-                    var tree = $('#tree_view_menus').jstree(true);
+                    var tree = $('#tree_view_groups').jstree(true);
                     bottomCheckedIds.forEach(function (nodeId) {
                         if (currentNodeId.id != nodeId) {
                             console.log('uncheck nodeid : ' + nodeId);
@@ -133,9 +133,9 @@
                         $('#updateTreeForm').css({'display': 'none'});
                     }
                 });
-                $('#tree_view_menus').on('check_node.jstree', function (e, data) {
+                $('#tree_view_groups').on('check_node.jstree', function (e, data) {
                     var currentNodeId = data.node.id;
-                    var tree = $('#tree_view_menus').jstree(true);
+                    var tree = $('#tree_view_groups').jstree(true);
 
                     // Get all currently checked nodes
                     var checkedNodes = tree.get_checked();
@@ -149,7 +149,7 @@
                         }
                     });
                 });
-                $('#tree_view_menus').on('rename_node.jstree', function (e, data) {
+                $('#tree_view_groups').on('rename_node.jstree', function (e, data) {
                     e.preventDefault();
                     let parent = data.node.parent;
                     var formdata = {
@@ -171,7 +171,7 @@
                         };
                     }
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/menu/insert/',
+                        url: _base_extraweb_uri + '/master/uac/groups/insert/',
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,
@@ -208,7 +208,7 @@
                         m: ($('input[type="checkbox"][name="m"]:checked').val()) ? 1 : 0
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/menu/update/' + id,
+                        url: _base_extraweb_uri + '/master/uac/groups/update/' + id,
                         methodType: 'POST',
                         dataType: 'json',
                         file: false,

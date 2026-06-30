@@ -38,7 +38,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
         $raw_menu = json_decode($menus);
         $is_active1 = 'start active';
         $is_open1 = ($raw_menu->data->state->opened == true) ? 'open' : '';
-        $path1 = ($raw_menu->data->path) ? $raw_menu->data->path : 'javascript:;';
+        $path1 = ($raw_menu->data->path) ? config('app.base_extraweb_uri') . $raw_menu->data->path : 'javascript:;';
         $is_arrow1 = ($raw_menu->data->children) ? 'arrow' : '';
         $icon1 = ($raw_menu->data->icon) ? '<i class="' . $raw_menu->data->icon . '"></i>' : '';
         $text1 = ($raw_menu->data->text) ? $raw_menu->data->text : '';
@@ -49,7 +49,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
             foreach ($raw_menu->data->children AS $key2 => $value2) {
                 $is_active2 = '';
                 $is_open2 = ($value2->state->opened == true) ? 'active open' : '';
-                $path2 = ($value2->path) ? $value2->path : 'javascript:;';
+                $path2 = ($value2->path) ? config('app.base_extraweb_uri') . $value2->path : 'javascript:;';
                 $is_arrow2 = ($value2->children) ? 'arrow' : '';
                 $icon2 = ($value2->icon) ? '<i class="' . $value2->icon . '"></i>' : '';
                 $text2 = ($value2->text) ? $value2->text : '';
@@ -60,7 +60,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                     foreach ($value2->children AS $key3 => $value3) {
                         $is_active3 = '';
                         $is_open3 = ($value3->state->opened == true) ? 'active open' : '';
-                        $path3 = ($value3->path) ? $value3->path : 'javascript:;';
+                        $path3 = ($value3->path) ? config('app.base_extraweb_uri') . $value3->path : 'javascript:;';
                         $is_arrow3 = ($value3->children) ? 'arrow' : '';
                         $icon3 = ($value3->icon) ? '<i class="' . $value3->icon . '"></i>' : '';
                         $text3 = ($value3->text) ? $value3->text : '';
@@ -71,7 +71,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                             foreach ($value3->children AS $key4 => $value4) {
                                 $is_active4 = '';
                                 $is_open4 = ($value4->state->opened == true) ? 'active open' : '';
-                                $path4 = ($value4->path) ? $value4->path : 'javascript:;';
+                                $path4 = ($value4->path) ? config('app.base_extraweb_uri') . $value4->path : 'javascript:;';
                                 $is_arrow4 = ($value4->children) ? 'arrow' : '';
                                 $icon4 = ($value4->icon) ? '<i class="' . $value4->icon . '"></i>' : '';
                                 $text4 = ($value4->text) ? $value4->text : '';
@@ -82,7 +82,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                     foreach ($value4->children AS $key5 => $value5) {
                                         $is_active5 = '';
                                         $is_open5 = ($value5->state->opened == true) ? 'active open' : '';
-                                        $path5 = ($value5->path) ? $value5->path : 'javascript:;';
+                                        $path5 = ($value5->path) ? config('app.base_extraweb_uri') . $value5->path : 'javascript:;';
                                         $is_arrow5 = ($value5->children) ? 'arrow' : '';
                                         $icon5 = ($value5->icon) ? '<i class="' . $value5->icon . '"></i>' : '';
                                         $text5 = ($value5->text) ? $value5->text : '';
@@ -93,7 +93,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                             foreach ($value5->children AS $key6 => $value6) {
                                                 $is_active6 = '';
                                                 $is_open6 = ($value6->state->opened == true) ? 'active open' : '';
-                                                $path6 = ($value6->path) ? $value6->path : 'javascript:;';
+                                                $path6 = ($value6->path) ? config('app.base_extraweb_uri') . $value6->path : 'javascript:;';
                                                 $is_arrow6 = ($value6->children) ? 'arrow' : '';
                                                 $icon6 = ($value6->icon) ? '<i class="' . $value6->icon . '"></i>' : '';
                                                 $text6 = ($value6->text) ? $value6->text : '';
@@ -104,7 +104,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                                     foreach ($value6->children AS $key7 => $value7) {
                                                         $is_active7 = '';
                                                         $is_open7 = ($value7->state->opened == true) ? 'active open' : '';
-                                                        $path7 = ($value7->path) ? $value7->path : 'javascript:;';
+                                                        $path7 = ($value7->path) ? config('app.base_extraweb_uri') . $value7->path : 'javascript:;';
                                                         $is_arrow7 = ($value7->children) ? 'arrow' : '';
                                                         $icon7 = ($value7->icon) ? '<i class="' . $value7->icon . '"></i>' : '';
                                                         $text7 = ($value7->text) ? $value7->text : '';
