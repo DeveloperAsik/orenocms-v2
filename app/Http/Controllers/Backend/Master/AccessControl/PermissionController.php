@@ -216,7 +216,7 @@ class PermissionController extends Controller {
                 ],
                 'limit' => 100
             ];
-            return $this->Tbl_a_uac_permissions_p_en->__find($request, 'all', $params);
+            return $this->Tbl_a_uac_permissions_p_en->__find($request, 'all', $params);//, 'mysql_bak');
         }
     }
 
@@ -277,10 +277,10 @@ class PermissionController extends Controller {
                 $StrHtmlUsers .= '<option value="' . $val1->id . '" title="' . $val1->__email . '">' . $val1->__user_name . '</option>';
             }
         }
-        $StrHtmlPermissions = '';
+        $StrHtmlGroups = '';
         if (isset($groups['data']) && !empty($groups['data'])) {
             foreach ($groups['data'] AS $key2 => $val2) {
-                $StrHtmlPermissions .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
+                $StrHtmlGroups .= '<option value="' . $val2->id . '" title="level : ' . $val2->__level . '">' . $val2->__name . '</option>';
             }
         }
         $this->load_css([
@@ -293,7 +293,7 @@ class PermissionController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlPermissions'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'controllers', 'StrHtmlActions', 'StrHtmlUsers', 'StrHtmlGroups'));
     }
 
     public function insert(Request $request) {
@@ -341,9 +341,9 @@ class PermissionController extends Controller {
                         '__is_basic' => $data['f'],
                         '__is_public' => $data['g'],
                         'is_active' => $data['h'],
-                        'created_by' => (int) $this->__user_id,
+                        'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'created_date' => $this->Date->now(),
-                        'updated_by' => (int) $this->__user_id,
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                 }
@@ -352,11 +352,11 @@ class PermissionController extends Controller {
                 'table_name' => 'tbl_a_uac_permissions_p',
                 'data' => $insertData
             ];
-            $response = true; //$this->Tbl_a_uac_permissions_p_en->__insert($request, $insert);
+            $response = true;//$this->Tbl_a_uac_permissions_p_en->__insert($request, $insert);//, 'mysql_bak');
             if ($response) {
                 $permissions = $this->__get_list_by_controller($request, $data['c']);
                 $arrUserPermissions = [];
-                $arrPermissionPermissions = [];
+                $arrGroupPermissions = [];
                 foreach ($permissions['data'] AS $key1 => $permission) {
                     //apply to user
                     if (isset($data['r']) && !empty($data['r'])) {
@@ -366,9 +366,9 @@ class PermissionController extends Controller {
                                 '__permission_id' => $permission->id,
                                 '__is_denied' => 0,
                                 'is_active' => $data['h'],
-                                'created_by' => (int) $this->__user_id,
+                                'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                                 'created_date' => $this->Date->now(),
-                                'updated_by' => (int) $this->__user_id,
+                                'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                                 'updated_date' => $this->Date->now()
                             ];
                         }
@@ -376,15 +376,15 @@ class PermissionController extends Controller {
                     //apply to group
                     if (isset($data['t']) && !empty($data['t'])) {
                         foreach ($data['t'] AS $key => $group) {
-                            $arrPermissionPermissions[] = [
+                            $arrGroupPermissions[] = [
                                 '__group_id' => (int) $group,
                                 '__permission_id' => $permission->id,
                                 '__module_id' => isset($data['u']) ? $data['s'] : 3,
                                 '__is_allowed' => 0,
                                 'is_active' => $data['h'],
-                                'created_by' => (int) $this->__user_id,
+                                'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                                 'created_date' => $this->Date->now(),
-                                'updated_by' => (int) $this->__user_id,
+                                'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                                 'updated_date' => $this->Date->now()
                             ];
                         }
@@ -394,12 +394,12 @@ class PermissionController extends Controller {
                     'table_name' => 'tbl_b_uac_user_permissions_r',
                     'data' => $arrUserPermissions
                 ];
-                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserPermissions);
-                $insertPermissionPermissions = [
+                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserPermissions);//, 'mysql_bak');
+                $insertGroupPermissions = [
                     'table_name' => 'tbl_b_uac_group_permissions_r',
-                    'data' => $arrPermissionPermissions
+                    'data' => $arrGroupPermissions
                 ];
-                $this->Tbl_b_uac_group_permissions_r_en->__insert($request, $insertPermissionPermissions);
+                $this->Tbl_b_uac_group_permissions_r_en->__insert($request, $insertGroupPermissions);//, 'mysql_bak');
                 return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
             } else {
                 return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
@@ -476,21 +476,21 @@ class PermissionController extends Controller {
                 case 'is_basic':
                     $update_data = [
                         '__is_basic' => $data['b'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
                 case 'is_public':
                     $update_data = [
                         '__is_public' => $data['b'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
                 case 'is_active':
                     $update_data = [
                         'is_active' => $data['b'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
@@ -515,7 +515,7 @@ class PermissionController extends Controller {
                         '__is_basic' => $data['f'],
                         '__is_public' => $data['g'],
                         'is_active' => $data['h'],
-                        'updated_by' => (int) $this->__user_id,
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;

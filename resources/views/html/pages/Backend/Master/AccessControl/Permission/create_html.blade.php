@@ -171,7 +171,7 @@
                                         {!! $StrHtmlGroups !!}
                                         @endif
                                     </select>
-                                    <label for="t">Select User</label>
+                                    <label for="t">Select Group</label>
                                 </div>
                             </div>
                         </div>

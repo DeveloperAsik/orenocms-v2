@@ -38,104 +38,104 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
         $raw_menu = json_decode($menus);
         $is_active1 = 'start active';
         $is_open1 = ($raw_menu->data->state->opened == true) ? 'open' : '';
-        $path1 = ($raw_menu->data->path) ? config('app.base_extraweb_uri') . $raw_menu->data->path : 'javascript:;';
-        $is_arrow1 = ($raw_menu->data->children) ? 'arrow' : '';
-        $icon1 = ($raw_menu->data->icon) ? '<i class="' . $raw_menu->data->icon . '"></i>' : '';
+        $path1 = ($raw_menu->data->path) ? ' href="' . config('app.base_extraweb_uri') . $raw_menu->data->path . '"' : 'javascript:;';
+        $is_arrow1 = ($raw_menu->data->children) ? '<span class="arrow"></span>' : '';
+        $icon1 = ($raw_menu->data->icon) ? ' <i class="' . $raw_menu->data->icon . '"></i> ' : '';
         $text1 = ($raw_menu->data->text) ? $raw_menu->data->text : '';
         $strHtmlMenu = '<li class="' . $is_active1 . ' ' . $is_open1 . '">';
-        $strHtmlMenu .= '<a data-txt="lvl-1" href="' . $path1 . '" style="padding: 5px 15px 6px 15px !important">' . $icon1 . '<span class="title">' . $text1 . '</span><span class="' . $is_arrow1 . '"></span></a>';
-        $strHtmlMenu .= '<ul class="sub-menu">';
+        $strHtmlMenu .= '<a data-txt="lvl-1"' . $path1 . ' style="padding: 5px 15px 6px 15px !important">' . $icon1 . '<span class="title">' . $text1 . '</span>' . $is_arrow1 . '</a>';
         if (isset($raw_menu->data->children) && !empty($raw_menu->data->children)) {
+            $strHtmlMenu .= '<ul class="sub-menu">';
             foreach ($raw_menu->data->children AS $key2 => $value2) {
                 $is_active2 = '';
                 $is_open2 = ($value2->state->opened == true) ? 'active open' : '';
-                $path2 = ($value2->path) ? config('app.base_extraweb_uri') . $value2->path : 'javascript:;';
-                $is_arrow2 = ($value2->children) ? 'arrow' : '';
-                $icon2 = ($value2->icon) ? '<i class="' . $value2->icon . '"></i>' : '';
+                $path2 = ($value2->path) ? ' href="' . config('app.base_extraweb_uri') . $value2->path . '"' : 'javascript:;';
+                $is_arrow2 = ($value2->children) ? '<span class="arrow"></span>' : '';
+                $icon2 = ($value2->icon) ? ' <i class="' . $value2->icon . '"></i> ' : '';
                 $text2 = ($value2->text) ? $value2->text : '';
                 $strHtmlMenu .= '<li class="' . $is_active2 . ' ' . $is_open2 . '">';
-                $strHtmlMenu .= '<a data-txt="lvl-2" href="' . $path2 . '">' . $icon2 . '<span class="title">' . $text2 . '</span><span class="' . $is_arrow2 . '"></span></a>';
-                $strHtmlMenu .= '<ul class="sub-menu">';
+                $strHtmlMenu .= '<a data-txt="lvl-2"' . $path2 . '>' . $icon2 . '<span class="title">' . $text2 . '</span>' . $is_arrow2 . '</a>';
                 if (isset($value2->children) && !empty($value2->children)) {
+                    $strHtmlMenu .= '<ul class="sub-menu">';
                     foreach ($value2->children AS $key3 => $value3) {
                         $is_active3 = '';
                         $is_open3 = ($value3->state->opened == true) ? 'active open' : '';
-                        $path3 = ($value3->path) ? config('app.base_extraweb_uri') . $value3->path : 'javascript:;';
-                        $is_arrow3 = ($value3->children) ? 'arrow' : '';
-                        $icon3 = ($value3->icon) ? '<i class="' . $value3->icon . '"></i>' : '';
+                        $path3 = ($value3->path) ? ' href="' . config('app.base_extraweb_uri') . $value3->path . '"' : 'javascript:;';
+                        $is_arrow3 = ($value3->children) ? '<span class="arrow"></span>' : '';
+                        $icon3 = ($value3->icon) ? ' <i class="' . $value3->icon . '"></i> ' : '';
                         $text3 = ($value3->text) ? $value3->text : '';
                         $strHtmlMenu .= '<li class="' . $is_active3 . ' ' . $is_open3 . '">';
-                        $strHtmlMenu .= '<a data-txt="lvl-2" href="' . $path3 . '">' . $icon3 . '<span class="title">' . $text3 . '</span><span class="' . $is_arrow3 . '"></span></a>';
-                        $strHtmlMenu .= '<ul class="sub-menu">';
+                        $strHtmlMenu .= '<a data-txt="lvl-2"' . $path3 . '>' . $icon3 . '<span class="title">' . $text3 . '</span>' . $is_arrow3 . '</a>';
                         if (isset($value3->children) && !empty($value3->children)) {
+                            $strHtmlMenu .= '<ul class="sub-menu">';
                             foreach ($value3->children AS $key4 => $value4) {
                                 $is_active4 = '';
                                 $is_open4 = ($value4->state->opened == true) ? 'active open' : '';
-                                $path4 = ($value4->path) ? config('app.base_extraweb_uri') . $value4->path : 'javascript:;';
-                                $is_arrow4 = ($value4->children) ? 'arrow' : '';
-                                $icon4 = ($value4->icon) ? '<i class="' . $value4->icon . '"></i>' : '';
+                                $path4 = ($value4->path) ? ' href="' . config('app.base_extraweb_uri') . $value4->path . '"' : 'javascript:;';
+                                $is_arrow4 = ($value4->children) ? '<span class="arrow"></span>' : '';
+                                $icon4 = ($value4->icon) ? ' <i class="' . $value4->icon . '"></i> ' : '';
                                 $text4 = ($value4->text) ? $value4->text : '';
                                 $strHtmlMenu .= '<li class="' . $is_active4 . ' ' . $is_open4 . '">';
-                                $strHtmlMenu .= '<a data-txt="lvl-3" href="' . $path4 . '">' . $icon4 . '<span class="title">' . $text4 . '</span><span class="' . $is_arrow4 . '"></span></a>';
-                                $strHtmlMenu .= '<ul class="sub-menu">';
+                                $strHtmlMenu .= '<a data-txt="lvl-3"' . $path4 . '>' . $icon4 . '<span class="title">' . $text4 . '</span>' . $is_arrow4 . '</a>';
                                 if (isset($value4->children) && !empty($value4->children)) {
+                                    $strHtmlMenu .= '<ul class="sub-menu">';
                                     foreach ($value4->children AS $key5 => $value5) {
                                         $is_active5 = '';
                                         $is_open5 = ($value5->state->opened == true) ? 'active open' : '';
-                                        $path5 = ($value5->path) ? config('app.base_extraweb_uri') . $value5->path : 'javascript:;';
-                                        $is_arrow5 = ($value5->children) ? 'arrow' : '';
-                                        $icon5 = ($value5->icon) ? '<i class="' . $value5->icon . '"></i>' : '';
+                                        $path5 = ($value5->path) ? ' href="' . config('app.base_extraweb_uri') . $value5->path . '"' : 'javascript:;';
+                                        $is_arrow5 = ($value5->children) ? '<span class="arrow"></span>' : '';
+                                        $icon5 = ($value5->icon) ? ' <i class="' . $value5->icon . '"></i> ' : '';
                                         $text5 = ($value5->text) ? $value5->text : '';
                                         $strHtmlMenu .= '<li class="' . $is_active5 . ' ' . $is_open5 . '">';
-                                        $strHtmlMenu .= '<a data-txt="lvl-4" href="' . $path5 . '">' . $icon5 . '<span class="title">' . $text5 . '</span><span class="' . $is_arrow5 . '"></span></a>';
-                                        $strHtmlMenu .= '<ul class="sub-menu">';
+                                        $strHtmlMenu .= '<a data-txt="lvl-4"' . $path5 . '>' . $icon5 . '<span class="title">' . $text5 . '</span>' . $is_arrow5 . '</a>';
                                         if (isset($value5->children) && !empty($value5->children)) {
+                                            $strHtmlMenu .= '<ul class="sub-menu">';
                                             foreach ($value5->children AS $key6 => $value6) {
                                                 $is_active6 = '';
                                                 $is_open6 = ($value6->state->opened == true) ? 'active open' : '';
-                                                $path6 = ($value6->path) ? config('app.base_extraweb_uri') . $value6->path : 'javascript:;';
-                                                $is_arrow6 = ($value6->children) ? 'arrow' : '';
-                                                $icon6 = ($value6->icon) ? '<i class="' . $value6->icon . '"></i>' : '';
+                                                $path6 = ($value6->path) ? ' href="' . config('app.base_extraweb_uri') . $value6->path . '"' : 'javascript:;';
+                                                $is_arrow6 = ($value6->children) ? '<span class="arrow"></span>' : '';
+                                                $icon6 = ($value6->icon) ? ' <i class="' . $value6->icon . '"></i> ' : '';
                                                 $text6 = ($value6->text) ? $value6->text : '';
                                                 $strHtmlMenu .= '<li class="' . $is_active6 . ' ' . $is_open6 . '">';
-                                                $strHtmlMenu .= '<a data-txt="lvl-5" href="' . $path6 . '">' . $icon6 . '<span class="title">' . $text6 . '</span><span class="' . $is_arrow6 . '"></span></a>';
-                                                $strHtmlMenu .= '<ul class="sub-menu">';
+                                                $strHtmlMenu .= '<a data-txt="lvl-5"' . $path6 . '>' . $icon6 . '<span class="title">' . $text6 . '</span>' . $is_arrow6 . '</a>';
                                                 if (isset($value6->children) && !empty($value6->children)) {
+                                                    $strHtmlMenu .= '<ul class="sub-menu">';
                                                     foreach ($value6->children AS $key7 => $value7) {
                                                         $is_active7 = '';
                                                         $is_open7 = ($value7->state->opened == true) ? 'active open' : '';
-                                                        $path7 = ($value7->path) ? config('app.base_extraweb_uri') . $value7->path : 'javascript:;';
-                                                        $is_arrow7 = ($value7->children) ? 'arrow' : '';
-                                                        $icon7 = ($value7->icon) ? '<i class="' . $value7->icon . '"></i>' : '';
+                                                        $path7 = ($value7->path) ? ' href="' . config('app.base_extraweb_uri') . $value7->path . '"' : 'javascript:;';
+                                                        $is_arrow7 = ($value7->children) ? '<span class="arrow"></span>' : '';
+                                                        $icon7 = ($value7->icon) ? ' <i class="' . $value7->icon . '"></i> ' : '';
                                                         $text7 = ($value7->text) ? $value7->text : '';
                                                         $strHtmlMenu .= '<li class="' . $is_active7 . ' ' . $is_open7 . '">';
-                                                        $strHtmlMenu .= '<a data-txt="lvl-6" href="' . $path7 . '">' . $icon7 . '<span class="title">' . $text7 . '</span><span class="' . $is_arrow7 . '"></span></a>';
+                                                        $strHtmlMenu .= '<a data-txt="lvl-6"' . $path7 . '>' . $icon7 . '<span class="title">' . $text7 . '</span>' . $is_arrow7 . '</a>';
                                                         //$strHtmlMenu .= '<ul class="sub-menu">';
                                                         //$strHtmlMenu .= '</ul>';
                                                         $strHtmlMenu .= '</li>';
                                                     }
+                                                    $strHtmlMenu .= '</ul>';
                                                 }
-                                                $strHtmlMenu .= '</ul>';
                                                 $strHtmlMenu .= '</li>';
                                             }
+                                            $strHtmlMenu .= '</ul>';
                                         }
-                                        $strHtmlMenu .= '</ul>';
                                         $strHtmlMenu .= '</li>';
                                     }
+                                    $strHtmlMenu .= '</ul>';
                                 }
-                                $strHtmlMenu .= '</ul>';
                                 $strHtmlMenu .= '</li>';
                             }
+                            $strHtmlMenu .= '</ul>';
                         }
-                        $strHtmlMenu .= '</ul>';
                         $strHtmlMenu .= '</li>';
                     }
+                    $strHtmlMenu .= '</ul>';
                 }
-                $strHtmlMenu .= '</ul>';
                 $strHtmlMenu .= '</li>';
             }
+            $strHtmlMenu .= '</ul>';
         }
-        $strHtmlMenu .= '</ul>';
         $strHtmlMenu .= '</li>';
         return $strHtmlMenu;
     }
@@ -308,7 +308,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                 'id' => '0',
                 'text' => 'Root Menu',
                 'path' => '',
-                'icon' => 'fa fa-slack',
+                'icon' => 'fa fa-home',
                 'level_id' => 0,
                 'parent_id' => 0,
                 'state' => [

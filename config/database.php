@@ -4,6 +4,8 @@ use Illuminate\Support\Str;
 use App\Libraries\Oreno\Converter;
 
 $Converter = new Converter();
+//$dbbbb = 'db_project_orenocms_app_backup';
+//dd($Converter->base64_basic($dbbbb, 'encode', ['rep' => 3]));
 $host_uac = $Converter->base64_basic(env('CORE_DB_HOST'), 'decode', ['rep' => 3]);
 $port_uac = $Converter->base64_basic(env('CORE_DB_PORT'), 'decode', ['rep' => 3]);
 $database_uac = $Converter->base64_basic(env('CORE_DB_DATABASE'), 'decode', ['rep' => 3]);
@@ -16,19 +18,17 @@ $database_bak_uac = $Converter->base64_basic(env('CORE_BAK_DB_DATABASE'), 'decod
 $username_bak_uac = $Converter->base64_basic(env('CORE_BAK_DB_USERNAME'), 'decode', ['rep' => 3]);
 $password_bak_uac = $Converter->base64_basic(env('CORE_BAK_DB_PASSWORD'), 'decode', ['rep' => 3]);
 
-$host_app = $Converter->base64_basic(env('CORE_DB_HOST'), 'decode', ['rep' => 3]);
+$host_app = $Converter->base64_basic(env('APP_DB_HOST'), 'decode', ['rep' => 3]);
 $port_app = $Converter->base64_basic(env('APP_DB_PORT'), 'decode', ['rep' => 3]);
 $database_app = $Converter->base64_basic(env('APP_DB_DATABASE'), 'decode', ['rep' => 3]);
 $username_app = $Converter->base64_basic(env('APP_DB_USERNAME'), 'decode', ['rep' => 3]);
 $password_app = $Converter->base64_basic(env('APP_DB_PASSWORD'), 'decode', ['rep' => 3]);
 
-
-$host_bak_app = $Converter->base64_basic(env('CORE_BAK_DB_HOST'), 'decode', ['rep' => 3]);
+$host_bak_app = $Converter->base64_basic(env('APP_BAK_DB_HOST'), 'decode', ['rep' => 3]);
 $port_bak_app = $Converter->base64_basic(env('APP_BAK_DB_PORT'), 'decode', ['rep' => 3]);
 $database_bak_app = $Converter->base64_basic(env('APP_BAK_DB_DATABASE'), 'decode', ['rep' => 3]);
 $username_bak_app = $Converter->base64_basic(env('APP_BAK_DB_USERNAME'), 'decode', ['rep' => 3]);
 $password_bak_app = $Converter->base64_basic(env('APP_BAK_DB_PASSWORD'), 'decode', ['rep' => 3]);
-
 return [
     /*
       |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ return [
         //    'synchronous' => null,
         //    'transaction_mode' => 'DEFERRED',
         //],
-        'mysql' => [ //uac
+        'mysql' => [//uac
             'driver' => 'mysql',
             'url' => env('DB_URL'),
             'host' => $host_uac,
@@ -84,7 +84,7 @@ return [
                 (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-        'mysql_bak' => [ //uac
+        'mysql_bak' => [//uac
             'driver' => 'mysql',
             'url' => env('DB_URL'),
             'host' => $host_bak_uac,
@@ -103,7 +103,7 @@ return [
                 (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-        'mysql_app' => [ //app
+        'mysql_app' => [//app
             'driver' => 'mysql',
             'url' => env('DB_URL'),
             'host' => $host_app,
@@ -122,7 +122,7 @@ return [
                 (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-         'mysql_app_bak' => [ //app
+        'mysql_app_bak' => [//app
             'driver' => 'mysql',
             'url' => env('DB_URL'),
             'host' => $host_bak_app,
@@ -141,55 +141,55 @@ return [
                 (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-        //'mariadb' => [
-        //    'driver' => 'mariadb',
-        //    'url' => env('DB_URL'),
-        //    'host' => env('DB_HOST', '127.0.0.1'),
-        //    'port' => env('DB_PORT', '3306'),
-        //    'database' => env('DB_DATABASE', 'laravel'),
-        //    'username' => env('DB_USERNAME', 'root'),
-        //    'password' => env('DB_PASSWORD', ''),
-        //    'unix_socket' => env('DB_SOCKET', ''),
-        //    'charset' => env('DB_CHARSET', 'utf8mb4'),
-        //    'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
-        //    'prefix' => '',
-        //    'prefix_indexes' => true,
-        //    'strict' => true,
-        //    'engine' => null,
-        //    'options' => extension_loaded('pdo_mysql') ? array_filter([
-        //        (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
-        //    ]) : [],
-        //],
-        //
-        //'pgsql' => [
-        //    'driver' => 'pgsql',
-        //    'url' => env('DB_URL'),
-        //    'host' => env('DB_HOST', '127.0.0.1'),
-        //    'port' => env('DB_PORT', '5432'),
-        //    'database' => env('DB_DATABASE', 'laravel'),
-        //    'username' => env('DB_USERNAME', 'root'),
-        //    'password' => env('DB_PASSWORD', ''),
-        //    'charset' => env('DB_CHARSET', 'utf8'),
-        //    'prefix' => '',
-        //    'prefix_indexes' => true,
-        //    'search_path' => 'public',
-        //    'sslmode' => 'prefer',
-        //],
-        //
-        //'sqlsrv' => [
-        //    'driver' => 'sqlsrv',
-        //    'url' => env('DB_URL'),
-        //    'host' => env('DB_HOST', 'localhost'),
-        //    'port' => env('DB_PORT', '1433'),
-        //    'database' => env('DB_DATABASE', 'laravel'),
-        //    'username' => env('DB_USERNAME', 'root'),
-        //    'password' => env('DB_PASSWORD', ''),
-        //    'charset' => env('DB_CHARSET', 'utf8'),
-        //    'prefix' => '',
-        //    'prefix_indexes' => true,
-        //    // 'encrypt' => env('DB_ENCRYPT', 'yes'),
-        //    // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
-        //],
+    //'mariadb' => [
+    //    'driver' => 'mariadb',
+    //    'url' => env('DB_URL'),
+    //    'host' => env('DB_HOST', '127.0.0.1'),
+    //    'port' => env('DB_PORT', '3306'),
+    //    'database' => env('DB_DATABASE', 'laravel'),
+    //    'username' => env('DB_USERNAME', 'root'),
+    //    'password' => env('DB_PASSWORD', ''),
+    //    'unix_socket' => env('DB_SOCKET', ''),
+    //    'charset' => env('DB_CHARSET', 'utf8mb4'),
+    //    'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+    //    'prefix' => '',
+    //    'prefix_indexes' => true,
+    //    'strict' => true,
+    //    'engine' => null,
+    //    'options' => extension_loaded('pdo_mysql') ? array_filter([
+    //        (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+    //    ]) : [],
+    //],
+    //
+    //'pgsql' => [
+    //    'driver' => 'pgsql',
+    //    'url' => env('DB_URL'),
+    //    'host' => env('DB_HOST', '127.0.0.1'),
+    //    'port' => env('DB_PORT', '5432'),
+    //    'database' => env('DB_DATABASE', 'laravel'),
+    //    'username' => env('DB_USERNAME', 'root'),
+    //    'password' => env('DB_PASSWORD', ''),
+    //    'charset' => env('DB_CHARSET', 'utf8'),
+    //    'prefix' => '',
+    //    'prefix_indexes' => true,
+    //    'search_path' => 'public',
+    //    'sslmode' => 'prefer',
+    //],
+    //
+    //'sqlsrv' => [
+    //    'driver' => 'sqlsrv',
+    //    'url' => env('DB_URL'),
+    //    'host' => env('DB_HOST', 'localhost'),
+    //    'port' => env('DB_PORT', '1433'),
+    //    'database' => env('DB_DATABASE', 'laravel'),
+    //    'username' => env('DB_USERNAME', 'root'),
+    //    'password' => env('DB_PASSWORD', ''),
+    //    'charset' => env('DB_CHARSET', 'utf8'),
+    //    'prefix' => '',
+    //    'prefix_indexes' => true,
+    //    // 'encrypt' => env('DB_ENCRYPT', 'yes'),
+    //    // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
+    //],
     ],
     /*
       |--------------------------------------------------------------------------

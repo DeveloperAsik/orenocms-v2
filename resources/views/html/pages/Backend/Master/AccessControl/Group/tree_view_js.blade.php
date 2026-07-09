@@ -111,11 +111,7 @@
                 $('#tree_view_groups').on('click', '.jstree-anchor', function (e) {
                     e.preventDefault();
                     let currentNodeId = $(this).jstree(true).get_node(this);
-                    console.log('currentNodeId : ');
-                    console.log(currentNodeId);
                     var bottomCheckedIds = $('#tree_view_groups').jstree("get_bottom_checked");
-                    console.log("bottomCheckedIds");
-                    console.log(bottomCheckedIds);
                     var tree = $('#tree_view_groups').jstree(true);
                     bottomCheckedIds.forEach(function (nodeId) {
                         if (currentNodeId.id != nodeId) {

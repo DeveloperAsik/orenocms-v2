@@ -34,6 +34,29 @@ class Tbl_a_uac_groups_p_en extends Tbl_a_uac_groups_p {
         $this->Tbl_a_uac_groups_p = new Tbl_a_uac_groups_p();
     }
 
+    public function __get_all(Request $request, $keyword = null) {
+        $conditions = [
+            'where' => [
+                ['a.is_active', '=', 1]
+            ]
+        ];
+        if (isset($keyword) && !empty($keyword)) {
+            $conditions = [
+                'where' => [
+                    ['a.is_active', '=', 1]
+                ],
+                'orWhere' => [
+                    ['a.__name', 'like', '%' . $keyword],
+                ]
+            ];
+        }
+        $paramCheckName = [
+            'table_name' => 'tbl_a_uac_groups_p',
+            'select' => ['a.*'],
+            'conditions' => $conditions
+        ];
+        return $this->__find($request, 'all', $paramCheckName);
+    }
     public function __get_tree_data($request) {
         $menus = $this->__get_tree_view_list($request);
         $raw_menu = json_decode($menus);

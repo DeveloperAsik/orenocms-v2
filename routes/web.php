@@ -2,10 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Backend\Auth\AppController;
 use App\Http\Controllers\Globals\AjaxController;
-
+use App\Http\Controllers\Installer\SetupController;
 use App\Http\Controllers\Backend\Master\AccessControl\UserController;
 use App\Http\Controllers\Backend\Master\AccessControl\GroupController;
 use App\Http\Controllers\Backend\Master\AccessControl\PermissionController;
@@ -27,6 +26,7 @@ use App\Http\Controllers\Backend\Messaging\DefaultController AS MessagingDefault
 Route::get('/', function () {
     return redirect('/extraweb/login');
 });
+//
 
 Route::prefix('extraweb')->group(function () {
     Route::get('/', [AppController::class, 'login'])->name('extraweb.login');
@@ -39,6 +39,20 @@ Route::prefix('extraweb')->group(function () {
     Route::prefix('/ajax')->group(function () {
         Route::post('/get/{method}', [AjaxController::class, 'fn_ajax_get'])->name('extraweb.global.ajax_get');
         Route::post('/post/{method}', [AjaxController::class, 'fn_ajax_post'])->name('extraweb.global.ajax_post');
+    });
+
+    Route::prefix('installer')->group(function () {
+        Route::prefix('setup')->group(function () {
+            Route::get('/', [SetupController::class, 'view'])->name('installer.view.setup');
+            Route::get('/view', [SetupController::class, 'view'])->name('installer.view1.setup');
+            Route::post('/get_list', [SetupController::class, 'get_list'])->name('installer.get_list');
+            Route::get('/edit/{id}', [SetupController::class, 'edit'])->name('installer.edit');
+            Route::post('/update/{id}', [SetupController::class, 'update'])->name('installer.update');
+            Route::get('/create', [SetupController::class, 'create'])->name('installer.create');
+            Route::post('/insert', [SetupController::class, 'insert'])->name('installer.insert');
+            Route::get('/delete/{id}', [SetupController::class, 'delete'])->name('installer.delete');
+            Route::get('/remove/{id}', [SetupController::class, 'remove'])->name('installer.remove');
+        });
     });
     Route::prefix('/master')->group(function () {
         Route::prefix('/uac')->group(function () {

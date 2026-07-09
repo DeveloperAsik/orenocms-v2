@@ -371,9 +371,9 @@ class GroupController extends Controller {
                     '__is_open' => $data['k'],
                     '__is_disabled' => $data['l'],
                     'is_active' => $data['m'],
-                    'created_by' => (int) $this->__user_id,
+                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
-                    'updated_by' => (int) $this->__user_id,
+                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'updated_date' => $this->Date->now()
                 ];
                 $insert = [
@@ -450,11 +450,11 @@ class GroupController extends Controller {
                 '__is_selected' => 0,
                 '__is_basic' => 1,
                 '__is_open' => 1,
-                '__is_disabled' => 0,
+                '__is_disabled' => 0, 
                 'is_active' => 1,
-                'created_by' => (int) $this->__user_id,
+                'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                 'created_date' => $this->Date->now(),
-                'updated_by' => (int) $this->__user_id,
+                'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                 'updated_date' => $this->Date->now()
             ];
             $param_insert = [
@@ -544,49 +544,49 @@ class GroupController extends Controller {
                 case '__is_badge':
                     $update_data = [
                         '__is_badge' => $data['g'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
                 case '__is_dashboard':
                     $update_data = [
                         '__is_dashboard' => $data['h'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
                 case '__is_selected':
                     $update_data = [
                         '__is_selected' => $data['i'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
                 case '__is_basic':
                     $update_data = [
                         '__is_basic' => $data['j'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
                 case '__is_open':
                     $update_data = [
                         '__is_open' => $data['k'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
                 case '__is_disabled':
                     $update_data = [
                         '__is_disabled' => $data['l'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
                 case 'is_active':
                     $update_data = [
                         'is_active' => $data['m'],
-                        'updated_by' => $this->__user_id,
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
@@ -606,7 +606,7 @@ class GroupController extends Controller {
                         '__is_open' => $data['k'],
                         '__is_disabled' => $data['l'],
                         'is_active' => $data['m'],
-                        'updated_by' => (int) $this->__user_id,
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
