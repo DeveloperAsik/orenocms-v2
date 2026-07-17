@@ -14,15 +14,16 @@ use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Encrypter;
 use App\Libraries\Oreno\Date;
-use App\Models\Entity\uac\Tbl_d_uac_installer_list_p_en;
 use App\Models\Entity\uac\Tbl_b_uac_user_permissions_r_en;
-use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
 use App\Models\Entity\uac\Tbl_b_uac_user_group_c_en;
 use App\Models\Entity\uac\Tbl_a_uac_users_module_c_en;
 use App\Models\Entity\uac\Tbl_a_uac_users_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
+use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
 use App\Models\Entity\uac\Tbl_a_uac_modules_p_en;
+use App\Models\Entity\uac\Tbl_a_uac_menu_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_user_registered_type_c_en;
+use App\Models\Entity\uac\Tbl_d_uac_installer_list_p_en;
 use App\Models\Entity\uac\Tbl_c_uac_location_a_country_p_en;
 use App\Models\Entity\uac\Tbl_c_uac_location_b_provinces_p_en;
 use App\Models\Entity\uac\Tbl_c_uac_location_c_cities_p_en;
@@ -55,6 +56,7 @@ class SetupController extends Controller {
     protected $Tbl_c_uac_location_c_cities_p_en;
     protected $Tbl_c_uac_location_d_districts_p_en;
     protected $Tbl_c_uac_location_e_areas_p_en;
+    protected $Tbl_a_uac_menu_p_en;
 
     public function __construct(Request $request) {
         parent::__construct($request);
@@ -76,6 +78,7 @@ class SetupController extends Controller {
         $this->Tbl_c_uac_location_c_cities_p_en = new Tbl_c_uac_location_c_cities_p_en();
         $this->Tbl_c_uac_location_d_districts_p_en = new Tbl_c_uac_location_d_districts_p_en();
         $this->Tbl_c_uac_location_e_areas_p_en = new Tbl_c_uac_location_e_areas_p_en();
+        $this->Tbl_a_uac_menu_p_en = new Tbl_a_uac_menu_p_en();
     }
 
     public function view(Request $request) {
@@ -110,7 +113,8 @@ class SetupController extends Controller {
                 ]
             ]
         ];
-        //$rr = $this->__init_master_data_permissions($request);
+        //$qq = $this->__init_master_data_menuns($request);
+        $rr = $this->__init_master_data_permissions($request);
         //$ss = $this->__init_master_data_groups($request);
         //$tt = $this->__init_master_data_modules($request);
         //$uu = $this->__init_master_data_users($request);
@@ -118,7 +122,7 @@ class SetupController extends Controller {
         //$vv = $this->__init_master_data_registered_types($request);
         //$xx = $this->__init_master_data_locations($request);
         $yy = $this->__init_master_data_group_permission($request);
-        dd($yy);
+        dd($rr);
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
@@ -468,6 +472,173 @@ class SetupController extends Controller {
         }
     }
 
+    public function __init_master_data_menuns(Request $request) {
+        $data_menus = $this->__init_data_menus($request);
+        $insertData = [];
+        if (isset($data_menus) && !empty($data_menus)) {
+            foreach ($data_menus AS $key => $value) {
+                $code = $this->General->getRandomChar(20);
+                $insertData[] = [
+                    'code' => $code,
+                    '__name' => $value[0],
+                    '__path' => $value[1],
+                    '__icon' => $value[2],
+                    '__level' => $value[3],
+                    '__rank' => $value[4],
+                    '__badge' => $value[5],
+                    '__badge_value' => $value[6],
+                    '__badge_id' => $value[7],
+                    '__is_badge' => $value[8],
+                    '__uac_menu_parent_id' => $value[9],
+                    '__is_dashboard' => $value[10],
+                    '__is_selected' => $value[11],
+                    '__is_basic' => $value[12],
+                    '__is_open' => $value[13],
+                    '__is_disabled' => $value[14],
+                    'is_active' => 1,
+                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'updated_date' => $this->Date->now()
+                ];
+            }
+        }
+        $insert = [
+            'table_name' => 'tbl_a_uac_permissions_p',
+            'data' => $insertData
+        ];
+        return $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_data_menus($request) {
+        return [
+            //name, path, icon, level, rank, badge, badge value, badge id, is badge, parent id, is dashboard, is selected, is basic, is open, is disabled
+            ['Dashboard', '/javascript:;', 'fa fa-dashboard', '1', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //1
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['Contents', '/javascript:;', 'fa fa-pencil-square-o', '2', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //2
+                ['Create', '/contents/create', '', '3', '1', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //3
+                ['View', '/contents/view', '', '3', '2', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //4
+                ['Options', '/javascript:;', '', '3', '3', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //5
+                    ['Categories', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //6
+                        ['Create', '/contents/options/category/create', '', '5', '1', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //7
+                        ['View', '/contents/options/category/view', '', '5', '2', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //8
+                    ['Types', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //9
+                        ['Create', '/contents/options/category/create', '', '5', '1', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //10
+                        ['View', '/contents/options/category/view', '', '5', '2', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //11
+                    ['Meta', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //12
+                        ['Create', '/contents/options/meta/create', '', '5', '1', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //13
+                        ['View', '/contents/options/meta/view', '', '5', '2', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //14
+                    ['Photo', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //15
+                        ['Create', '/contents/options/photo/create', '', '5', '1', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //16
+                        ['View', '/contents/options/photo/view', '', '5', '2', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //17
+                    ['Attachments', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //18
+                        ['Create', '/contents/options/attachments/create', '', '5', '1', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //19
+                        ['View', '/contents/options/attachment/view', '', '5', '2', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //20
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['Masters', '/javascript:;', 'fa fa-key', '2', '2', '-', '-', '0', '0', '0', '0', '0', '1', '1', '0'], //21
+                ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //22
+                    ['Users', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //23
+                        ['Create', '/masters/uac/users/create', '', '5', '1', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //24
+                        ['View', '/masters/uac/users/view', '', '5', '2', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //25
+                    ['Groups', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //26
+                        ['Create', '/masters/uac/groups/create', '', '5', '1', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //27 
+                        ['List View', '/masters/uac/groups/view', '', '5', '2', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //28
+                        ['Tree View', '/masters/uac/groups/tree-view', '', '5', '3', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //29
+                    ['Permissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //30
+                        ['Create', '/masters/uac/permissions/create', '', '5', '1', '-', '-', '0', '0', '29', '0', '0', '1', '0', '0'], //31
+                        ['View', '/masters/uac/permissions/view', '', '5', '2', '-', '-', '0', '0', '29', '0', '0', '1', '0', '0'], //32
+                    ['Menu', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //33
+                        ['Create', '/masters/uac/menu/create', '', '5', '1', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //34
+                        ['List View', '/masters/uac/menu/view', '', '5', '2', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //35
+                        ['Tree View', '/masters/uac/menu/tree-view', '', '5', '3', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //36
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+                ['Assets', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '21', '0', '0', '1', '0', '0'], //37
+                    ['Modules', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //38
+                        ['Create', '/masters/assets/modules/create', '', '5', '1', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //39
+                        ['View', '/masters/assets/modules/view', '', '5', '2', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //40
+                    ['RegisteredType', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //41
+                        ['Create', '/masters/assets/modules/register-type/create', '', '5', '1', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //42
+                        ['View', '/masters/assets/modules/register-type/view', '', '5', '2', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //43
+                    ['Locations', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //43
+                        ['Countries', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //44
+                            ['Create', '/masters/assets/locations/countries/create', '', '5', '1', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //45
+                            ['View', '/masters/assets/locations/countries/view', '', '5', '2', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //46
+                        ['Provinces', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //47
+                            ['Create', '/masters/assets/locations/provinces/create', '', '5', '1', '-', '-', '0', '0', '47', '0', '0', '1', '0', '0'], //48
+                            ['View', '/masters/assets/locations/provinces/view', '', '5', '2', '-', '-', '0', '0', '47', '0', '0', '1', '0', '0'], //49
+                        ['Cities', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //50
+                            ['Create', '/masters/assets/locations/cities/create', '', '5', '1', '-', '-', '0', '0', '50', '0', '0', '1', '0', '0'], //51
+                            ['View', '/masters/assets/locations/cities/view', '', '5', '2', '-', '-', '0', '0', '50', '0', '0', '1', '0', '0'], //52
+                        ['Districts', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //53
+                            ['Create', '/masters/assets/locations/districts/create', '', '5', '1', '-', '-', '0', '0', '53', '0', '0', '1', '0', '0'], //54
+                            ['View', '/masters/assets/locations/districts/view', '', '5', '2', '-', '-', '0', '0', '53', '0', '0', '1', '0', '0'], //55
+                        ['Areas', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //56
+                            ['Create', '/masters/assets/locations/areas/create', '', '5', '1', '-', '-', '0', '0', '56', '0', '0', '1', '0', '0'], //57
+                            ['View', '/masters/assets/locations/areas/view', '', '5', '2', '-', '-', '0', '0', '56', '0', '0', '1', '0', '0'], //58
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+                    ['Tools', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //59
+                        ['Currency', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //60
+                            ['Create', '/masters/assets/tools/currency/create', '', '5', '1', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //61
+                            ['View', '/masters/assets/tools/currency/view', '', '5', '2', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //62
+                        ['Documents', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //63
+                            ['Create', '/masters/assets/tools/documents/create', '', '5', '1', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //64
+                            ['View', '/masters/assets/tools/documents/view', '', '5', '2', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //65
+                        ['icons', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //66
+                            ['Create', '/masters/assets/tools/icons/create', '', '5', '1', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //67
+                            ['View', '/masters/assets/tools/icons/view', '', '5', '2', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //68
+                        ['ControllerList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //69
+                            ['Create', '/masters/assets/tools/controller-list/create', '', '5', '1', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //70
+                            ['View', '/masters/assets/tools/controller-list/view', '', '5', '2', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //71
+                        ['MethodList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //72
+                            ['Create', '/masters/assets/tools/method-list/create', '', '5', '1', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //73
+                            ['View', '/masters/assets/tools/method-list/view', '', '5', '2', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //74
+                        ['FormMethodList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //75
+                            ['Create', '/masters/assets/tools/form-method-list/create', '', '5', '1', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //76
+                            ['View', '/masters/assets/tools/form-method-list/view', '', '5', '2', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //77
+                        ['ShortenURL', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //78
+                            ['Create', '/masters/assets/tools/shorten-url/create', '', '5', '1', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //79
+                            ['View', '/masters/assets/tools/shorten-url/view', '', '5', '2', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //80
+                        ['SmartList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //81
+                            ['Create', '/masters/assets/tools/smart-list/create', '', '5', '1', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //82
+                            ['View', '/masters/assets/tools/smart-list/view', '', '5', '2', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //83
+                        ['WebParams', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //84
+                            ['Create', '/masters/assets/tools/web-params/create', '', '5', '1', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //85
+                            ['View', '/masters/assets/tools/web-params/view', '', '5', '2', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //86
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['Prefferences', '/javascript:;', 'icon-settings', '2', '3', '-', '-', '0', '0', '0', '0', '0', '1', '1', '0'], //87
+                ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '87', '0', '0', '1', '0', '0'], //88
+                    ['UserGroups', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //89
+                        ['View', '/prefferences/uac/user-groups/view', '', '5', '2', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //90
+                    ['UserPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //91
+                        ['View', '/prefferences/uac/user-permissions/view', '', '5', '2', '-', '-', '0', '0', '91', '0', '0', '1', '0', '0'], //92
+                    ['UserModules', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //93
+                        ['View', '/prefferences/uac/user-modules/view', '', '5', '2', '-', '-', '0', '0', '93', '0', '0', '1', '0', '0'], //94
+                    ['UserLocations', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //95
+                        ['View', '/prefferences/uac/user-locations/view', '', '5', '2', '-', '-', '0', '0', '95', '0', '0', '1', '0', '0'], //96
+                    ['UserTokens', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //97
+                        ['View', '/prefferences/uac/user-token/view', '', '5', '2', '-', '-', '0', '0', '97', '0', '0', '1', '0', '0'], //98
+                    ['GroupPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //99
+                        ['View', '/prefferences/uac/group-permissions/view', '', '5', '2', '-', '-', '0', '0', '99', '0', '0', '1', '0', '0'], //100
+                    ['MenuPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //101
+                        ['View', '/prefferences/uac/menu-permissions/view', '', '5', '2', '-', '-', '0', '0', '101', '0', '0', '1', '0', '0'], //102
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+                ['Messaging', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //103
+                    ['compose', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //104
+                    ['inbox', '', '', '5', '1', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //105
+                    ['draft', '', '', '5', '1', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //106
+                    ['sent', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //107
+                    ['delete', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //108
+                    ['archive', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //109
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+                ['Styles', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //          
+                ['Templates', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //       
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['Reports', '/javascript:;', 'icon-docs', '2', '5', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'],
+            
+            
+        ];
+    }
+
     public function __init_master_data_permissions(Request $request) {
         $data_permissions = $this->__init_data_permissions($request);
         $insertData = [];
@@ -505,6 +676,7 @@ class SetupController extends Controller {
             'table_name' => 'tbl_a_uac_permissions_p',
             'data' => $insertData
         ];
+        dd($insert);
         return $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert, 'mysql_bak');
     }
 
@@ -529,6 +701,16 @@ class SetupController extends Controller {
             ['extraweb-installer', 'extraweb/installer/setup/insert', 'extraweb/installer/setup/insert', 'SetupController', 'insert', 'post', 'extraweb', 'installer', 'setup', 'insert', '', '', '', ''],
             ['extraweb-installer', 'extraweb/installer/setup/delete/{id}', 'extraweb/installer/setup/delete/{id}', 'SetupController', 'delete', 'get', 'extraweb', 'installer', 'setup', 'delete', '{id}', '', '', ''],
             ['extraweb-installer', 'extraweb/installer/setup/remove/{id}', 'extraweb/installer/setup/remove/{id}', 'SetupController', 'remove', 'get', 'extraweb', 'installer', 'setup', 'remove', '{id}', '', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-messaging', 'extraweb/messanging/compose', 'extraweb/messanging/compose', 'MessagingController', 'view', 'get', 'extraweb', 'messaging', 'compose', '', '', '', '', ''],
+            ['extraweb-messaging', 'extraweb/messanging/insert', 'extraweb/messanging/insert', 'MessagingController', 'tree_view', 'post', 'extraweb', 'messaging', 'insert', '', '', '', '', ''],
+            ['extraweb-messaging', 'extraweb/messanging/inbox', 'extraweb/messanging/inbox', 'MessagingController', 'edit', 'get', 'extraweb', 'messaging', 'inbox', '', '', '', '', ''],
+            ['extraweb-messaging', 'extraweb/messanging/sent', 'extraweb/messanging/sent', 'MessagingController', 'create', 'get', 'extraweb', 'messaging', 'sent', '', '', '', '', ''],
+            ['extraweb-messaging', 'extraweb/messanging/draft', 'extraweb/messanging/draft', 'MessagingController', 'get_list', 'get', 'extraweb', 'messaging', 'draft', '', '', '', '', ''],
+            ['extraweb-messaging', 'extraweb/messanging/junk', 'extraweb/messanging/junk', 'MessagingController', 'update', 'get', 'extraweb', 'messaging', 'junk', '', '', '', '', ''],
+            ['extraweb-messaging', 'extraweb/messanging/detail/{id}', 'extraweb/messanging/detail', 'MessagingController', 'insert', 'get', 'extraweb', 'messaging', 'detail', '{id}', '', '', '', ''],
+            ['extraweb-messaging', 'extraweb/messanging/chat', 'extraweb/messanging/chat', 'MessagingController', 'delete', 'get', 'extraweb', 'messaging', 'chat', '', '', '', '', ''],
+            ['extraweb-messaging', 'extraweb/messanging/get_list', 'extraweb/messanging/get_list', 'MessagingController', 'remove', 'post', 'extraweb', 'messaging', 'get_list', '', '', '', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['extraweb-master-uac-users', 'extraweb/master/uac/users/view', 'extraweb/master/uac/users/view', 'UserController', 'view', 'get', 'extraweb', 'master', 'uac', 'users', 'view', '', '', ''],
             ['extraweb-master-uac-users', 'extraweb/master/uac/users/get_list', 'extraweb/master/uac/users/get_list', 'UserController', 'get_list', 'post', 'extraweb', 'master', 'uac', 'users', 'get_list', '', '', ''],
@@ -567,6 +749,200 @@ class SetupController extends Controller {
             ['extraweb-master-uac-menu', 'extraweb/master/uac/menu/insert', 'extraweb/master/uac/menu/insert', 'MenuController', 'insert', 'post', 'extraweb', 'master', 'uac', 'menu', 'insert', '', '', ''],
             ['extraweb-master-uac-menu', 'extraweb/master/uac/menu/delete/{id}', 'extraweb/master/uac/menu/delete', 'MenuController', 'delete', 'get', 'extraweb', 'master', 'uac', 'menu', 'delete', '{id}', '', ''],
             ['extraweb-master-uac-menu', 'extraweb/master/uac/menu/remove/{id}', 'extraweb/master/uac/menu/remove', 'MenuController', 'remove', 'get', 'extraweb', 'master', 'uac', 'menu', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-modules', 'extraweb/master/assets/modules/view', 'extraweb/master/assets/modules/view', 'ModulesController', 'view', 'get', 'extraweb', 'master', 'assets', 'modules', 'view', '', '', ''],
+            ['extraweb-master-assets-modules', 'extraweb/master/assets/modules/get_list', 'extraweb/master/assets/modules/get_list', 'ModulesController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'modules', 'get_list', '', '', ''],
+            ['extraweb-master-assets-modules', 'extraweb/master/assets/modules/edit/{id}', 'extraweb/master/assets/modules/edit', 'ModulesController', 'edit', 'get', 'extraweb', 'master', 'assets', 'modules', 'edit', '{id}', '', ''],
+            ['extraweb-master-assets-modules', 'extraweb/master/assets/modules/update/{id}', 'extraweb/master/assets/modules/update', 'ModulesController', 'update', 'post', 'extraweb', 'master', 'assets', 'modules', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-modules', 'extraweb/master/assets/modules/create', 'extraweb/master/assets/modules/create', 'ModulesController', 'create', 'get', 'extraweb', 'master', 'assets', 'modules', 'create', '', '', ''],
+            ['extraweb-master-assets-modules', 'extraweb/master/assets/modules/insert', 'extraweb/master/assets/modules/insert', 'ModulesController', 'insert', 'post', 'extraweb', 'master', 'assets', 'modules', 'insert', '', '', ''],
+            ['extraweb-master-assets-modules', 'extraweb/master/assets/modules/delete/{id}', 'extraweb/master/assets/modules/delete', 'ModulesController', 'delete', 'get', 'extraweb', 'master', 'assets', 'modules', 'delete', '{id}', '', ''],
+            ['extraweb-master-assets-modules', 'extraweb/master/assets/modules/remove/{id}', 'extraweb/master/assets/modules/remove', 'ModulesController', 'remove', 'get', 'extraweb', 'master', 'assets', 'modules', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-registered-types', 'extraweb/master/assets/registered-types/view', 'extraweb/master/assets/registered-types/view', 'RegisteredTypeController', 'view', 'get', 'extraweb', 'master', 'assets', 'registered-types', 'view', '', '', ''],
+            ['extraweb-master-assets-registered-types', 'extraweb/master/assets/registered-types/get_list', 'extraweb/master/assets/registered-types/get_list', 'RegisteredTypeController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'registered-types', 'get_list', '', '', ''],
+            ['extraweb-master-assets-registered-types', 'extraweb/master/assets/registered-types/edit/{id}', 'extraweb/master/assets/registered-types/edit', 'RegisteredTypeController', 'edit', 'get', 'extraweb', 'master', 'assets', 'registered-types', 'edit', '{id}', '', ''],
+            ['extraweb-master-assets-registered-types', 'extraweb/master/assets/registered-types/update/{id}', 'extraweb/master/assets/registered-types/update', 'RegisteredTypeController', 'update', 'post', 'extraweb', 'master', 'assets', 'registered-types', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-registered-types', 'extraweb/master/assets/registered-types/create', 'extraweb/master/assets/registered-types/create', 'RegisteredTypeController', 'create', 'get', 'extraweb', 'master', 'assets', 'registered-types', 'create', '', '', ''],
+            ['extraweb-master-assets-registered-types', 'extraweb/master/assets/registered-types/insert', 'extraweb/master/assets/registered-types/insert', 'RegisteredTypeController', 'insert', 'post', 'extraweb', 'master', 'assets', 'registered-types', 'insert', '', '', ''],
+            ['extraweb-master-assets-registered-types', 'extraweb/master/assets/registered-types/delete/{id}', 'extraweb/master/assets/registered-types/delete', 'RegisteredTypeController', 'delete', 'get', 'extraweb', 'master', 'assets', 'registered-types', 'delete', '{id}', '', ''],
+            ['extraweb-master-assets-registered-types', 'extraweb/master/assets/registered-types/remove/{id}', 'extraweb/master/assets/registered-types/remove', 'RegisteredTypeController', 'remove', 'get', 'extraweb', 'master', 'assets', 'registered-types', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-locations-countries', 'extraweb/master/assets/locations/countries/view', 'extraweb/master/assets/locations/countries/view', 'CountriesController', 'view', 'get', 'extraweb', 'master', 'assets', 'locations', 'countries', 'view', '', ''],
+            ['extraweb-master-assets-locations-countries', 'extraweb/master/assets/locations/countries/get_list', 'extraweb/master/assets/locations/countries/get_list', 'CountriesController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'locations', 'countries', 'get_list', '', ''],
+            ['extraweb-master-assets-locations-countries', 'extraweb/master/assets/locations/countries/edit/{id}', 'extraweb/master/assets/locations/countries/edit', 'CountriesController', 'edit', 'get', 'extraweb', 'master', 'assets', 'locations', 'countries', 'edit', '{id}', ''],
+            ['extraweb-master-assets-locations-countries', 'extraweb/master/assets/locations/countries/update/{id}', 'extraweb/master/assets/locations/countries/update', 'CountriesController', 'update', 'post', 'extraweb', 'master', 'assets', 'locations', 'countries', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-locations-countries', 'extraweb/master/assets/locations/countries/create', 'extraweb/master/assets/locations/countries/create', 'CountriesController', 'create', 'get', 'extraweb', 'master', 'assets', 'locations', 'countries', 'create', '', ''],
+            ['extraweb-master-assets-locations-countries', 'extraweb/master/assets/locations/countries/insert', 'extraweb/master/assets/locations/countries/insert', 'CountriesController', 'insert', 'post', 'extraweb', 'master', 'assets', 'locations', 'countries', 'insert', '', ''],
+            ['extraweb-master-assets-locations-countries', 'extraweb/master/assets/locations/countries/delete/{id}', 'extraweb/master/assets/locations/countries/delete', 'CountriesController', 'delete', 'get', 'extraweb', 'master', 'assets', 'locations', 'countries', 'delete', '{id}', ''],
+            ['extraweb-master-assets-locations-countries', 'extraweb/master/assets/locations/countries/remove/{id}', 'extraweb/master/assets/locations/countries/remove', 'CountriesController', 'remove', 'get', 'extraweb', 'master', 'assets', 'locations', 'countries', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-locations-provinces', 'extraweb/master/assets/locations/provinces/view', 'extraweb/master/assets/locations/provinces/view', 'ProvincesController', 'view', 'get', 'extraweb', 'master', 'assets', 'locations', 'provinces', 'view', '', ''],
+            ['extraweb-master-assets-locations-provinces', 'extraweb/master/assets/locations/provinces/get_list', 'extraweb/master/assets/locations/provinces/get_list', 'ProvincesController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'locations', 'provinces', 'get_list', '', ''],
+            ['extraweb-master-assets-locations-provinces', 'extraweb/master/assets/locations/provinces/edit/{id}', 'extraweb/master/assets/locations/provinces/edit', 'ProvincesController', 'edit', 'get', 'extraweb', 'master', 'assets', 'locations', 'provinces', 'edit', '{id}', ''],
+            ['extraweb-master-assets-locations-provinces', 'extraweb/master/assets/locations/provinces/update/{id}', 'extraweb/master/assets/locations/provinces/update', 'ProvincesController', 'update', 'post', 'extraweb', 'master', 'assets', 'locations', 'provinces', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-locations-provinces', 'extraweb/master/assets/locations/provinces/create', 'extraweb/master/assets/locations/provinces/create', 'ProvincesController', 'create', 'get', 'extraweb', 'master', 'assets', 'locations', 'provinces', 'create', '', ''],
+            ['extraweb-master-assets-locations-provinces', 'extraweb/master/assets/locations/provinces/insert', 'extraweb/master/assets/locations/provinces/insert', 'ProvincesController', 'insert', 'post', 'extraweb', 'master', 'assets', 'locations', 'provinces', 'insert', '', ''],
+            ['extraweb-master-assets-locations-provinces', 'extraweb/master/assets/locations/provinces/delete/{id}', 'extraweb/master/assets/locations/provinces/delete', 'ProvincesController', 'delete', 'get', 'extraweb', 'master', 'assets', 'locations', 'provinces', 'delete', '{id}', ''],
+            ['extraweb-master-assets-locations-provinces', 'extraweb/master/assets/locations/provinces/remove/{id}', 'extraweb/master/assets/locations/provinces/remove', 'ProvincesController', 'remove', 'get', 'extraweb', 'master', 'assets', 'locations', 'provinces', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-locations-cities', 'extraweb/master/assets/locations/cities/view', 'extraweb/master/assets/locations/cities/view', 'CitiesController', 'view', 'get', 'extraweb', 'master', 'assets', 'locations', 'cities', 'view', '', ''],
+            ['extraweb-master-assets-locations-cities', 'extraweb/master/assets/locations/cities/get_list', 'extraweb/master/assets/locations/cities/get_list', 'CitiesController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'locations', 'cities', 'get_list', '', ''],
+            ['extraweb-master-assets-locations-cities', 'extraweb/master/assets/locations/cities/edit/{id}', 'extraweb/master/assets/locations/cities/edit', 'CitiesController', 'edit', 'get', 'extraweb', 'master', 'assets', 'locations', 'cities', 'edit', '{id}', ''],
+            ['extraweb-master-assets-locations-cities', 'extraweb/master/assets/locations/cities/update/{id}', 'extraweb/master/assets/locations/cities/update', 'CitiesController', 'update', 'post', 'extraweb', 'master', 'assets', 'locations', 'cities', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-locations-cities', 'extraweb/master/assets/locations/cities/create', 'extraweb/master/assets/locations/cities/create', 'CitiesController', 'create', 'get', 'extraweb', 'master', 'assets', 'locations', 'cities', 'create', '', ''],
+            ['extraweb-master-assets-locations-cities', 'extraweb/master/assets/locations/cities/insert', 'extraweb/master/assets/locations/cities/insert', 'CitiesController', 'insert', 'post', 'extraweb', 'master', 'assets', 'locations', 'cities', 'insert', '', ''],
+            ['extraweb-master-assets-locations-cities', 'extraweb/master/assets/locations/cities/delete/{id}', 'extraweb/master/assets/locations/cities/delete', 'CitiesController', 'delete', 'get', 'extraweb', 'master', 'assets', 'locations', 'cities', 'delete', '{id}', ''],
+            ['extraweb-master-assets-locations-cities', 'extraweb/master/assets/locations/cities/remove/{id}', 'extraweb/master/assets/locations/cities/remove', 'CitiesController', 'remove', 'get', 'extraweb', 'master', 'assets', 'locations', 'cities', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-locations-districts', 'extraweb/master/assets/locations/districts/view', 'extraweb/master/assets/locations/districts/view', 'DistrictsController', 'view', 'get', 'extraweb', 'master', 'assets', 'locations', 'districts', 'view', '', ''],
+            ['extraweb-master-assets-locations-districts', 'extraweb/master/assets/locations/districts/get_list', 'extraweb/master/assets/locations/districts/get_list', 'DistrictsController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'locations', 'districts', 'get_list', '', ''],
+            ['extraweb-master-assets-locations-districts', 'extraweb/master/assets/locations/districts/edit/{id}', 'extraweb/master/assets/locations/districts/edit', 'DistrictsController', 'edit', 'get', 'extraweb', 'master', 'assets', 'locations', 'districts', 'edit', '{id}', ''],
+            ['extraweb-master-assets-locations-districts', 'extraweb/master/assets/locations/districts/update/{id}', 'extraweb/master/assets/locations/districts/update', 'DistrictsController', 'update', 'post', 'extraweb', 'master', 'assets', 'locations', 'districts', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-locations-districts', 'extraweb/master/assets/locations/districts/create', 'extraweb/master/assets/locations/districts/create', 'DistrictsController', 'create', 'get', 'extraweb', 'master', 'assets', 'locations', 'districts', 'create', '', ''],
+            ['extraweb-master-assets-locations-districts', 'extraweb/master/assets/locations/districts/insert', 'extraweb/master/assets/locations/districts/insert', 'DistrictsController', 'insert', 'post', 'extraweb', 'master', 'assets', 'locations', 'districts', 'insert', '', ''],
+            ['extraweb-master-assets-locations-districts', 'extraweb/master/assets/locations/districts/delete/{id}', 'extraweb/master/assets/locations/districts/delete', 'DistrictsController', 'delete', 'get', 'extraweb', 'master', 'assets', 'locations', 'districts', 'delete', '{id}', ''],
+            ['extraweb-master-assets-locations-districts', 'extraweb/master/assets/locations/districts/remove/{id}', 'extraweb/master/assets/locations/districts/remove', 'DistrictsController', 'remove', 'get', 'extraweb', 'master', 'assets', 'locations', 'districts', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-locations-areas', 'extraweb/master/assets/locations/areas/view', 'extraweb/master/assets/locations/areas/view', 'AreasController', 'view', 'get', 'extraweb', 'master', 'assets', 'locations', 'areas', 'view', '', ''],
+            ['extraweb-master-assets-locations-areas', 'extraweb/master/assets/locations/areas/get_list', 'extraweb/master/assets/locations/areas/get_list', 'AreasController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'locations', 'areas', 'get_list', '', ''],
+            ['extraweb-master-assets-locations-areas', 'extraweb/master/assets/locations/areas/edit/{id}', 'extraweb/master/assets/locations/areas/edit', 'AreasController', 'edit', 'get', 'extraweb', 'master', 'assets', 'locations', 'areas', 'edit', '{id}', ''],
+            ['extraweb-master-assets-locations-areas', 'extraweb/master/assets/locations/areas/update/{id}', 'extraweb/master/assets/locations/areas/update', 'AreasController', 'update', 'post', 'extraweb', 'master', 'assets', 'locations', 'areas', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-locations-areas', 'extraweb/master/assets/locations/areas/create', 'extraweb/master/assets/locations/areas/create', 'AreasController', 'create', 'get', 'extraweb', 'master', 'assets', 'locations', 'areas', 'create', '', ''],
+            ['extraweb-master-assets-locations-areas', 'extraweb/master/assets/locations/areas/insert', 'extraweb/master/assets/locations/areas/insert', 'AreasController', 'insert', 'post', 'extraweb', 'master', 'assets', 'locations', 'areas', 'insert', '', ''],
+            ['extraweb-master-assets-locations-areas', 'extraweb/master/assets/locations/areas/delete/{id}', 'extraweb/master/assets/locations/areas/delete', 'AreasController', 'delete', 'get', 'extraweb', 'master', 'assets', 'locations', 'areas', 'delete', '{id}', ''],
+            ['extraweb-master-assets-locations-areas', 'extraweb/master/assets/locations/areas/remove/{id}', 'extraweb/master/assets/locations/areas/remove', 'AreasController', 'remove', 'get', 'extraweb', 'master', 'assets', 'locations', 'areas', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-tools-currency', 'extraweb/master/assets/tools/currency/view', 'extraweb/master/assets/tools/currency/view', 'CurrencyController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'currency', 'view', '', ''],
+            ['extraweb-master-assets-tools-currency', 'extraweb/master/assets/tools/currency/get_list', 'extraweb/master/assets/tools/currency/get_list', 'CurrencyController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'currency', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-currency', 'extraweb/master/assets/tools/currency/edit/{id}', 'extraweb/master/assets/tools/currency/dit', 'CurrencyController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'currency', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-currency', 'extraweb/master/assets/tools/currency/update/{id}', 'extraweb/master/assets/tools/currency/update', 'CurrencyController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'currency', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-currency', 'extraweb/master/assets/tools/currency/create', 'extraweb/master/assets/tools/currency/create', 'CurrencyController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'currency', 'create', '', ''],
+            ['extraweb-master-assets-tools-currency', 'extraweb/master/assets/tools/currency/insert', 'extraweb/master/assets/tools/currency/insert', 'CurrencyController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'currency', 'insert', '', ''],
+            ['extraweb-master-assets-tools-currency', 'extraweb/master/assets/tools/currency/delete/{id}', 'extraweb/master/assets/tools/currency/delete', 'CurrencyController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'currency', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-currency', 'extraweb/master/assets/tools/currency/remove/{id}', 'extraweb/master/assets/tools/currency/remove', 'CurrencyController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'currency', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-tools-documents', 'extraweb/master/assets/tools/documents/view', 'extraweb/master/assets/tools/documents/view', 'DocumentsController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'documents', 'view', '', ''],
+            ['extraweb-master-assets-tools-documents', 'extraweb/master/assets/tools/documents/get_list', 'extraweb/master/assets/tools/documents/get_list', 'DocumentsController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'documents', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-documents', 'extraweb/master/assets/tools/documents/edit/{id}', 'extraweb/master/assets/tools/documents/dit', 'DocumentsController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'documents', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-documents', 'extraweb/master/assets/tools/documents/update/{id}', 'extraweb/master/assets/tools/documents/update', 'DocumentsController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'documents', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-documents', 'extraweb/master/assets/tools/documents/create', 'extraweb/master/assets/tools/documents/create', 'DocumentsController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'documents', 'create', '', ''],
+            ['extraweb-master-assets-tools-documents', 'extraweb/master/assets/tools/documents/insert', 'extraweb/master/assets/tools/documents/insert', 'DocumentsController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'documents', 'insert', '', ''],
+            ['extraweb-master-assets-tools-documents', 'extraweb/master/assets/tools/documents/delete/{id}', 'extraweb/master/assets/tools/documents/delete', 'DocumentsController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'documents', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-documents', 'extraweb/master/assets/tools/documents/remove/{id}', 'extraweb/master/assets/tools/documents/remove', 'DocumentsController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'documents', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/view', 'extraweb/master/assets/tools/icons/view', 'IconsController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'icons', 'view', '', ''],
+            ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/get_list', 'extraweb/master/assets/tools/icons/get_list', 'IconsController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'icons', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/edit/{id}', 'extraweb/master/assets/tools/icons/dit', 'IconsController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'icons', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/update/{id}', 'extraweb/master/assets/tools/icons/update', 'IconsController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'icons', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/create', 'extraweb/master/assets/tools/icons/create', 'IconsController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'icons', 'create', '', ''],
+            ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/insert', 'extraweb/master/assets/tools/icons/insert', 'IconsController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'icons', 'insert', '', ''],
+            ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/delete/{id}', 'extraweb/master/assets/tools/icons/delete', 'IconsController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'icons', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/remove/{id}', 'extraweb/master/assets/tools/icons/remove', 'IconsController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'icons', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/view', 'extraweb/master/assets/tools/controllerlist/view', 'ControllerlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'view', '', ''],
+            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/get_list', 'extraweb/master/assets/tools/controllerlist/get_list', 'ControllerlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/edit/{id}', 'extraweb/master/assets/tools/controllerlist/dit', 'ControllerlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/update/{id}', 'extraweb/master/assets/tools/controllerlist/update', 'ControllerlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/create', 'extraweb/master/assets/tools/controllerlist/create', 'ControllerlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'create', '', ''],
+            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/insert', 'extraweb/master/assets/tools/controllerlist/insert', 'ControllerlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'insert', '', ''],
+            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/delete/{id}', 'extraweb/master/assets/tools/controllerlist/delete', 'ControllerlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/remove/{id}', 'extraweb/master/assets/tools/controllerlist/remove', 'ControllerlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/view', 'extraweb/master/assets/tools/methodlist/view', 'MethodlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'view', '', ''],
+            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/get_list', 'extraweb/master/assets/tools/methodlist/get_list', 'MethodlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/edit/{id}', 'extraweb/master/assets/tools/methodlist/dit', 'MethodlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/update/{id}', 'extraweb/master/assets/tools/methodlist/update', 'MethodlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/create', 'extraweb/master/assets/tools/methodlist/create', 'MethodlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'create', '', ''],
+            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/insert', 'extraweb/master/assets/tools/methodlist/insert', 'MethodlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'insert', '', ''],
+            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/delete/{id}', 'extraweb/master/assets/tools/methodlist/delete', 'MethodlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/remove/{id}', 'extraweb/master/assets/tools/methodlist/remove', 'MethodlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/view', 'extraweb/master/assets/tools/formmethodlist/view', 'FormmethodlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'view', '', ''],
+            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/get_list', 'extraweb/master/assets/tools/formmethodlist/get_list', 'FormmethodlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/edit/{id}', 'extraweb/master/assets/tools/formmethodlist/dit', 'FormmethodlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/update/{id}', 'extraweb/master/assets/tools/formmethodlist/update', 'FormmethodlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/create', 'extraweb/master/assets/tools/formmethodlist/create', 'FormmethodlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'create', '', ''],
+            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/insert', 'extraweb/master/assets/tools/formmethodlist/insert', 'FormmethodlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'insert', '', ''],
+            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/delete/{id}', 'extraweb/master/assets/tools/formmethodlist/delete', 'FormmethodlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/remove/{id}', 'extraweb/master/assets/tools/formmethodlist/remove', 'FormmethodlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/view', 'extraweb/master/assets/tools/shortenurl/view', 'ShortenurlController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'view', '', ''],
+            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/get_list', 'extraweb/master/assets/tools/shortenurl/get_list', 'ShortenurlController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/edit/{id}', 'extraweb/master/assets/tools/shortenurl/dit', 'ShortenurlController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/update/{id}', 'extraweb/master/assets/tools/shortenurl/update', 'ShortenurlController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/create', 'extraweb/master/assets/tools/shortenurl/create', 'ShortenurlController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'create', '', ''],
+            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/insert', 'extraweb/master/assets/tools/shortenurl/insert', 'ShortenurlController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'insert', '', ''],
+            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/delete/{id}', 'extraweb/master/assets/tools/shortenurl/delete', 'ShortenurlController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/remove/{id}', 'extraweb/master/assets/tools/shortenurl/remove', 'ShortenurlController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/view', 'extraweb/master/assets/tools/smartlist/view', 'SmartlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'view', '', ''],
+            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/get_list', 'extraweb/master/assets/tools/smartlist/get_list', 'SmartlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/edit/{id}', 'extraweb/master/assets/tools/smartlist/dit', 'SmartlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/update/{id}', 'extraweb/master/assets/tools/smartlist/update', 'SmartlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/create', 'extraweb/master/assets/tools/smartlist/create', 'SmartlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'create', '', ''],
+            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/insert', 'extraweb/master/assets/tools/smartlist/insert', 'SmartlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'insert', '', ''],
+            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/delete/{id}', 'extraweb/master/assets/tools/smartlist/delete', 'SmartlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/remove/{id}', 'extraweb/master/assets/tools/smartlist/remove', 'SmartlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'remove', '{id}', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/view', 'extraweb/master/assets/web/params/view', 'WebparamsController', 'view', 'get', 'extraweb', 'master', 'assets', 'web-params', 'view', '', '', ''],
+            ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/get_list', 'extraweb/master/assets/web/params/get_list', 'WebparamsController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'web-params', 'get_list', '', '', ''],
+            ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/edit/{id}', 'extraweb/master/assets/web/params/dit', 'WebparamsController', 'edit', 'get', 'extraweb', 'master', 'assets', 'web-params', 'edit', '{id}', '', ''],
+            ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/update/{id}', 'extraweb/master/assets/web/params/update', 'WebparamsController', 'update', 'post', 'extraweb', 'master', 'assets', 'web-params', 'update', '{id}', '', '', ''],
+            ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/create', 'extraweb/master/assets/web/params/create', 'WebparamsController', 'create', 'get', 'extraweb', 'master', 'assets', 'web-params', 'create', '', '', ''],
+            ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/insert', 'extraweb/master/assets/web/params/insert', 'WebparamsController', 'insert', 'post', 'extraweb', 'master', 'assets', 'web-params', 'insert', '', '', ''],
+            ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/delete/{id}', 'extraweb/master/assets/web/params/delete', 'WebparamsController', 'delete', 'get', 'extraweb', 'master', 'assets', 'web-params', 'delete', '{id}', '', ''],
+            ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/remove/{id}', 'extraweb/master/assets/web/params/remove', 'WebparamsController', 'remove', 'get', 'extraweb', 'master', 'assets', 'web-params', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/view', 'extraweb/prefferences/uac/usergroups/view', 'UsergroupsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/get_list', 'extraweb/prefferences/uac/usergroups/get_list', 'UsergroupsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usergroups', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/edit/{id}', 'extraweb/prefferences/uac/usergroups/dit', 'UsergroupsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/update/{id}', 'extraweb/prefferences/uac/usergroups/update', 'UsergroupsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usergroups', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/delete/{id}', 'extraweb/prefferences/uac/usergroups/delete', 'UsergroupsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/remove/{id}', 'extraweb/prefferences/uac/usergroups/remove', 'UsergroupsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/view', 'extraweb/prefferences/uac/userpermissions/view', 'UserpermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/get_list', 'extraweb/prefferences/uac/userpermissions/get_list', 'UserpermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/edit/{id}', 'extraweb/prefferences/uac/userpermissions/dit', 'UserpermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/update/{id}', 'extraweb/prefferences/uac/userpermissions/update', 'UserpermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/delete/{id}', 'extraweb/prefferences/uac/userpermissions/delete', 'UserpermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/remove/{id}', 'extraweb/prefferences/uac/userpermissions/remove', 'UserpermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/view', 'extraweb/prefferences/uac/usermodules/view', 'UsermodulesController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/get_list', 'extraweb/prefferences/uac/usermodules/get_list', 'UsermodulesController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usermodules', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/edit/{id}', 'extraweb/prefferences/uac/usermodules/dit', 'UsermodulesController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/update/{id}', 'extraweb/prefferences/uac/usermodules/update', 'UsermodulesController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usermodules', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/delete/{id}', 'extraweb/prefferences/uac/usermodules/delete', 'UsermodulesController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/remove/{id}', 'extraweb/prefferences/uac/usermodules/remove', 'UsermodulesController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/view', 'extraweb/prefferences/uac/userlocations/view', 'UserlocationsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/get_list', 'extraweb/prefferences/uac/userlocations/get_list', 'UserlocationsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'userlocations', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/edit/{id}', 'extraweb/prefferences/uac/userlocations/dit', 'UserlocationsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/update/{id}', 'extraweb/prefferences/uac/userlocations/update', 'UserlocationsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'userlocations', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/delete/{id}', 'extraweb/prefferences/uac/userlocations/delete', 'UserlocationsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/remove/{id}', 'extraweb/prefferences/uac/userlocations/remove', 'UserlocationsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/view', 'extraweb/prefferences/uac/usertokens/view', 'UsertokensController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/get_list', 'extraweb/prefferences/uac/usertokens/get_list', 'UsertokensController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usertokens', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/edit/{id}', 'extraweb/prefferences/uac/usertokens/dit', 'UsertokensController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/update/{id}', 'extraweb/prefferences/uac/usertokens/update', 'UsertokensController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usertokens', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/delete/{id}', 'extraweb/prefferences/uac/usertokens/delete', 'UsertokensController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/remove/{id}', 'extraweb/prefferences/uac/usertokens/remove', 'UsertokensController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/view', 'extraweb/prefferences/uac/grouppermissions/view', 'GrouppermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/get_list', 'extraweb/prefferences/uac/grouppermissions/get_list', 'GrouppermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/edit/{id}', 'extraweb/prefferences/uac/grouppermissions/dit', 'GrouppermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/update/{id}', 'extraweb/prefferences/uac/grouppermissions/update', 'GrouppermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/delete/{id}', 'extraweb/prefferences/uac/grouppermissions/delete', 'GrouppermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/remove/{id}', 'extraweb/prefferences/uac/grouppermissions/remove', 'GrouppermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'remove', '{id}', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/view', 'extraweb/prefferences/uac/menupermissions/view', 'MenupermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/get_list', 'extraweb/prefferences/uac/menupermissions/get_list', 'MenupermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/edit/{id}', 'extraweb/prefferences/uac/menupermissions/dit', 'MenupermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/update/{id}', 'extraweb/prefferences/uac/menupermissions/update', 'MenupermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/delete/{id}', 'extraweb/prefferences/uac/menupermissions/delete', 'MenupermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/remove/{id}', 'extraweb/prefferences/uac/menupermissions/remove', 'MenupermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'remove', '{id}', '', ''],
+            
         ];
     }
 
@@ -2082,7 +2458,7 @@ class SetupController extends Controller {
         if (isset($data_users) && !empty($data_users)) {
             foreach ($data_users AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
-                $moduleid = $this->__get_data_user_modules($request,$value->id);
+                $moduleid = $this->__get_data_user_modules($request, $value->id);
                 $insertData[] = [
                     'code' => $code,
                     '__user_id' => $value->id,
