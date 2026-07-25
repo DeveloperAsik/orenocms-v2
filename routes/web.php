@@ -22,6 +22,18 @@ use App\Http\Controllers\Backend\Messaging\MessagingDefaultController;
  */
 //------------------------------------------------------------------------------//
 /*
+ * Contents route start here
+ */
+use App\Http\Controllers\Backend\Contents\ContentController;
+use App\Http\Controllers\Backend\Contents\ContentcategoryController;
+use App\Http\Controllers\Backend\Contents\ContenttypeController;
+use App\Http\Controllers\Backend\Contents\ContentmetaController;
+use App\Http\Controllers\Backend\Contents\ContentphotoController;
+/*
+ * Contents end here
+ */
+//------------------------------------------------------------------------------//
+/*
  * Master route start here
  */
 use App\Http\Controllers\Backend\Master\AccessControl\UserController;
@@ -83,6 +95,66 @@ Route::prefix('extraweb')->group(function () {
     });
     /*
      * Messaging module end here
+     */
+    /*
+     * Contents module start here 
+     */
+    Route::prefix('/content')->group(function () {
+        Route::get('/view', [ContentController::class, 'view'])->name('extraweb.content.view');
+        Route::post('/get_list', [ContentController::class, 'get_list'])->name('extraweb.content.get_list');
+        Route::get('/edit/{id}', [ContentController::class, 'edit'])->name('extraweb.content.edit');
+        Route::post('/update/{id}', [ContentController::class, 'update'])->name('extraweb.content.update');
+        Route::get('/create', [ContentController::class, 'create'])->name('extraweb.content.create');
+        Route::post('/insert', [ContentController::class, 'insert'])->name('extraweb.content.insert');
+        Route::get('/delete/{id}', [ContentController::class, 'delete'])->name('extraweb.content.delete');
+        Route::get('/remove/{id}', [ContentController::class, 'remove'])->name('extraweb.content.remove');
+        //ContentcategoryController
+        Route::prefix('/categories')->group(function () {
+            Route::get('/view', [ContentcategoryController::class, 'view'])->name('extraweb.content.categories.view');
+            Route::post('/get_list', [ContentcategoryController::class, 'get_list'])->name('extraweb.content.categories.get_list');
+            Route::get('/edit/{id}', [ContentcategoryController::class, 'edit'])->name('extraweb.content.categories.edit');
+            Route::post('/update/{id}', [ContentcategoryController::class, 'update'])->name('extraweb.content.categories.update');
+            Route::get('/create', [ContentcategoryController::class, 'create'])->name('extraweb.content.categories.create');
+            Route::post('/insert', [ContentcategoryController::class, 'insert'])->name('extraweb.content.categories.insert');
+            Route::get('/delete/{id}', [ContentcategoryController::class, 'delete'])->name('extraweb.content.categories.delete');
+            Route::get('/remove/{id}', [ContentcategoryController::class, 'remove'])->name('extraweb.content.categories.remove');
+        });
+        //ContenttypeController
+        Route::prefix('/types')->group(function () {
+            Route::get('/view', [ContenttypeController::class, 'view'])->name('extraweb.content.types.view');
+            Route::post('/get_list', [ContenttypeController::class, 'get_list'])->name('extraweb.content.types.get_list');
+            Route::get('/edit/{id}', [ContenttypeController::class, 'edit'])->name('extraweb.content.types.edit');
+            Route::post('/update/{id}', [ContenttypeController::class, 'update'])->name('extraweb.content.types.update');
+            Route::get('/create', [ContenttypeController::class, 'create'])->name('extraweb.content.types.create');
+            Route::post('/insert', [ContenttypeController::class, 'insert'])->name('extraweb.content.types.insert');
+            Route::get('/delete/{id}', [ContenttypeController::class, 'delete'])->name('extraweb.content.types.delete');
+            Route::get('/remove/{id}', [ContenttypeController::class, 'remove'])->name('extraweb.content.types.remove');
+        });
+        //ContentmetaController
+        Route::prefix('/meta')->group(function () {
+            Route::get('/view', [ContentmetaController::class, 'view'])->name('extraweb.content.meta.view');
+            Route::post('/get_list', [ContentmetaController::class, 'get_list'])->name('extraweb.content.meta.get_list');
+            Route::get('/edit/{id}', [ContentmetaController::class, 'edit'])->name('extraweb.content.meta.edit');
+            Route::post('/update/{id}', [ContentmetaController::class, 'update'])->name('extraweb.content.meta.update');
+            Route::get('/create', [ContentmetaController::class, 'create'])->name('extraweb.content.meta.create');
+            Route::post('/insert', [ContentmetaController::class, 'insert'])->name('extraweb.content.meta.insert');
+            Route::get('/delete/{id}', [ContentmetaController::class, 'delete'])->name('extraweb.content.meta.delete');
+            Route::get('/remove/{id}', [ContentmetaController::class, 'remove'])->name('extraweb.content.meta.remove');
+        });
+        //ContentphotoController
+        Route::prefix('/photos')->group(function () {
+            Route::get('/view', [ContentphotoController::class, 'view'])->name('extraweb.content.photos.view');
+            Route::post('/get_list', [ContentphotoController::class, 'get_list'])->name('extraweb.content.photos.get_list');
+            Route::get('/edit/{id}', [ContentphotoController::class, 'edit'])->name('extraweb.content.photos.edit');
+            Route::post('/update/{id}', [ContentphotoController::class, 'update'])->name('extraweb.content.photos.update');
+            Route::get('/create', [ContentphotoController::class, 'create'])->name('extraweb.content.photos.create');
+            Route::post('/insert', [ContentphotoController::class, 'insert'])->name('extraweb.content.photos.insert');
+            Route::get('/delete/{id}', [ContentphotoController::class, 'delete'])->name('extraweb.content.photos.delete');
+            Route::get('/remove/{id}', [ContentphotoController::class, 'remove'])->name('extraweb.content.photos.remove');
+        });
+    });
+    /*
+     * Contents module end here
      */
     /*
      * Master module start here

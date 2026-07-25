@@ -516,126 +516,124 @@ class SetupController extends Controller {
             ['Dashboard', '/javascript:;', 'fa fa-dashboard', '1', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //1
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['Contents', '/javascript:;', 'fa fa-pencil-square-o', '2', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //2
-                ['Create', '/contents/create', '', '3', '1', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //3
-                ['View', '/contents/view', '', '3', '2', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //4
-                ['Options', '/javascript:;', '', '3', '3', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //5
-                    ['Categories', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //6
-                        ['Create', '/contents/options/category/create', '', '5', '1', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //7
-                        ['View', '/contents/options/category/view', '', '5', '2', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //8
-                    ['Types', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //9
-                        ['Create', '/contents/options/category/create', '', '5', '1', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //10
-                        ['View', '/contents/options/category/view', '', '5', '2', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //11
-                    ['Meta', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //12
-                        ['Create', '/contents/options/meta/create', '', '5', '1', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //13
-                        ['View', '/contents/options/meta/view', '', '5', '2', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //14
-                    ['Photo', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //15
-                        ['Create', '/contents/options/photo/create', '', '5', '1', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //16
-                        ['View', '/contents/options/photo/view', '', '5', '2', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //17
-                    ['Attachments', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //18
-                        ['Create', '/contents/options/attachments/create', '', '5', '1', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //19
-                        ['View', '/contents/options/attachment/view', '', '5', '2', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //20
+            ['Create', '/contents/create', '', '3', '1', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //3
+            ['View', '/contents/view', '', '3', '2', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //4
+            ['Options', '/javascript:;', '', '3', '3', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //5
+            ['Categories', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //6
+            ['Create', '/contents/options/category/create', '', '5', '1', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //7
+            ['View', '/contents/options/category/view', '', '5', '2', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //8
+            ['Types', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //9
+            ['Create', '/contents/options/category/create', '', '5', '1', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //10
+            ['View', '/contents/options/category/view', '', '5', '2', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //11
+            ['Meta', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //12
+            ['Create', '/contents/options/meta/create', '', '5', '1', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //13
+            ['View', '/contents/options/meta/view', '', '5', '2', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //14
+            ['Photo', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //15
+            ['Create', '/contents/options/photo/create', '', '5', '1', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //16
+            ['View', '/contents/options/photo/view', '', '5', '2', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //17
+            ['Attachments', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //18
+            ['Create', '/contents/options/attachments/create', '', '5', '1', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //19
+            ['View', '/contents/options/attachment/view', '', '5', '2', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //20
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['Masters', '/javascript:;', 'fa fa-key', '2', '2', '-', '-', '0', '0', '0', '0', '0', '1', '1', '0'], //21
-                ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //22
-                    ['Users', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //23
-                        ['Create', '/masters/uac/users/create', '', '5', '1', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //24
-                        ['View', '/masters/uac/users/view', '', '5', '2', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //25
-                    ['Groups', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //26
-                        ['Create', '/masters/uac/groups/create', '', '5', '1', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //27 
-                        ['List View', '/masters/uac/groups/view', '', '5', '2', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //28
-                        ['Tree View', '/masters/uac/groups/tree-view', '', '5', '3', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //29
-                    ['Permissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //30
-                        ['Create', '/masters/uac/permissions/create', '', '5', '1', '-', '-', '0', '0', '29', '0', '0', '1', '0', '0'], //31
-                        ['View', '/masters/uac/permissions/view', '', '5', '2', '-', '-', '0', '0', '29', '0', '0', '1', '0', '0'], //32
-                    ['Menu', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //33
-                        ['Create', '/masters/uac/menu/create', '', '5', '1', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //34
-                        ['List View', '/masters/uac/menu/view', '', '5', '2', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //35
-                        ['Tree View', '/masters/uac/menu/tree-view', '', '5', '3', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //36
+            ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //22
+            ['Users', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //23
+            ['Create', '/masters/uac/users/create', '', '5', '1', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //24
+            ['View', '/masters/uac/users/view', '', '5', '2', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //25
+            ['Groups', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //26
+            ['Create', '/masters/uac/groups/create', '', '5', '1', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //27 
+            ['List View', '/masters/uac/groups/view', '', '5', '2', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //28
+            ['Tree View', '/masters/uac/groups/tree-view', '', '5', '3', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //29
+            ['Permissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //30
+            ['Create', '/masters/uac/permissions/create', '', '5', '1', '-', '-', '0', '0', '29', '0', '0', '1', '0', '0'], //31
+            ['View', '/masters/uac/permissions/view', '', '5', '2', '-', '-', '0', '0', '29', '0', '0', '1', '0', '0'], //32
+            ['Menu', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //33
+            ['Create', '/masters/uac/menu/create', '', '5', '1', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //34
+            ['List View', '/masters/uac/menu/view', '', '5', '2', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //35
+            ['Tree View', '/masters/uac/menu/tree-view', '', '5', '3', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //36
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-                ['Assets', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '21', '0', '0', '1', '0', '0'], //37
-                    ['Modules', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //38
-                        ['Create', '/masters/assets/modules/create', '', '5', '1', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //39
-                        ['View', '/masters/assets/modules/view', '', '5', '2', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //40
-                    ['RegisteredType', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //41
-                        ['Create', '/masters/assets/modules/register-type/create', '', '5', '1', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //42
-                        ['View', '/masters/assets/modules/register-type/view', '', '5', '2', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //43
-                    ['Locations', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //43
-                        ['Countries', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //44
-                            ['Create', '/masters/assets/locations/countries/create', '', '5', '1', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //45
-                            ['View', '/masters/assets/locations/countries/view', '', '5', '2', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //46
-                        ['Provinces', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //47
-                            ['Create', '/masters/assets/locations/provinces/create', '', '5', '1', '-', '-', '0', '0', '47', '0', '0', '1', '0', '0'], //48
-                            ['View', '/masters/assets/locations/provinces/view', '', '5', '2', '-', '-', '0', '0', '47', '0', '0', '1', '0', '0'], //49
-                        ['Cities', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //50
-                            ['Create', '/masters/assets/locations/cities/create', '', '5', '1', '-', '-', '0', '0', '50', '0', '0', '1', '0', '0'], //51
-                            ['View', '/masters/assets/locations/cities/view', '', '5', '2', '-', '-', '0', '0', '50', '0', '0', '1', '0', '0'], //52
-                        ['Districts', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //53
-                            ['Create', '/masters/assets/locations/districts/create', '', '5', '1', '-', '-', '0', '0', '53', '0', '0', '1', '0', '0'], //54
-                            ['View', '/masters/assets/locations/districts/view', '', '5', '2', '-', '-', '0', '0', '53', '0', '0', '1', '0', '0'], //55
-                        ['Areas', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //56
-                            ['Create', '/masters/assets/locations/areas/create', '', '5', '1', '-', '-', '0', '0', '56', '0', '0', '1', '0', '0'], //57
-                            ['View', '/masters/assets/locations/areas/view', '', '5', '2', '-', '-', '0', '0', '56', '0', '0', '1', '0', '0'], //58
+            ['Assets', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '21', '0', '0', '1', '0', '0'], //37
+            ['Modules', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //38
+            ['Create', '/masters/assets/modules/create', '', '5', '1', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //39
+            ['View', '/masters/assets/modules/view', '', '5', '2', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //40
+            ['RegisteredType', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //41
+            ['Create', '/masters/assets/modules/register-type/create', '', '5', '1', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //42
+            ['View', '/masters/assets/modules/register-type/view', '', '5', '2', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //43
+            ['Locations', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //43
+            ['Countries', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //44
+            ['Create', '/masters/assets/locations/countries/create', '', '5', '1', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //45
+            ['View', '/masters/assets/locations/countries/view', '', '5', '2', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //46
+            ['Provinces', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //47
+            ['Create', '/masters/assets/locations/provinces/create', '', '5', '1', '-', '-', '0', '0', '47', '0', '0', '1', '0', '0'], //48
+            ['View', '/masters/assets/locations/provinces/view', '', '5', '2', '-', '-', '0', '0', '47', '0', '0', '1', '0', '0'], //49
+            ['Cities', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //50
+            ['Create', '/masters/assets/locations/cities/create', '', '5', '1', '-', '-', '0', '0', '50', '0', '0', '1', '0', '0'], //51
+            ['View', '/masters/assets/locations/cities/view', '', '5', '2', '-', '-', '0', '0', '50', '0', '0', '1', '0', '0'], //52
+            ['Districts', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //53
+            ['Create', '/masters/assets/locations/districts/create', '', '5', '1', '-', '-', '0', '0', '53', '0', '0', '1', '0', '0'], //54
+            ['View', '/masters/assets/locations/districts/view', '', '5', '2', '-', '-', '0', '0', '53', '0', '0', '1', '0', '0'], //55
+            ['Areas', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //56
+            ['Create', '/masters/assets/locations/areas/create', '', '5', '1', '-', '-', '0', '0', '56', '0', '0', '1', '0', '0'], //57
+            ['View', '/masters/assets/locations/areas/view', '', '5', '2', '-', '-', '0', '0', '56', '0', '0', '1', '0', '0'], //58
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-                    ['Tools', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //59
-                        ['Currency', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //60
-                            ['Create', '/masters/assets/tools/currency/create', '', '5', '1', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //61
-                            ['View', '/masters/assets/tools/currency/view', '', '5', '2', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //62
-                        ['Documents', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //63
-                            ['Create', '/masters/assets/tools/documents/create', '', '5', '1', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //64
-                            ['View', '/masters/assets/tools/documents/view', '', '5', '2', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //65
-                        ['icons', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //66
-                            ['Create', '/masters/assets/tools/icons/create', '', '5', '1', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //67
-                            ['View', '/masters/assets/tools/icons/view', '', '5', '2', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //68
-                        ['ControllerList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //69
-                            ['Create', '/masters/assets/tools/controller-list/create', '', '5', '1', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //70
-                            ['View', '/masters/assets/tools/controller-list/view', '', '5', '2', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //71
-                        ['MethodList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //72
-                            ['Create', '/masters/assets/tools/method-list/create', '', '5', '1', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //73
-                            ['View', '/masters/assets/tools/method-list/view', '', '5', '2', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //74
-                        ['FormMethodList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //75
-                            ['Create', '/masters/assets/tools/form-method-list/create', '', '5', '1', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //76
-                            ['View', '/masters/assets/tools/form-method-list/view', '', '5', '2', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //77
-                        ['ShortenURL', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //78
-                            ['Create', '/masters/assets/tools/shorten-url/create', '', '5', '1', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //79
-                            ['View', '/masters/assets/tools/shorten-url/view', '', '5', '2', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //80
-                        ['SmartList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //81
-                            ['Create', '/masters/assets/tools/smart-list/create', '', '5', '1', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //82
-                            ['View', '/masters/assets/tools/smart-list/view', '', '5', '2', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //83
-                        ['WebParams', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //84
-                            ['Create', '/masters/assets/tools/web-params/create', '', '5', '1', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //85
-                            ['View', '/masters/assets/tools/web-params/view', '', '5', '2', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //86
+            ['Tools', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //59
+            ['Currency', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //60
+            ['Create', '/masters/assets/tools/currency/create', '', '5', '1', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //61
+            ['View', '/masters/assets/tools/currency/view', '', '5', '2', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //62
+            ['Documents', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //63
+            ['Create', '/masters/assets/tools/documents/create', '', '5', '1', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //64
+            ['View', '/masters/assets/tools/documents/view', '', '5', '2', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //65
+            ['icons', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //66
+            ['Create', '/masters/assets/tools/icons/create', '', '5', '1', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //67
+            ['View', '/masters/assets/tools/icons/view', '', '5', '2', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //68
+            ['ControllerList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //69
+            ['Create', '/masters/assets/tools/controller-list/create', '', '5', '1', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //70
+            ['View', '/masters/assets/tools/controller-list/view', '', '5', '2', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //71
+            ['MethodList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //72
+            ['Create', '/masters/assets/tools/method-list/create', '', '5', '1', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //73
+            ['View', '/masters/assets/tools/method-list/view', '', '5', '2', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //74
+            ['FormMethodList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //75
+            ['Create', '/masters/assets/tools/form-method-list/create', '', '5', '1', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //76
+            ['View', '/masters/assets/tools/form-method-list/view', '', '5', '2', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //77
+            ['ShortenURL', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //78
+            ['Create', '/masters/assets/tools/shorten-url/create', '', '5', '1', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //79
+            ['View', '/masters/assets/tools/shorten-url/view', '', '5', '2', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //80
+            ['SmartList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //81
+            ['Create', '/masters/assets/tools/smart-list/create', '', '5', '1', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //82
+            ['View', '/masters/assets/tools/smart-list/view', '', '5', '2', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //83
+            ['WebParams', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //84
+            ['Create', '/masters/assets/tools/web-params/create', '', '5', '1', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //85
+            ['View', '/masters/assets/tools/web-params/view', '', '5', '2', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //86
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['Prefferences', '/javascript:;', 'icon-settings', '2', '3', '-', '-', '0', '0', '0', '0', '0', '1', '1', '0'], //87
-                ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '87', '0', '0', '1', '0', '0'], //88
-                    ['UserGroups', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //89
-                        ['View', '/prefferences/uac/user-groups/view', '', '5', '2', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //90
-                    ['UserPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //91
-                        ['View', '/prefferences/uac/user-permissions/view', '', '5', '2', '-', '-', '0', '0', '91', '0', '0', '1', '0', '0'], //92
-                    ['UserModules', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //93
-                        ['View', '/prefferences/uac/user-modules/view', '', '5', '2', '-', '-', '0', '0', '93', '0', '0', '1', '0', '0'], //94
-                    ['UserLocations', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //95
-                        ['View', '/prefferences/uac/user-locations/view', '', '5', '2', '-', '-', '0', '0', '95', '0', '0', '1', '0', '0'], //96
-                    ['UserTokens', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //97
-                        ['View', '/prefferences/uac/user-token/view', '', '5', '2', '-', '-', '0', '0', '97', '0', '0', '1', '0', '0'], //98
-                    ['GroupPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //99
-                        ['View', '/prefferences/uac/group-permissions/view', '', '5', '2', '-', '-', '0', '0', '99', '0', '0', '1', '0', '0'], //100
-                    ['MenuPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //101
-                        ['View', '/prefferences/uac/menu-permissions/view', '', '5', '2', '-', '-', '0', '0', '101', '0', '0', '1', '0', '0'], //102
+            ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '87', '0', '0', '1', '0', '0'], //88
+            ['UserGroups', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //89
+            ['View', '/prefferences/uac/user-groups/view', '', '5', '2', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //90
+            ['UserPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //91
+            ['View', '/prefferences/uac/user-permissions/view', '', '5', '2', '-', '-', '0', '0', '91', '0', '0', '1', '0', '0'], //92
+            ['UserModules', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //93
+            ['View', '/prefferences/uac/user-modules/view', '', '5', '2', '-', '-', '0', '0', '93', '0', '0', '1', '0', '0'], //94
+            ['UserLocations', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //95
+            ['View', '/prefferences/uac/user-locations/view', '', '5', '2', '-', '-', '0', '0', '95', '0', '0', '1', '0', '0'], //96
+            ['UserTokens', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //97
+            ['View', '/prefferences/uac/user-token/view', '', '5', '2', '-', '-', '0', '0', '97', '0', '0', '1', '0', '0'], //98
+            ['GroupPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //99
+            ['View', '/prefferences/uac/group-permissions/view', '', '5', '2', '-', '-', '0', '0', '99', '0', '0', '1', '0', '0'], //100
+            ['MenuPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //101
+            ['View', '/prefferences/uac/menu-permissions/view', '', '5', '2', '-', '-', '0', '0', '101', '0', '0', '1', '0', '0'], //102
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-                ['Messaging', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //103
-                    ['compose', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //104
-                    ['inbox', '', '', '5', '1', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //105
-                    ['draft', '', '', '5', '1', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //106
-                    ['sent', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //107
-                    ['delete', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //108
-                    ['archive', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //109
+            ['Messaging', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //103
+            ['compose', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //104
+            ['inbox', '', '', '5', '1', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //105
+            ['draft', '', '', '5', '1', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //106
+            ['sent', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //107
+            ['delete', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //108
+            ['archive', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //109
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-                ['Styles', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //          
-                ['Templates', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //       
+            ['Styles', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //          
+            ['Templates', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //       
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['Reports', '/javascript:;', 'icon-docs', '2', '5', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'],
-            
-            
         ];
     }
 
@@ -711,6 +709,49 @@ class SetupController extends Controller {
             ['extraweb-messaging', 'extraweb/messanging/detail/{id}', 'extraweb/messanging/detail', 'MessagingController', 'insert', 'get', 'extraweb', 'messaging', 'detail', '{id}', '', '', '', ''],
             ['extraweb-messaging', 'extraweb/messanging/chat', 'extraweb/messanging/chat', 'MessagingController', 'delete', 'get', 'extraweb', 'messaging', 'chat', '', '', '', '', ''],
             ['extraweb-messaging', 'extraweb/messanging/get_list', 'extraweb/messanging/get_list', 'MessagingController', 'remove', 'post', 'extraweb', 'messaging', 'get_list', '', '', '', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-contents', 'extraweb/contents/view', 'extraweb/contents/view', 'ContentController', 'view', 'get', 'extraweb', 'content', 'view', '', '', '', '', ''],
+            ['extraweb-contents', 'extraweb/contents/get_list', 'extraweb/contents/get_list', 'ContentController', 'get_list', 'post', 'extraweb', 'content', 'get_list', '', '', '', '', ''],
+            ['extraweb-contents', 'extraweb/contents/edit/{id}', 'extraweb/contents/edit/{id}', 'ContentController', 'edit', 'get', 'extraweb', 'content', 'edit', '{id}', '', '', '', ''],
+            ['extraweb-contents', 'extraweb/contents/update/{id}', 'extraweb/contents/update/{id}', 'ContentController', 'update', 'post', 'extraweb', 'content', 'update', '{id}', '', '', '', ''],
+            ['extraweb-contents', 'extraweb/contents/create', 'extraweb/contents/create', 'ContentController', 'create', 'get', 'extraweb', 'content', 'create', '', '', '', '', ''],
+            ['extraweb-contents', 'extraweb/contents/insert', 'extraweb/contents/insert', 'ContentController', 'insert', 'post', 'extraweb', 'content', 'insert', '', '', '', '', ''],
+            ['extraweb-contents', 'extraweb/contents/delete/{id}', 'extraweb/contents/delete/{id}', 'ContentController', 'delete', 'get', 'extraweb', 'content', 'delete', '{id}', '', '', '', ''],
+            ['extraweb-contents', 'extraweb/contents/remove/{id}', 'extraweb/contents/remove/{id}', 'ContentController', 'remove', 'get', 'extraweb', 'content', 'remove', '{id}', '', '', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-contents-categories', 'extraweb/content/categories/view', 'extraweb/content/categories/view', 'ContentcategoryController', 'view', 'get', 'extraweb', 'content', 'categories', 'view', '', '', '', ''],
+            ['extraweb-contents-categories', 'extraweb/content/categories/get_list', 'extraweb/content/categories/get_list', 'ContentcategoryController', 'get_list', 'post', 'extraweb', 'content', 'categories', 'get_list', '', '', '', ''],
+            ['extraweb-contents-categories', 'extraweb/content/categories/edit/{id}', 'extraweb/content/categories/edit/{id}', 'ContentcategoryController', 'edit', 'get', 'extraweb', 'content', 'categories', 'edit', '{id}', '', '', ''],
+            ['extraweb-contents-categories', 'extraweb/content/categories/update/{id}', 'extraweb/content/categories/update/{id}', 'ContentcategoryController', 'update', 'post', 'extraweb', 'content', 'categories', 'update', '{id}', '', '', ''],
+            ['extraweb-contents-categories', 'extraweb/content/categories/create', 'extraweb/content/categories/create', 'ContentcategoryController', 'create', 'get', 'extraweb', 'content', 'categories', 'create', '', '', '', ''],
+            ['extraweb-contents-categories', 'extraweb/content/categories/insert', 'extraweb/content/categories/insert', 'ContentcategoryController', 'insert', 'post', 'extraweb', 'content', 'categories', 'insert', '', '', '', ''],
+            ['extraweb-contents-categories', 'extraweb/content/categories/delete/{id}', 'extraweb/content/categories/delete/{id}', 'ContentcategoryController', 'delete', 'get', 'extraweb', 'content', 'categories', 'delete', '{id}', '', '', ''],
+            ['extraweb-contents-categories', 'extraweb/content/categories/remove/{id}', 'extraweb/content/categories/remove/{id}', 'ContentcategoryController', 'remove', 'get', 'extraweb', 'content', 'categories', 'remove', '{id}', '', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-contents-types', 'extraweb/content/types/view', 'extraweb/content/types/view', 'ContenttypeController', 'view', 'get', 'extraweb', 'content', 'types', 'view', '', '', '', ''],
+            ['extraweb-contents-types', 'extraweb/content/types/get_list', 'extraweb/content/types/get_list', 'ContenttypeController', 'get_list', 'post', 'extraweb', 'content', 'types', 'get_list', '', '', '', ''],
+            ['extraweb-contents-types', 'extraweb/content/types/edit/{id}', 'extraweb/content/types/edit/{id}', 'ContenttypeController', 'edit', 'get', 'extraweb', 'content', 'types', 'edit', '{id}', '', '', ''],
+            ['extraweb-contents-types', 'extraweb/content/types/update/{id}', 'extraweb/content/types/update/{id}', 'ContenttypeController', 'update', 'post', 'extraweb', 'content', 'types', 'update', '{id}', '', '', ''],
+            ['extraweb-contents-types', 'extraweb/content/types/create', 'extraweb/content/types/create', 'ContenttypeController', 'create', 'get', 'extraweb', 'content', 'types', 'create', '', '', '', ''],
+            ['extraweb-contents-types', 'extraweb/content/types/insert', 'extraweb/content/types/insert', 'ContenttypeController', 'insert', 'post', 'extraweb', 'content', 'types', 'insert', '', '', '', ''],
+            ['extraweb-contents-types', 'extraweb/content/types/delete/{id}', 'extraweb/content/types/delete/{id}', 'ContenttypeController', 'delete', 'get', 'extraweb', 'content', 'types', 'delete', '{id}', '', '', ''],
+            ['extraweb-contents-types', 'extraweb/content/types/remove/{id}', 'extraweb/content/types/remove/{id}', 'ContenttypeController', 'remove', 'get', 'extraweb', 'content', 'types', 'remove', '{id}', '', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-contents-meta', 'extraweb/content/meta/view', 'extraweb/content/meta/view', 'ContentmetaController', 'view', 'get', 'extraweb', 'content', 'meta', 'view', '', '', '', ''],
+            ['extraweb-contents-meta', 'extraweb/content/meta/get_list', 'extraweb/content/meta/get_list', 'ContentmetaController', 'get_list', 'post', 'extraweb', 'content', 'meta', 'get_list', '', '', '', ''],
+            ['extraweb-contents-meta', 'extraweb/content/meta/edit/{id}', 'extraweb/content/meta/edit/{id}', 'ContentmetaController', 'edit', 'get', 'extraweb', 'content', 'meta', 'edit', '{id}', '', '', ''],
+            ['extraweb-contents-meta', 'extraweb/content/meta/update/{id}', 'extraweb/content/meta/update/{id}', 'ContentmetaController', 'update', 'post', 'extraweb', 'content', 'meta', 'update', '{id}', '', '', ''],
+            ['extraweb-contents-meta', 'extraweb/content/meta/create', 'extraweb/content/meta/create', 'ContentmetaController', 'create', 'get', 'extraweb', 'content', 'meta', 'create', '', '', '', ''],
+            ['extraweb-contents-meta', 'extraweb/content/meta/insert', 'extraweb/content/meta/insert', 'ContentmetaController', 'insert', 'post', 'extraweb', 'content', 'meta', 'insert', '', '', '', ''],
+            ['extraweb-contents-meta', 'extraweb/content/meta/delete/{id}', 'extraweb/content/meta/delete/{id}', 'ContentmetaController', 'delete', 'get', 'extraweb', 'content', 'meta', 'delete', '{id}', '', '', ''],
+            ['extraweb-contents-meta', 'extraweb/content/meta/remove/{id}', 'extraweb/content/meta/remove/{id}', 'ContentmetaController', 'remove', 'get', 'extraweb', 'content', 'meta', 'remove', '{id}', '', '', ''],
+            //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+            ['extraweb-contents-photos', 'extraweb/content/meta/view', 'extraweb/content/meta/view', 'ContentphotoController', 'view', 'get', 'extraweb', 'content', 'meta', 'view', '', '', '', ''],
+            ['extraweb-contents-photos', 'extraweb/content/meta/get_list', 'extraweb/content/meta/get_list', 'ContentphotoController', 'get_list', 'post', 'extraweb', 'content', 'meta', 'get_list', '', '', '', ''],
+            ['extraweb-contents-photos', 'extraweb/content/meta/create', 'extraweb/content/meta/create', 'ContentphotoController', 'create', 'get', 'extraweb', 'content', 'meta', 'create', '', '', '', ''],
+            ['extraweb-contents-photos', 'extraweb/content/meta/insert', 'extraweb/content/meta/insert', 'ContentphotoController', 'insert', 'post', 'extraweb', 'content', 'meta', 'insert', '', '', '', ''],
+            ['extraweb-contents-photos', 'extraweb/content/meta/delete/{id}', 'extraweb/content/meta/delete/{id}', 'ContentphotoController', 'delete', 'get', 'extraweb', 'content', 'meta', 'delete', '{id}', '', '', ''],
+            ['extraweb-contents-photos', 'extraweb/content/meta/remove/{id}', 'extraweb/content/meta/remove/{id}', 'ContentphotoController', 'remove', 'get', 'extraweb', 'content', 'meta', 'remove', '{id}', '', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['extraweb-master-uac-users', 'extraweb/master/uac/users/view', 'extraweb/master/uac/users/view', 'UserController', 'view', 'get', 'extraweb', 'master', 'uac', 'users', 'view', '', '', ''],
             ['extraweb-master-uac-users', 'extraweb/master/uac/users/get_list', 'extraweb/master/uac/users/get_list', 'UserController', 'get_list', 'post', 'extraweb', 'master', 'uac', 'users', 'get_list', '', '', ''],
@@ -942,7 +983,6 @@ class SetupController extends Controller {
             ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/update/{id}', 'extraweb/prefferences/uac/menupermissions/update', 'MenupermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'update', '{id}', '', '', ''],
             ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/delete/{id}', 'extraweb/prefferences/uac/menupermissions/delete', 'MenupermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'delete', '{id}', '', ''],
             ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/remove/{id}', 'extraweb/prefferences/uac/menupermissions/remove', 'MenupermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'remove', '{id}', '', ''],
-            
         ];
     }
 
