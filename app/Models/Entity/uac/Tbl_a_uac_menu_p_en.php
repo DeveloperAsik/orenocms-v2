@@ -194,12 +194,37 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                                                 $child_level_6 = [];
                                                                 foreach ($data_level_6 AS $key6 => $value6) {
                                                                     $child_level_7 = [];
-                                                                    $new_level7 = $value5->__level + 1;
+                                                                    $new_level7 = $value6->__level + 1;
                                                                     $data_level_7 = $this->__fetch_tree_view_data($request, (int) $new_level7, (int) $value6->id);
                                                                     if (isset($data_level_7) && !empty($data_level_7)) {
                                                                         $child_level_8 = [];
-                                                                        foreach ($data_level_78 AS $key8 => $value6) {
-                                                                            $child_level_7 = [];
+                                                                        foreach ($data_level_7 AS $key7 => $value7) {
+                                                                            $child_level_8 = [];
+                                                                            
+                                                                            $new_level8 = $value7->__level + 1;
+                                                                            $data_level_8 = $this->__fetch_tree_view_data($request, (int) $new_level8, (int) $value7->id);
+                                                                            if (isset($data_level_8) && !empty($data_level_8)) {
+                                                                                $child_level_9 = [];
+                                                                                foreach ($data_level_8 AS $key8 => $value8) {
+                                                                                    $child_level_8 = [];
+                                                                                    $__is_open8 = ($value8->__is_open) ? true : false;
+                                                                                    $__is_disabled8 = ($value8->__is_disabled) ? true : false;
+                                                                                    $child_level_8[] = [
+                                                                                        'id' => $value8->id,
+                                                                                        'text' => $value8->__name,
+                                                                                        'path' => $value8->__path,
+                                                                                        'icon' => $value8->__icon,
+                                                                                        'level_id' => $value8->__level,
+                                                                                        'parent_id' => $value8->__uac_menu_parent_id,
+                                                                                        'state' => [
+                                                                                            'opened' => $__is_open8,
+                                                                                            'disabled' => $__is_disabled8
+                                                                                        ],
+                                                                                        'children' => $child_level_9
+                                                                                    ];
+                                                                                }
+                                                                            }
+                                                                            
                                                                             $__is_open7 = ($value7->__is_open) ? true : false;
                                                                             $__is_disabled7 = ($value7->__is_disabled) ? true : false;
                                                                             $child_level_7[] = [
@@ -219,7 +244,7 @@ class Tbl_a_uac_menu_p_en extends Tbl_a_uac_menu_p {
                                                                     }
                                                                     $__is_open6 = ($value6->__is_open) ? true : false;
                                                                     $__is_disabled6 = ($value6->__is_disabled) ? true : false;
-                                                                    $child_level_5[] = [
+                                                                    $child_level_6[] = [
                                                                         'id' => $value6->id,
                                                                         'text' => $value6->__name,
                                                                         'path' => $value6->__path,
