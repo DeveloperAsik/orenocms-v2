@@ -1183,12 +1183,7 @@ class SetupController extends Controller {
 
     public function __init_data_user_permissions($request) {
         return [
-            [1, 1],
-            [1, 2],
-            [1, 3],
-            [2, 1],
-            [3, 4],
-            [4, 6]
+         []
         ];
     }
 
