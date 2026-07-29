@@ -114,16 +114,16 @@ class SetupController extends Controller {
             ]
         ];
         //$qq = $this->__init_master_data_menuns($request);
-        $rr = $this->__init_master_data_permissions($request);
+        //$rr = $this->__init_master_data_permissions($request);
         //$ss = $this->__init_master_data_groups($request);
         //$tt = $this->__init_master_data_modules($request);
         //$uu = $this->__init_master_data_users($request);
-        $uu2 = $this->__init_master_data_user_groups($request);
+        //$uu2 = $this->__init_master_data_user_groups($request);
         $uu3 = $this->__init_master_data_user_permissions($request);
         //$vv = $this->__init_master_data_registered_types($request);
         //$xx = $this->__init_master_data_locations($request);
         //$yy = $this->__init_master_data_group_permission($request);
-        dd($rr);
+        dd($uu3);
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
