@@ -22,6 +22,7 @@ use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
 use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
 use App\Models\Entity\uac\Tbl_a_uac_modules_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_menu_p_en;
+use App\Models\Entity\uac\Tbl_a_uac_permissions_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_user_registered_type_c_en;
 use App\Models\Entity\uac\Tbl_d_uac_installer_list_p_en;
 use App\Models\Entity\uac\Tbl_c_uac_location_a_country_p_en;
@@ -45,6 +46,7 @@ class SetupController extends Controller {
     protected $Tbl_d_uac_installer_list_p_en;
     protected $Tbl_b_uac_user_permissions_r_en;
     protected $Tbl_b_uac_group_permissions_r_en;
+    protected $Tbl_a_uac_permissions_p_en;
     protected $Tbl_b_uac_user_group_c_en;
     protected $Tbl_a_uac_user_registered_type_c_en;
     protected $Tbl_a_uac_users_p_en;
@@ -65,6 +67,7 @@ class SetupController extends Controller {
         $this->Encrypter = new Encrypter();
         $this->Date = new Date();
         $this->Tbl_d_uac_installer_list_p_en = new Tbl_d_uac_installer_list_p_en();
+        $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
         $this->Tbl_b_uac_user_permissions_r_en = new Tbl_b_uac_user_permissions_r_en();
         $this->Tbl_b_uac_group_permissions_r_en = new Tbl_b_uac_group_permissions_r_en();
         $this->Tbl_b_uac_user_group_c_en = new Tbl_b_uac_user_group_c_en();
@@ -113,17 +116,19 @@ class SetupController extends Controller {
                 ]
             ]
         ];
-        //$qq = $this->__init_master_data_menuns($request);
-        //$rr = $this->__init_master_data_permissions($request);
-        //$ss = $this->__init_master_data_groups($request);
-        //$tt = $this->__init_master_data_modules($request);
-        //$uu = $this->__init_master_data_users($request);
-        //$uu2 = $this->__init_master_data_user_groups($request);
-        $uu3 = $this->__init_master_data_user_permissions($request);
-        //$vv = $this->__init_master_data_registered_types($request);
-        //$xx = $this->__init_master_data_locations($request);
-        //$yy = $this->__init_master_data_group_permission($request);
-        dd($uu3);
+        //$a = $this->__init_master_data_groups($request);
+        //$b = $this->__init_master_data_menus($request);
+        //$c = $this->__init_master_data_modules($request);
+        //$d = $this->__init_master_data_permissions($request);
+        $e = $this->__init_master_data_users($request);
+        $e2 = $this->__init_master_data_user_profies($request);
+        //$f = $this->__init_master_data_locations($request);
+        //$g = $this->__init_master_data_registered_types($request);
+        //$h = $this->__init_master_data_user_groups($request);
+        //$i = $this->__init_master_data_user_permissions($request);
+        //$j = $this->__init_master_data_group_permission($request);
+        dd('success');
+
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
@@ -136,344 +141,53 @@ class SetupController extends Controller {
         return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
     }
 
-    public function get_list(Request $request) {
-        $data = $request->all();
-        if (isset($data) && !empty($data)) {
-            if (isset($data['a']) && !empty($data['a'])) {
-                //    switch ($data['a']) {
-                //        case 1:
-                //            return $this->__get_list_path_segment($request);
-                //            break;
-                //    }
-            } else {
-                return $this->__get_list_default($request);
-            }
-        }
-    }
-
-    public function __get_list_default($request) {
-        $draw = $request->draw;
-        $limit = ($request->length) ? $request->length : 10;
-        if ($request->length == '-1') {
-            $limit = 1000;
-        }
-        $offset = ($request->start) ? $request->start : 0;
-        $search = $request->search['value'];
-        $conditions = [];
-        if (isset($search) && !empty($search)) {
-            $conditions = [
-                'orWhere' => [
-                    ['a.__name', 'like', '%' . $search . '%'],
-                    ['a.__path', 'like', '%' . $search . '%'],
-                    ['a.__controller', 'like', '%' . $search . '%'],
-                    ['a.__action', 'like', '%' . $search . '%']
-                ]
-            ];
-        }
-        $params = [
-            'table_name' => 'tbl_d_uac_installer_list_p',
-            'select' => ['a.*'],
-            'conditions' => $conditions,
-            'limit' => 100,
-            'offset' => 0
-        ];
-        $data = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params);
-        if (isset($data['data']) && !empty($data['data'])) {
-            if ($offset == 0) {
-                $i = 1;
-            } else {
-                $i = ($offset + 1);
-            }
-            $arrData = array();
-            foreach ($data['data'] AS $keyword => $value) {
-                $is_active = '';
-                if ($value->is_active == 1) {
-                    $is_active = ' checked';
-                }
-                $arrData[] = [
-                    'id' => $i,
-                    '__subject' => $value->__subject,
-                    '__target_table' => $value->__target_table,
-                    '__action' => $value->__action,
-                    '__run_count' => $value->__run_count,
-                    'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
-                    'action' => '<div class="btn-group">
-                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/generate/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Generate Installer Data"><i class="fa fa-play"></i></a></button>
-                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
-                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
-                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
-                      </div>',
-                ];
-                if ($i <= $data['meta']['total']) {
-                    $i++;
-                }
-            }
-            $output = array(
-                'draw' => $draw,
-                'recordsTotal' => $data['meta']['total'],
-                'recordsFiltered' => $data['meta']['total'],
-                'data' => $arrData,
-            );
-            echo json_encode($output);
-        } else {
-            echo json_encode(array());
-        }
-    }
-
-    public function __get_list_path_segment($request) {
-        $data = $request->json()->all();
-        $get_segment_by_url = $this->General->getSegmentByUrl($data["value"]);
-        $segmented = explode('/', $get_segment_by_url);
-        if (isset($segmented) && !empty($segmented)) {
-            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching and reformat data', 'valid' => true, 'data' => $segmented]);
-        }
-    }
-
-    public function __get_list_by_controller($request, $keywords = null) {
-        if (isset($keywords) && !empty($keywords) && $keywords !== null) {
-            $params = [
-                'table_name' => 'tbl_d_uac_installer_list_p',
-                'select' => ['a.*'],
-                'conditions' => [
-                    'where' => [
-                        ['a.__controller', '=', $keywords]
-                    ]
-                ],
-                'limit' => 100
-            ];
-            return $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params, 'mysql_bak');
-        }
-    }
-
-    public function create(Request $request) {
-        $title_for_layout = config('app.default_variables.title_for_layout');
-        $_config = [
-            'title_for_header' => '<b>Permission</b> master data management page',
-            'pages' => [
-                'title' => 'Create Page Master Data Installer',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/installer/setup/create'
-            ],
-            'header' => [
-                'title' => 'View',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/installer/setup/view'
-            ],
-            'form' => [
-                'el-id' => 'frm_create_installer',
-                'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
-                ],
-                'dt_tbl_th' => [
-                    '<th> ID </th>',
-                    '<th> Subject </th>',
-                    '<th> Target Table </th>',
-                    '<th> Controller </th>',
-                    '<th> Action </th>',
-                    '<th> Running Count </th>',
-                    '<th> Status </th>',
-                    '<th> Action </th>'
-                ]
-            ]
-        ];
-        $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
-        ]);
-        $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
-        ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
-    }
-
-    public function insert(Request $request) {
-        $data = $request->json()->all();
+    public function __init_master_data_groups(Request $request) {
+        $data_permissions = $this->__init_data_groups($request);
         $insertData = [];
-        if (isset($data) && !empty($data)) {
-            $insertData = [
-                'code' => $this->General->getRandomChar(20),
-                '__subject' => $data['a'],
-                '__target_table' => $data['b'],
-                '__action' => $data['c'],
-                '__run_count' => 0,
-                '__description' => $data['d'],
-                'is_active' => $data['e'],
-                'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                'created_date' => $this->Date->now(),
-                'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                'updated_date' => $this->Date->now()
-            ];
+        if (isset($data_permissions) && !empty($data_permissions)) {
+            foreach ($data_permissions AS $key => $value) {
+                $code = $this->General->getRandomChar(20);
+                $insertData[] = [
+                    'code' => $code,
+                    '__name' => $value[0],
+                    '__icon' => $value[1],
+                    '__rank' => (int) $value[2],
+                    '__level' => (int) $value[3],
+                    '__description' => $value[4],
+                    '__uac_group_parent_id' => (int) $value[5],
+                    '__is_key_group' => (int) $value[6],
+                    '__is_menu' => (int) $value[7],
+                    '__is_group_project' => (int) $value[8],
+                    'is_active' => 1,
+                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'updated_date' => $this->Date->now()
+                ];
+            }
         }
         $insert = [
-            'table_name' => 'tbl_d_uac_installer_list_p',
+            'table_name' => 'tbl_a_uac_groups_p',
             'data' => $insertData
         ];
-        $response = $this->Tbl_d_uac_installer_list_p_en->__insert($request, $insert); //, 'mysql_bak');
-        if ($response) {
-            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
-        } else {
-            return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
-        }
+        return $this->Tbl_a_uac_groups_p_en->__insert($request, $insert, 'mysql_bak');
     }
 
-    public function edit(Request $request, $params = null) {
-        $id = base64_decode($params);
-        $title_for_layout = config('app.default_variables.title_for_layout');
-        $_config = [
-            'title_for_header' => '<b>Permission</b> master data management page',
-            'pages' => [
-                'title' => 'Edit Page Master Data Installer',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/installer/setup/edit/' . $params
-            ],
-            'header' => [
-                'title' => 'View',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/installer/setup/view'
-            ],
-            'form' => [
-                'el-id' => 'frm_create_installer',
-                'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
-                ],
-                'dt_tbl_th' => [
-                    '<th> ID </th>',
-                    '<th> Subject </th>',
-                    '<th> Target Table </th>',
-                    '<th> Controller </th>',
-                    '<th> Action </th>',
-                    '<th> Running Count </th>',
-                    '<th> Status </th>',
-                    '<th> Action </th>'
-                ]
-            ]
+    public function __init_data_groups($request) {
+        return [
+            ['system', '-', '1', '1', '-', '0', '0', '0', '0'],
+            ['superuser', '-', '2', '1', '-', '0', '0', '0', '0'],
+            ['webmaster', '-', '3', '1', '-', '0', '0', '0', '0'],
+            //-----------------------------------------------------//
+            ['admin1', '-', '1', '2', '-', '2', '0', '1', '1'],
+            ['admin2', '-', '2', '2', '-', '2', '0', '1', '1'],
+            //-----------------------------------------------------//
+            ['officer1', '-', '1', '2', '-', '3', '1', '1', '1'],
+            ['officer2', '-', '2', '2', '-', '3', '1', '1', '1']
         ];
-        $params = [
-            'table_name' => 'tbl_d_uac_installer_list_p',
-            'select' => ['a.*'],
-            'conditions' => [
-                'where' => [
-                    ['a.id', '=', $id]
-                ]
-            ],
-            'limit' => 100,
-            'offset' => 0
-        ];
-        $installers = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'first', $params);
-        $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
-        ]);
-        $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
-        ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'installers'));
     }
 
-    public function update(Request $request, $params = null) {
-        $data = $request->json()->all();
-        if (isset($data) && !empty($data)) {
-            $id = base64_decode($params);
-            switch ($data['a']) {
-                case 'is_active':
-                    $update_data = [
-                        'is_active' => $data['b'],
-                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                        'updated_date' => $this->Date->now()
-                    ];
-                    break;
-                default:
-                    $alias = strtolower(str_replace(' ', '-', $data['name']));
-                    $update_data = [
-                        '__subject' => $data['a'],
-                        '__target_table' => $data['b'],
-                        '__action' => $data['c'],
-                        '__description' => $data['d'],
-                        'is_active' => $data['e'],
-                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                        'updated_date' => $this->Date->now()
-                    ];
-                    break;
-            }
-            $paramsUpdate = [
-                'table_name' => 'tbl_d_uac_installer_list_p',
-                'conditions' => [
-                    'keyword' => 'id',
-                    'value' => $id
-                ]
-            ];
-            $response = $this->Tbl_d_uac_installer_list_p_en->__update($request, $update_data, $paramsUpdate);
-            if ($response) {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
-            } else {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
-            }
-        }
-    }
-
-    public function remove(Request $request, $params = null) {
-        if ($params != null) {
-            $data = (['a' => 'is_active']);
-            //$request->request->add($data);
-            $request->json()->replace([
-                'a' => 'is_active',
-                'b' => 0
-            ]);
-            $resp = $this->update($request, $params);
-            $response = json_decode($resp);
-            if ($response && $response->status->code == 200) {
-                return redirect()->back()->with('success', 'successfully update data');
-            } else {
-                return redirect()->back()->with('error', 'failed update data.');
-            }
-        }
-    }
-
-    public function delete(Request $request, $params = null) {
-        if ($params != null) {
-            $id = base64_decode($params);
-            $params = [
-                'table_name' => 'tbl_d_uac_installer_list_p',
-                'select' => ['a.*'],
-                'conditions' => [
-                    'where' => [
-                        ['a.id', '=', $id]
-                    ]
-                ]
-            ];
-            $existData = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'first', $params);
-            if ($existData && $existData['data']) {
-                $insertUserInstallerBackup = [
-                    'table_name' => 'tbl_d_uac_installer_list_p',
-                    'data' => (array) $existData['data']
-                ];
-                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserInstallerBackup, 'mysql_bak');
-                $deleteParams = [
-                    'table_name' => 'tbl_d_uac_installer_list_p',
-                    'conditions' => [
-                        'keyword' => 'id',
-                        'value' => $id
-                    ]
-                ];
-                $response = $this->Tbl_d_uac_installer_list_p_en->__delete($request, $deleteParams, 'mysql');
-                return redirect()->back()->with('success', 'successfully delete data');
-            } else {
-                return redirect()->back()->with('error', 'failed delete data.');
-            }
-        }
-    }
-
-    public function __init_master_data_menuns(Request $request) {
+    public function __init_master_data_menus(Request $request) {
         $data_menus = $this->__init_data_menus($request);
         $insertData = [];
         if (isset($data_menus) && !empty($data_menus)) {
@@ -484,18 +198,18 @@ class SetupController extends Controller {
                     '__name' => $value[0],
                     '__path' => $value[1],
                     '__icon' => $value[2],
-                    '__level' => $value[3],
-                    '__rank' => $value[4],
+                    '__level' => (int) $value[3],
+                    '__rank' => (int) $value[4],
                     '__badge' => $value[5],
                     '__badge_value' => $value[6],
-                    '__badge_id' => $value[7],
-                    '__is_badge' => $value[8],
-                    '__uac_menu_parent_id' => $value[9],
-                    '__is_dashboard' => $value[10],
-                    '__is_selected' => $value[11],
-                    '__is_basic' => $value[12],
-                    '__is_open' => $value[13],
-                    '__is_disabled' => $value[14],
+                    '__badge_id' => (int) $value[7],
+                    '__is_badge' => (int) $value[8],
+                    '__uac_menu_parent_id' => (int) (int) $value[9],
+                    '__is_dashboard' => (int) $value[10],
+                    '__is_selected' => (int) $value[11],
+                    '__is_basic' => (int) $value[12],
+                    '__is_open' => (int) $value[13],
+                    '__is_disabled' => (int) $value[14],
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -508,7 +222,7 @@ class SetupController extends Controller {
             'table_name' => 'tbl_a_uac_menu_p',
             'data' => $insertData
         ];
-        return $this->Tbl_a_uac_menu_p_en->__insert($request, $insert); //, 'mysql_bak');
+        return $this->Tbl_a_uac_menu_p_en->__insert($request, $insert, 'mysql_bak');
     }
 
     public function __init_data_menus($request) {
@@ -638,6 +352,43 @@ class SetupController extends Controller {
         ];
     }
 
+    public function __init_master_data_modules(Request $request) {
+        $data_modules = $this->__init_data_modules($request);
+        $insertData = [];
+        if (isset($data_modules) && !empty($data_modules)) {
+            foreach ($data_modules AS $key => $value) {
+                $code = $this->General->getRandomChar(20);
+                $insertData[] = [
+                    'code' => $code,
+                    '__alias' => $value[0],
+                    '__name' => $value[1],
+                    '__default_path' => $value[2],
+                    '__rank' => $value[3],
+                    '__description' => $value[4],
+                    'is_active' => 1,
+                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'updated_date' => $this->Date->now()
+                ];
+            }
+        }
+        $insert = [
+            'table_name' => 'tbl_a_uac_modules_p',
+            'data' => $insertData
+        ];
+        return $this->Tbl_a_uac_modules_p_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_data_modules($request) {
+        return [
+            ['cdn-static', 'CDN Static Files', 'cdn.static.files/v1/', 1, ''],
+            ['backend-api', 'Backend API', 'api/v1/', 2, ''],
+            ['backend-cms', 'Backend CMS', 'extraweb/', 3, ''],
+            ['frontend-application-home', 'Frontend Application Home', 'home/', 4, '']
+        ];
+    }
+
     public function __init_master_data_permissions(Request $request) {
         $data_permissions = $this->__init_data_permissions($request);
         $insertData = [];
@@ -675,7 +426,6 @@ class SetupController extends Controller {
             'table_name' => 'tbl_a_uac_permissions_p',
             'data' => $insertData
         ];
-        dd($insert);
         return $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert, 'mysql_bak');
     }
 
@@ -987,89 +737,6 @@ class SetupController extends Controller {
         ];
     }
 
-    public function __init_master_data_groups(Request $request) {
-        $data_permissions = $this->__init_data_groups($request);
-        $insertData = [];
-        if (isset($data_permissions) && !empty($data_permissions)) {
-            foreach ($data_permissions AS $key => $value) {
-                $code = $this->General->getRandomChar(20);
-                $insertData[] = [
-                    'code' => $code,
-                    '__name' => $value[0],
-                    '__icon' => $value[1],
-                    '__rank' => $value[2],
-                    '__level' => $value[3],
-                    '__description' => $value[4],
-                    '__uac_group_parent_id' => $value[5],
-                    '__is_key_group' => $value[6],
-                    '__is_menu' => $value[7],
-                    '__is_group_project' => $value[8],
-                    'is_active' => 1,
-                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'created_date' => $this->Date->now(),
-                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'updated_date' => $this->Date->now()
-                ];
-            }
-        }
-        $insert = [
-            'table_name' => 'tbl_a_uac_groups_p',
-            'data' => $insertData
-        ];
-        return $this->Tbl_a_uac_groups_p_en->__insert($request, $insert, 'mysql_bak');
-    }
-
-    public function __init_data_groups($request) {
-        return [
-            ['system', '-', '1', '1', '-', '0', '0', '0', '0'],
-            ['superuser', '-', '2', '1', '-', '0', '0', '0', '0'],
-            ['webmaster', '-', '3', '1', '-', '0', '0', '0', '0'],
-            //-----------------------------------------------------//
-            ['admin1', '-', '1', '2', '-', '2', '0', '1', '1'],
-            ['admin2', '-', '2', '2', '-', '2', '0', '1', '1'],
-            //-----------------------------------------------------//
-            ['officer1', '-', '1', '2', '-', '3', '1', '1', '1'],
-            ['officer2', '-', '2', '2', '-', '3', '1', '1', '1']
-        ];
-    }
-
-    public function __init_master_data_modules(Request $request) {
-        $data_modules = $this->__init_data_modules($request);
-        $insertData = [];
-        if (isset($data_modules) && !empty($data_modules)) {
-            foreach ($data_modules AS $key => $value) {
-                $code = $this->General->getRandomChar(20);
-                $insertData[] = [
-                    'code' => $code,
-                    '__alias' => $value[0],
-                    '__name' => $value[1],
-                    '__default_path' => $value[2],
-                    '__rank' => $value[3],
-                    '__description' => $value[4],
-                    'is_active' => 1,
-                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'created_date' => $this->Date->now(),
-                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'updated_date' => $this->Date->now()
-                ];
-            }
-        }
-        $insert = [
-            'table_name' => 'tbl_a_uac_modules_p',
-            'data' => $insertData
-        ];
-        return $this->Tbl_a_uac_modules_p_en->__insert($request, $insert, 'mysql_bak');
-    }
-
-    public function __init_data_modules($request) {
-        return [
-            ['cdn-static', 'CDN Static Files', 'cdn.static.files/v1/', 1, ''],
-            ['backend-api', 'Backend API', 'api/v1/', 2, ''],
-            ['backend-cms', 'Backend CMS', 'extraweb/', 3, ''],
-            ['frontend-application-home', 'Frontend Application Home', 'home/', 4, '']
-        ];
-    }
-
     public function __init_master_data_users(Request $request) {
         $data_permissions = $this->__init_data_users($request);
         $insertData = [];
@@ -1090,7 +757,7 @@ class SetupController extends Controller {
                     '__password' => $pwd_encr,
                     '__salt' => $value[6],
                     '__description' => $desc,
-                    '__score' => $value[7],
+                    '__score' => (int) $value[7],
                     '__uac_user_profile_id' => $value[8],
                     '__uac_user_registered_type_id' => $value[9],
                     '__uac_user_location_id' => $value[10],
@@ -1118,17 +785,31 @@ class SetupController extends Controller {
         ];
     }
 
-    public function __init_master_data_user_groups($request) {
-        $data_user_groups = $this->__init_data_user_groups($request);
+    public function __init_master_data_user_profies(Request $request) {
+        $data_user_profiles = $this->__init_data_user_profiles($request);
+        $params = [
+            'table_name' => 'tbl_a_uac_users_p',
+        ];
+        $data = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $params);
         $insertData = [];
-        if (isset($data_user_groups) && !empty($data_user_groups)) {
-            foreach ($data_user_groups AS $key => $value) {
-                $code = $this->General->getRandomChar(20);
-                $desc = 'code : ' . $code;
+        if (isset($data['data']) && !empty($data['data'])) {
+            foreach ($data['data'] AS $keyword => $value) {
                 $insertData[] = [
-                    'code' => $code,
-                    '__uac_user_id' => $value[0],
-                    '__uac_group_id' => $value[1],
+                    'code' => '',
+                    '__address' => '',
+                    '__lat' => '',
+                    '__lng' => '',
+                    '__zoom' => '',
+                    '__socmed_fb' => '',
+                    '__socmed_tw' => '',
+                    '__socmed_ins' => '',
+                    '__socmed_lnkd' => '',
+                    '__photos' => '',
+                    '__last_education' => '',
+                    '__last_education_institution' => '',
+                    '__skill' => '',
+                    '__notes' => '',
+                    '__description' => '',
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -1137,89 +818,12 @@ class SetupController extends Controller {
                 ];
             }
         }
-        $insert = [
-            'table_name' => 'tbl_b_uac_user_group_c',
-            'data' => $insertData
-        ];
-        return $this->Tbl_b_uac_user_group_c_en->__insert($request, $insert, 'mysql_bak');
+        dd($data);
     }
 
-    public function __init_data_user_groups($request) {
+    public function __init_data_user_profiles($request) {
         return [
-            [1, 1],
-            [1, 2],
-            [1, 3],
-            [2, 1],
-            [3, 4],
-            [4, 6]
-        ];
-    }
-
-    public function __init_master_data_user_permissions() {
-        $data_user_groups = $this->__init_data_user_permissions($request);
-        $insertData = [];
-        if (isset($data_user_groups) && !empty($data_user_groups)) {
-            foreach ($data_user_groups AS $key => $value) {
-                $code = $this->General->getRandomChar(20);
-                $desc = 'code : ' . $code;
-                $insertData[] = [
-                    'code' => $code,
-                    '__uac_user_id' => $value[0],
-                    '__uac_group_id' => $value[1],
-                    'is_active' => 1,
-                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'created_date' => $this->Date->now(),
-                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'updated_date' => $this->Date->now()
-                ];
-            }
-        }
-        $insert = [
-            'table_name' => 'tbl_b_uac_user_group_c',
-            'data' => $insertData
-        ];
-        return $this->Tbl_b_uac_user_group_c_en->__insert($request, $insert, 'mysql_bak');
-    }
-
-    public function __init_data_user_permissions($request) {
-        return [
-         []
-        ];
-    }
-
-    public function __init_master_data_registered_types(Request $request) {
-        $data_permissions = $this->__init_data_user_registered_types($request);
-        $insertData = [];
-        if (isset($data_permissions) && !empty($data_permissions)) {
-            foreach ($data_permissions AS $key => $value) {
-                $pwd = $this->General->getRandomChar(6);
-                $pwd_encr = $this->Encrypter->encrypt($pwd);
-                $code = $this->General->getRandomChar(20);
-                $desc = 'Registered type name : ' . $value[0];
-                $insertData[] = [
-                    'code' => $code,
-                    '__name' => strtolower($value[0]),
-                    '__description' => $desc,
-                    'is_active' => 1,
-                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'created_date' => $this->Date->now(),
-                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'updated_date' => $this->Date->now()
-                ];
-            }
-        }
-        $insert = [
-            'table_name' => 'tbl_a_uac_user_registered_type_c',
-            'data' => $insertData
-        ];
-        return $this->Tbl_a_uac_user_registered_type_c_en->__insert($request, $insert, 'mysql_bak');
-    }
-
-    public function __init_data_user_registered_types($request) {
-        return [
-            ['system.auto.create'],
-            ['superuser.manual.create'],
-            ['self.register']
+            ['', '', '', '', '', '', '', '', '', '', '', '', '', '']
         ];
     }
 
@@ -1249,7 +853,6 @@ class SetupController extends Controller {
             'data' => $insertData
         ];
         $this->Tbl_c_uac_location_a_country_p_en->__insert($request, $insert, 'mysql_bak');
-
         if (isset($data_locations['provinces']) && !empty($data_locations['provinces'])) {
             foreach ($data_locations['provinces'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
@@ -1298,11 +901,10 @@ class SetupController extends Controller {
             ];
             $this->Tbl_c_uac_location_c_cities_p_en->__insert($request, $insertCities, 'mysql_bak');
         }
-
         if (isset($data_locations['districts']) && !empty($data_locations['districts'])) {
             foreach ($data_locations['districts'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
-                $desc = 'districts code  : ' . $code . ', ' . $value[2];
+                $desc = "districts code  : " . $code . ' - ' . $value[2];
                 $insertDataDistricts[] = [
                     'code' => $code,
                     '__initial' => $value[0],
@@ -1324,20 +926,19 @@ class SetupController extends Controller {
             ];
             $this->Tbl_c_uac_location_d_districts_p_en->__insert($request, $insertDistricts, 'mysql_bak');
         }
-
         if (isset($data_locations['areas']) && !empty($data_locations['areas'])) {
             foreach ($data_locations['areas'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
-                $desc = 'areas name : ' . $code . ' ' . $value[2];
+                $desc = 'areas name : ' . $code;
                 $insertDataDistricts[] = [
                     'code' => $code,
                     '__initial' => $value[0],
                     '__name' => strtolower($value[1]),
-                    '__description' => $desc,
-                    '__country_id' => $value[3],
-                    '__province_id' => $value[4],
-                    '__city_id' => $value[5],
-                    '__disctrict_id' => $value[6],
+                    '__description' => "'" . $desc . "'",
+                    '__country_id' => (int) $value[3],
+                    '__province_id' => (int) $value[4],
+                    '__city_id' => (int) $value[5],
+                    '__disctrict_id' => (int) $value[6],
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -2525,20 +2126,19 @@ class SetupController extends Controller {
         ];
     }
 
-    public function __init_master_data_group_permission($request) {
-        $data_users = $this->__get_data_users($request);
+    public function __init_master_data_registered_types(Request $request) {
+        $data_permissions = $this->__init_data_user_registered_types($request);
         $insertData = [];
-        if (isset($data_users) && !empty($data_users)) {
-            foreach ($data_users AS $key => $value) {
+        if (isset($data_permissions) && !empty($data_permissions)) {
+            foreach ($data_permissions AS $key => $value) {
+                $pwd = $this->General->getRandomChar(6);
+                $pwd_encr = $this->Encrypter->encrypt($pwd);
                 $code = $this->General->getRandomChar(20);
-                $moduleid = $this->__get_data_user_modules($request, $value->id);
+                $desc = 'Registered type name : ' . $value[0];
                 $insertData[] = [
                     'code' => $code,
-                    '__user_id' => $value->id,
-                    '__group_id' => $value->__uac_group_id,
-                    '__permission_id' => 1,
-                    '__module_id' => $moduleid->__module_id,
-                    '__is_allowed' => 1,
+                    '__name' => strtolower($value[0]),
+                    '__description' => $desc,
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -2546,12 +2146,474 @@ class SetupController extends Controller {
                     'updated_date' => $this->Date->now()
                 ];
             }
+        }
+        $insert = [
+            'table_name' => 'tbl_a_uac_user_registered_type_c',
+            'data' => $insertData
+        ];
+        return $this->Tbl_a_uac_user_registered_type_c_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_data_user_registered_types($request) {
+        return [
+            ['system.auto.create'],
+            ['superuser.manual.create'],
+            ['self.register']
+        ];
+    }
+
+    public function __init_master_data_user_groups($request) {
+        $param_users = [
+            'table_name' => 'tbl_a_uac_users_p',
+            'select' => ['a.id', 'a.__email']
+        ];
+        $users = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $param_users);
+        $insertData = [];
+        if (isset($users['data']) && !empty($users['data'])) {
+            foreach ($users['data'] AS $key => $value) {
+                $code = $this->General->getRandomChar(20);
+                $desc = 'code : ' . $code;
+                $param_groups = [
+                    'table_name' => 'tbl_a_uac_groups_p',
+                    'select' => ['a.id', 'a.__name', 'a.__is_key_group'],
+                    'conditions' => [
+                        'where' => [
+                            ['a.__is_key_group', '=', 1]
+                        ]
+                    ]
+                ];
+                $groups = $this->Tbl_a_uac_groups_p_en->__find($request, 'all', $param_groups);
+                if (isset($groups['data']) && !empty($groups['data'])) {
+                    foreach ($groups['data'] AS $keyword2 => $value2) {
+                        $insertData[] = [
+                            'code' => $code,
+                            '__uac_user_id' => $value->id,
+                            '__uac_group_id' => $value2->id,
+                            'is_active' => 1,
+                            'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'updated_date' => $this->Date->now()
+                        ];
+                    }
+                }
+            }
+        }
+        $insert = [
+            'table_name' => 'tbl_b_uac_user_group_c',
+            'data' => $insertData
+        ];
+        return $this->Tbl_b_uac_user_group_c_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_master_data_user_permissions($request) {
+        $param_users = [
+            'table_name' => 'tbl_a_uac_users_p',
+            'select' => ['a.id', 'a.__email']
+        ];
+        $users = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $param_users);
+        $insertData = [];
+        if (isset($users['data']) && !empty($users['data'])) {
+            foreach ($users['data'] AS $keyword => $value) {
+                $param_permissions = [
+                    'table_name' => 'tbl_a_uac_permissions_p',
+                ];
+                $permissions = $this->Tbl_a_uac_permissions_p_en->__find($request, 'all', $param_permissions, 'mysql_bak');
+                if (isset($permissions['data']) && !empty($permissions['data'])) {
+                    foreach ($permissions['data'] AS $keyword2 => $value2) {
+                        $insertData[] = [
+                            '__user_id' => $value->id,
+                            '__permission_id' => $value2->id,
+                            '__is_denied' => 0
+                        ];
+                    }
+                }
+            }
+        }
+        $response = false;
+        if (isset($insertData) && !empty($insertData)) {
+            $insert = [
+                'table_name' => 'tbl_b_uac_user_permissions_r',
+                'data' => $insertData
+            ];
+            $response = $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert, 'mysql_bak');
+        }
+        return $response;
+    }
+
+    public function __init_master_data_group_permission($request) {
+        $param_user_groups = [
+            'table_name' => 'tbl_b_uac_user_group_c',
+            'select' => ['a.id', 'a.__uac_user_id', 'a.__uac_group_id']
+        ];
+        $user_groups = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $param_user_groups, 'mysql_bak');
+        $insertData = [];
+        if (isset($user_groups['data']) && !empty($user_groups['data'])) {
+            foreach ($user_groups['data'] AS $key => $value) {
+                $moduleid = $this->__get_data_user_modules($request, $value->__uac_user_id);
+                $param_permissions = [
+                    'table_name' => 'tbl_a_uac_permissions_p',
+                ];
+                $permissions = $this->Tbl_a_uac_permissions_p_en->__find($request, 'all', $param_permissions, 'mysql_bak');
+                if (isset($permissions['data']) && !empty($permissions['data'])) {
+                    foreach ($permissions['data'] AS $keyword2 => $value2) {
+                        $insertData[] = [
+                            '__user_id' => $value->__uac_user_id,
+                            '__group_id' => $value->__uac_group_id,
+                            '__permission_id' => $value2->id,
+                            '__module_id' => $moduleid->__module_id,
+                            '__is_allowed' => 1,
+                            'is_active' => 1,
+                            'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'updated_date' => $this->Date->now()
+                        ];
+                    }
+                }
+            }
             $insertDistricts = [
                 'table_name' => 'tbl_b_uac_group_permissions_r',
                 'data' => $insertData
             ];
-            dd($insertDistricts);
             $this->Tbl_b_uac_group_permissions_r_en->__insert($request, $insertDistricts, 'mysql_bak');
+        }
+    }
+
+    public function get_list(Request $request) {
+        $data = $request->all();
+        if (isset($data) && !empty($data)) {
+            if (isset($data['a']) && !empty($data['a'])) {
+                //    switch ($data['a']) {
+                //        case 1:
+                //            return $this->__get_list_path_segment($request);
+                //            break;
+                //    }
+            } else {
+                return $this->__get_list_default($request);
+            }
+        }
+    }
+
+    public function __get_list_default($request) {
+        $draw = $request->draw;
+        $limit = ($request->length) ? $request->length : 10;
+        if ($request->length == '-1') {
+            $limit = 1000;
+        }
+        $offset = ($request->start) ? $request->start : 0;
+        $search = $request->search['value'];
+        $conditions = [];
+        if (isset($search) && !empty($search)) {
+            $conditions = [
+                'orWhere' => [
+                    ['a.__name', 'like', '%' . $search . '%'],
+                    ['a.__path', 'like', '%' . $search . '%'],
+                    ['a.__controller', 'like', '%' . $search . '%'],
+                    ['a.__action', 'like', '%' . $search . '%']
+                ]
+            ];
+        }
+        $params = [
+            'table_name' => 'tbl_d_uac_installer_list_p',
+            'select' => ['a.*'],
+            'conditions' => $conditions,
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $data = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params);
+        if (isset($data['data']) && !empty($data['data'])) {
+            if ($offset == 0) {
+                $i = 1;
+            } else {
+                $i = ($offset + 1);
+            }
+            $arrData = array();
+            foreach ($data['data'] AS $keyword => $value) {
+                $is_active = '';
+                if ($value->is_active == 1) {
+                    $is_active = ' checked';
+                }
+                $arrData[] = [
+                    'id' => $i,
+                    '__subject' => $value->__subject,
+                    '__target_table' => $value->__target_table,
+                    '__action' => $value->__action,
+                    '__run_count' => $value->__run_count,
+                    'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    'action' => '<div class="btn-group">
+                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/generate/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Generate Installer Data"><i class="fa fa-play"></i></a></button>
+                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
+                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
+                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
+                      </div>',
+                ];
+                if ($i <= $data['meta']['total']) {
+                    $i++;
+                }
+            }
+            $output = array(
+                'draw' => $draw,
+                'recordsTotal' => $data['meta']['total'],
+                'recordsFiltered' => $data['meta']['total'],
+                'data' => $arrData,
+            );
+            echo json_encode($output);
+        } else {
+            echo json_encode(array());
+        }
+    }
+
+    public function __get_list_path_segment($request) {
+        $data = $request->json()->all();
+        $get_segment_by_url = $this->General->getSegmentByUrl($data["value"]);
+        $segmented = explode('/', $get_segment_by_url);
+        if (isset($segmented) && !empty($segmented)) {
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching and reformat data', 'valid' => true, 'data' => $segmented]);
+        }
+    }
+
+    public function __get_list_by_controller($request, $keywords = null) {
+        if (isset($keywords) && !empty($keywords) && $keywords !== null) {
+            $params = [
+                'table_name' => 'tbl_d_uac_installer_list_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.__controller', '=', $keywords]
+                    ]
+                ],
+                'limit' => 100
+            ];
+            return $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params, 'mysql_bak');
+        }
+    }
+
+    public function create(Request $request) {
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Permission</b> master data management page',
+            'pages' => [
+                'title' => 'Create Page Master Data Installer',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/installer/setup/create'
+            ],
+            'header' => [
+                'title' => 'View',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/installer/setup/view'
+            ],
+            'form' => [
+                'el-id' => 'frm_create_installer',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Subject </th>',
+                    '<th> Target Table </th>',
+                    '<th> Controller </th>',
+                    '<th> Action </th>',
+                    '<th> Running Count </th>',
+                    '<th> Status </th>',
+                    '<th> Action </th>'
+                ]
+            ]
+        ];
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+    }
+
+    public function insert(Request $request) {
+        $data = $request->json()->all();
+        $insertData = [];
+        if (isset($data) && !empty($data)) {
+            $insertData = [
+                'code' => $this->General->getRandomChar(20),
+                '__subject' => $data['a'],
+                '__target_table' => $data['b'],
+                '__action' => $data['c'],
+                '__run_count' => 0,
+                '__description' => $data['d'],
+                'is_active' => $data['e'],
+                'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                'created_date' => $this->Date->now(),
+                'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                'updated_date' => $this->Date->now()
+            ];
+        }
+        $insert = [
+            'table_name' => 'tbl_d_uac_installer_list_p',
+            'data' => $insertData
+        ];
+        $response = $this->Tbl_d_uac_installer_list_p_en->__insert($request, $insert); //, 'mysql_bak');
+        if ($response) {
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
+        } else {
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
+        }
+    }
+
+    public function edit(Request $request, $params = null) {
+        $id = base64_decode($params);
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Permission</b> master data management page',
+            'pages' => [
+                'title' => 'Edit Page Master Data Installer',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/installer/setup/edit/' . $params
+            ],
+            'header' => [
+                'title' => 'View',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/installer/setup/view'
+            ],
+            'form' => [
+                'el-id' => 'frm_create_installer',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Subject </th>',
+                    '<th> Target Table </th>',
+                    '<th> Controller </th>',
+                    '<th> Action </th>',
+                    '<th> Running Count </th>',
+                    '<th> Status </th>',
+                    '<th> Action </th>'
+                ]
+            ]
+        ];
+        $params = [
+            'table_name' => 'tbl_d_uac_installer_list_p',
+            'select' => ['a.*'],
+            'conditions' => [
+                'where' => [
+                    ['a.id', '=', $id]
+                ]
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $installers = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'first', $params);
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'installers'));
+    }
+
+    public function update(Request $request, $params = null) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $id = base64_decode($params);
+            switch ($data['a']) {
+                case 'is_active':
+                    $update_data = [
+                        'is_active' => $data['b'],
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+                    break;
+                default:
+                    $alias = strtolower(str_replace(' ', '-', $data['name']));
+                    $update_data = [
+                        '__subject' => $data['a'],
+                        '__target_table' => $data['b'],
+                        '__action' => $data['c'],
+                        '__description' => $data['d'],
+                        'is_active' => $data['e'],
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+                    break;
+            }
+            $paramsUpdate = [
+                'table_name' => 'tbl_d_uac_installer_list_p',
+                'conditions' => [
+                    'keyword' => 'id',
+                    'value' => $id
+                ]
+            ];
+            $response = $this->Tbl_d_uac_installer_list_p_en->__update($request, $update_data, $paramsUpdate);
+            if ($response) {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
+            } else {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
+            }
+        }
+    }
+
+    public function remove(Request $request, $params = null) {
+        if ($params != null) {
+            $data = (['a' => 'is_active']);
+            //$request->request->add($data);
+            $request->json()->replace([
+                'a' => 'is_active',
+                'b' => 0
+            ]);
+            $resp = $this->update($request, $params);
+            $response = json_decode($resp);
+            if ($response && $response->status->code == 200) {
+                return redirect()->back()->with('success', 'successfully update data');
+            } else {
+                return redirect()->back()->with('error', 'failed update data.');
+            }
+        }
+    }
+
+    public function delete(Request $request, $params = null) {
+        if ($params != null) {
+            $id = base64_decode($params);
+            $params = [
+                'table_name' => 'tbl_d_uac_installer_list_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.id', '=', $id]
+                    ]
+                ]
+            ];
+            $existData = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'first', $params);
+            if ($existData && $existData['data']) {
+                $insertUserInstallerBackup = [
+                    'table_name' => 'tbl_d_uac_installer_list_p',
+                    'data' => (array) $existData['data']
+                ];
+                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserInstallerBackup, 'mysql_bak');
+                $deleteParams = [
+                    'table_name' => 'tbl_d_uac_installer_list_p',
+                    'conditions' => [
+                        'keyword' => 'id',
+                        'value' => $id
+                    ]
+                ];
+                $response = $this->Tbl_d_uac_installer_list_p_en->__delete($request, $deleteParams, 'mysql');
+                return redirect()->back()->with('success', 'successfully delete data');
+            } else {
+                return redirect()->back()->with('error', 'failed delete data.');
+            }
         }
     }
 
