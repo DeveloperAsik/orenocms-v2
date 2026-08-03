@@ -344,21 +344,20 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
         $arrCond = [];
         if ($ArrUrl) {
             $explodeUrl = explode('/', $ArrUrl);
-            //$maxSegment = count($explodeUrl);
-            //$minSegment = $maxSegment - 2;
+            $maxSegment = count($explodeUrl);
+            $minSegment = $maxSegment - 3;
             $no = 1;
             foreach ($explodeUrl AS $key => $value) {
-                //if ($maxSegment > 2) {
-                //    $getRangeNumber = $this->General->getRangeNumber($minSegment, ($maxSegment - 1));
-                //    dd($getRangeNumber);
-                //    foreach ($getRangeNumber AS $k => $v) {
-                //        if ($key == ($v - 1)) {
-                //            $arrCond[] = ['a.__segment' . $v, 'like', '%' . $explodeUrl[$key] . '%'];
-                 //       }
-                //    }
-                //} else {
+                if ($maxSegment > 2) {
+                    $getRangeNumber = $this->General->getRangeNumber($minSegment, ($maxSegment - 1));
+                    foreach ($getRangeNumber AS $k => $v) {
+                        if ($key == ($v - 1)) {
+                            $arrCond[] = ['a.__segment' . $v, 'like', '%' . $explodeUrl[$key] . '%'];
+                        }
+                    }
+                } else {
                     $arrCond[] = ['a.__segment' . $no, 'like', '%' . $explodeUrl[$key] . '%'];
-                //}
+                }
                 $no++;
             }
             $cond = [

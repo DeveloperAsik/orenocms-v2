@@ -16,6 +16,8 @@ use App\Libraries\Oreno\Encrypter;
 use App\Libraries\Oreno\Date;
 use App\Models\Entity\uac\Tbl_b_uac_user_permissions_r_en;
 use App\Models\Entity\uac\Tbl_b_uac_user_group_c_en;
+use App\Models\Entity\uac\Tbl_a_uac_user_profiles_c_en;
+use App\Models\Entity\uac\Tbl_a_uac_user_locations_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_users_module_c_en;
 use App\Models\Entity\uac\Tbl_a_uac_users_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
@@ -45,6 +47,8 @@ class SetupController extends Controller {
     protected $Date;
     protected $Tbl_d_uac_installer_list_p_en;
     protected $Tbl_b_uac_user_permissions_r_en;
+    protected $Tbl_a_uac_user_profiles_c_en;
+    protected $Tbl_a_uac_user_locations_p_en;
     protected $Tbl_b_uac_group_permissions_r_en;
     protected $Tbl_a_uac_permissions_p_en;
     protected $Tbl_b_uac_user_group_c_en;
@@ -68,6 +72,8 @@ class SetupController extends Controller {
         $this->Date = new Date();
         $this->Tbl_d_uac_installer_list_p_en = new Tbl_d_uac_installer_list_p_en();
         $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
+        $this->Tbl_a_uac_user_profiles_c_en = new Tbl_a_uac_user_profiles_c_en();
+        $this->Tbl_a_uac_user_locations_p_en = new Tbl_a_uac_user_locations_p_en();
         $this->Tbl_b_uac_user_permissions_r_en = new Tbl_b_uac_user_permissions_r_en();
         $this->Tbl_b_uac_group_permissions_r_en = new Tbl_b_uac_group_permissions_r_en();
         $this->Tbl_b_uac_user_group_c_en = new Tbl_b_uac_user_group_c_en();
@@ -116,17 +122,22 @@ class SetupController extends Controller {
                 ]
             ]
         ];
-        //$a = $this->__init_master_data_groups($request);
-        //$b = $this->__init_master_data_menus($request);
-        //$c = $this->__init_master_data_modules($request);
-        //$d = $this->__init_master_data_permissions($request);
-        $e = $this->__init_master_data_users($request);
-        $e2 = $this->__init_master_data_user_profies($request);
-        //$f = $this->__init_master_data_locations($request);
-        //$g = $this->__init_master_data_registered_types($request);
-        //$h = $this->__init_master_data_user_groups($request);
-        //$i = $this->__init_master_data_user_permissions($request);
-        //$j = $this->__init_master_data_group_permission($request);
+//        $a = $this->__init_master_data_groups($request);
+//        $b = $this->__init_master_data_menus($request);
+        $c = $this->__init_master_data_modules($request);
+//        $d = $this->__init_master_data_permissions($request);
+//        $e = $this->__init_master_data_users($request);
+//        $f = $this->__init_master_data_user_profies($request);
+//        $g = $this->__init_master_data_country($request);
+//        $h = $this->__init_master_data_provinces($request);
+//        $i = $this->__init_master_data_cities($request);
+//        $j = $this->__init_master_data_districts($request);
+//        $k = $this->__init_master_data_areas($request);
+//        $l = $this->__init_master_data_registered_types($request);
+//        $m = $this->__init_master_data_user_groups($request);
+//        $n = $this->__init_master_data_user_permissions($request);
+//        $o = $this->__init_master_data_group_permission($request);
+        dd($c);
         dd('success');
 
         $this->load_css([
@@ -786,48 +797,92 @@ class SetupController extends Controller {
     }
 
     public function __init_master_data_user_profies(Request $request) {
-        $data_user_profiles = $this->__init_data_user_profiles($request);
         $params = [
             'table_name' => 'tbl_a_uac_users_p',
         ];
         $data = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $params);
-        $insertData = [];
         if (isset($data['data']) && !empty($data['data'])) {
             foreach ($data['data'] AS $keyword => $value) {
-                $insertData[] = [
-                    'code' => '',
-                    '__address' => '',
-                    '__lat' => '',
-                    '__lng' => '',
-                    '__zoom' => '',
-                    '__socmed_fb' => '',
-                    '__socmed_tw' => '',
-                    '__socmed_ins' => '',
-                    '__socmed_lnkd' => '',
-                    '__photos' => '',
-                    '__last_education' => '',
-                    '__last_education_institution' => '',
-                    '__skill' => '',
-                    '__notes' => '',
-                    '__description' => '',
+                $insertDataProfile = [
+                    'code' => $this->General->getRandomChar(20),
+                    '__address' => $this->General->getRandomChar(150),
+                    '__lat' => $this->General->getRandomNumber(12),
+                    '__lng' => $this->General->getRandomNumber(12),
+                    '__zoom' => 4,
+                    '__socmed_fb' => 'fb-' . $this->General->getRandomChar(150),
+                    '__socmed_tw' => 'tw-' . $this->General->getRandomChar(150),
+                    '__socmed_ins' => 'ins-' . $this->General->getRandomChar(150),
+                    '__socmed_lnkd' => 'lnkd-' . $this->General->getRandomChar(150),
+                    '__photos' => '-',
+                    '__last_education' => 'S1',
+                    '__last_education_institution' => 'UIUIUI',
+                    '__skill' => $this->General->getRandomChar(150),
+                    '__notes' => $this->General->getRandomChar(150),
+                    '__description' => $this->General->getRandomChar(150),
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
                     'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'updated_date' => $this->Date->now()
                 ];
+                $insertProfile = [
+                    'table_name' => 'tbl_a_uac_user_profiles_c',
+                    'data' => $insertDataProfile
+                ];
+                $user_profile_id = $this->Tbl_a_uac_user_profiles_c_en->__insert_get_id($request, $insertProfile, 'mysql_bak');
+                if ($user_profile_id) {
+                    $update_data = [
+                        '__uac_user_profile_id' => $user_profile_id,
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+                    $paramsUpdate = [
+                        'table_name' => 'tbl_a_uac_users_p',
+                        'conditions' => [
+                            'keyword' => 'id',
+                            'value' => $value->id
+                        ]
+                    ];
+                    $this->Tbl_a_uac_users_p_en->__update($request, $update_data, $paramsUpdate);
+                }
+                $insertDataLocations = [
+                    'code' => $this->General->getRandomChar(20),
+                    '__country_id' => 1,
+                    '__province_id' => 6,
+                    '__city_id' => 55,
+                    '__district_id' => 3,
+                    '__area_id' => 16,
+                    'is_active' => 1,
+                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'updated_date' => $this->Date->now()
+                ];
+                $insertLocations = [
+                    'table_name' => 'tbl_a_uac_user_locations_p',
+                    'data' => $insertDataLocations
+                ];
+                $user_location_id = $this->Tbl_a_uac_user_locations_p_en->__insert_get_id($request, $insertLocations, 'mysql_bak');
+                if ($user_location_id) {
+                    $update_data = [
+                        '__uac_user_location_id' => $user_location_id,
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+                    $paramsUpdate = [
+                        'table_name' => 'tbl_a_uac_users_p',
+                        'conditions' => [
+                            'keyword' => 'id',
+                            'value' => $value->id
+                        ]
+                    ];
+                    $this->Tbl_a_uac_users_p_en->__update($request, $update_data, $paramsUpdate);
+                }
             }
         }
-        dd($data);
     }
 
-    public function __init_data_user_profiles($request) {
-        return [
-            ['', '', '', '', '', '', '', '', '', '', '', '', '', '']
-        ];
-    }
-
-    public function __init_master_data_locations(Request $request) {
+    public function __init_master_data_country(Request $request) {
         $data_locations = $this->__init_data_locations($request);
         $insertData = [];
         if (isset($data_locations['countries']) && !empty($data_locations['countries'])) {
@@ -853,6 +908,10 @@ class SetupController extends Controller {
             'data' => $insertData
         ];
         $this->Tbl_c_uac_location_a_country_p_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_master_data_provinces(Request $request) {
+        $data_locations = $this->__init_data_locations($request);
         if (isset($data_locations['provinces']) && !empty($data_locations['provinces'])) {
             foreach ($data_locations['provinces'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
@@ -877,6 +936,10 @@ class SetupController extends Controller {
             ];
             $this->Tbl_c_uac_location_b_provinces_p_en->__insert($request, $insertProvinces, 'mysql_bak');
         }
+    }
+
+    public function __init_master_data_cities(Request $request) {
+        $data_locations = $this->__init_data_locations($request);
         if (isset($data_locations['cities']) && !empty($data_locations['cities'])) {
             foreach ($data_locations['cities'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
@@ -901,6 +964,10 @@ class SetupController extends Controller {
             ];
             $this->Tbl_c_uac_location_c_cities_p_en->__insert($request, $insertCities, 'mysql_bak');
         }
+    }
+
+    public function __init_master_data_districts(Request $request) {
+        $data_locations = $this->__init_data_locations($request);
         if (isset($data_locations['districts']) && !empty($data_locations['districts'])) {
             foreach ($data_locations['districts'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
@@ -926,6 +993,10 @@ class SetupController extends Controller {
             ];
             $this->Tbl_c_uac_location_d_districts_p_en->__insert($request, $insertDistricts, 'mysql_bak');
         }
+    }
+
+    public function __init_master_data_areas(Request $request) {
+        $data_locations = $this->__init_data_locations($request);
         if (isset($data_locations['areas']) && !empty($data_locations['areas'])) {
             foreach ($data_locations['areas'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);

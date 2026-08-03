@@ -16,6 +16,7 @@
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/create_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/view_html.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/edit_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Models/Entity/uac/Tbl_a_uac_permissions_p_en.php</file>
         </group>
     </open-files>
 </project-private>
