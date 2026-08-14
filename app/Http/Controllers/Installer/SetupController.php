@@ -24,6 +24,7 @@ use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
 use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
 use App\Models\Entity\uac\Tbl_a_uac_modules_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_menu_p_en;
+use App\Models\Entity\uac\Tbl_b_uac_menu_permissions_r_en;
 use App\Models\Entity\uac\Tbl_a_uac_permissions_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_user_registered_type_c_en;
 use App\Models\Entity\uac\Tbl_d_uac_installer_list_p_en;
@@ -63,6 +64,7 @@ class SetupController extends Controller {
     protected $Tbl_c_uac_location_d_districts_p_en;
     protected $Tbl_c_uac_location_e_areas_p_en;
     protected $Tbl_a_uac_menu_p_en;
+    protected $Tbl_b_uac_menu_permissions_r_en;
 
     public function __construct(Request $request) {
         parent::__construct($request);
@@ -88,6 +90,7 @@ class SetupController extends Controller {
         $this->Tbl_c_uac_location_d_districts_p_en = new Tbl_c_uac_location_d_districts_p_en();
         $this->Tbl_c_uac_location_e_areas_p_en = new Tbl_c_uac_location_e_areas_p_en();
         $this->Tbl_a_uac_menu_p_en = new Tbl_a_uac_menu_p_en();
+        $this->Tbl_b_uac_menu_permissions_r_en = new Tbl_b_uac_menu_permissions_r_en();
     }
 
     public function view(Request $request) {
@@ -122,23 +125,24 @@ class SetupController extends Controller {
                 ]
             ]
         ];
-//        $a = $this->__init_master_data_groups($request);
-//        $b = $this->__init_master_data_menus($request);
-        $c = $this->__init_master_data_modules($request);
-//        $d = $this->__init_master_data_permissions($request);
-//        $e = $this->__init_master_data_users($request);
-//        $f = $this->__init_master_data_user_profies($request);
-//        $g = $this->__init_master_data_country($request);
-//        $h = $this->__init_master_data_provinces($request);
-//        $i = $this->__init_master_data_cities($request);
-//        $j = $this->__init_master_data_districts($request);
-//        $k = $this->__init_master_data_areas($request);
-//        $l = $this->__init_master_data_registered_types($request);
-//        $m = $this->__init_master_data_user_groups($request);
-//        $n = $this->__init_master_data_user_permissions($request);
-//        $o = $this->__init_master_data_group_permission($request);
-        dd($c);
-        dd('success');
+        //$a = $this->__init_master_data_groups($request);
+        //$b = $this->__init_master_data_menus($request);
+        //$b1 = $this->__init_master_data_menu_permissions($request);
+        //$c = $this->__init_master_data_modules($request);
+        //$d = $this->__init_master_data_permissions($request);
+        //$e = $this->__init_master_data_users($request);
+        //$f = $this->__init_master_data_user_profies($request);
+        //$g = $this->__init_master_data_country($request);
+        //$h = $this->__init_master_data_provinces($request);
+        //$i = $this->__init_master_data_cities($request);
+        //$j = $this->__init_master_data_districts($request);
+        //$k = $this->__init_master_data_areas($request);
+        //$l = $this->__init_master_data_registered_types($request);
+        //$m = $this->__init_master_data_user_groups($request);
+        //$n = $this->__init_master_data_user_permissions($request);
+        //$o = $this->__init_master_data_group_permission($request);
+        //dd($d);
+        //dd('success');
 
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
@@ -363,6 +367,48 @@ class SetupController extends Controller {
         ];
     }
 
+    public function __init_master_data_menu_permissions(Request $request) {
+        $params = [
+            'table_name' => 'tbl_a_uac_menu_p',
+            'limit' => 2000
+        ];
+        $data = $this->Tbl_a_uac_menu_p_en->__find($request, 'all', $params, 'mysql_bak');
+        $insertData = [];
+        if (isset($data['data']) && !empty($data['data'])) {
+            foreach ($data['data'] AS $keyword => $value) {
+                //$paramGroups = [
+                //    'table_name' => 'tbl_a_uac_menu_p',
+                //    'limit' => 1000
+                //];
+                //$dataGroups = $this->Tbl_a_uac_menu_p_en->__find($request, 'all', $paramGroups, 'mysql_bak');
+                $dataGroups = [2, 4, 5, 6, 7, 8, 9];
+                //if (isset($dataGroups['data']) && !empty($dataGroups['data'])) {
+                //    foreach ($dataGroups['data'] AS $key => $val) {
+                if (isset($dataGroups) && !empty($dataGroups)) {
+                    foreach ($dataGroups AS $key => $val) {
+                        $insertData[] = [
+                            '__menu_id' => $value->id,
+                            '__group_id' => $val,
+                            '__module_id' => 3,
+                            '__is_menu' => 0,
+                            '__is_allowed' => 1,
+                            'is_active' => 1,
+                            'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'updated_date' => $this->Date->now()
+                        ];
+                    }
+                }
+            }
+        }
+        $insert = [
+            'table_name' => 'tbl_b_uac_menu_permissions_r',
+            'data' => $insertData
+        ];
+        return $this->Tbl_b_uac_menu_permissions_r_en->__insert($request, $insert, 'mysql_bak');
+    }
+
     public function __init_master_data_modules(Request $request) {
         $data_modules = $this->__init_data_modules($request);
         $insertData = [];
@@ -406,6 +452,16 @@ class SetupController extends Controller {
         if (isset($data_permissions) && !empty($data_permissions)) {
             foreach ($data_permissions AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
+                switch($value[3]){
+                    case "AuthentificationMD":
+                    case "AppController":
+                    case "AjaxController":
+                        $__is_public = 1;
+                        break;
+                    default:
+                        $__is_public = 0;
+                        break;
+                }
                 $insertData[] = [
                     'code' => $code,
                     '__alias' => $value[0],
@@ -424,7 +480,7 @@ class SetupController extends Controller {
                     '__segment8' => $value[13],
                     '__description' => 'name : ' . $value[1] . ' code : ' . $code,
                     '__is_basic' => 1,
-                    '__is_public' => 0,
+                    '__is_public' => $__is_public,
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -2456,7 +2512,7 @@ class SetupController extends Controller {
                 ],
                 'limit' => 100
             ];
-            return $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params, 'mysql_bak');
+            return $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params, 'mysql');
         }
     }
 
@@ -2528,7 +2584,7 @@ class SetupController extends Controller {
             'table_name' => 'tbl_d_uac_installer_list_p',
             'data' => $insertData
         ];
-        $response = $this->Tbl_d_uac_installer_list_p_en->__insert($request, $insert); //, 'mysql_bak');
+        $response = $this->Tbl_d_uac_installer_list_p_en->__insert($request, $insert); //, 'mysql');
         if ($response) {
             return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
         } else {
@@ -2672,7 +2728,7 @@ class SetupController extends Controller {
                     'table_name' => 'tbl_d_uac_installer_list_p',
                     'data' => (array) $existData['data']
                 ];
-                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserInstallerBackup, 'mysql_bak');
+                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserInstallerBackup, 'mysql');
                 $deleteParams = [
                     'table_name' => 'tbl_d_uac_installer_list_p',
                     'conditions' => [
