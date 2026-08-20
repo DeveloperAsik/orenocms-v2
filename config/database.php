@@ -70,7 +70,7 @@ return [
             'url' => env('DB_URL'),
             'host' => $host_uac,
             'port' => $port_uac,
-            'database' => $database_bak_uac, //$database_uac,
+            'database' => $database_uac, //$database_bak_uac, //
             'username' => $username_uac,
             'password' => $password_uac,
             'unix_socket' => env('DB_SOCKET', ''),
@@ -89,7 +89,7 @@ return [
             'url' => env('DB_URL'),
             'host' => $host_bak_uac,
             'port' => $port_bak_uac,
-            'database' => $database_uac, //$database_bak_uac ,
+            'database' => $database_bak_uac,//$database_uac, //
             'username' => $username_bak_uac,
             'password' => $password_bak_uac,
             'unix_socket' => env('DB_SOCKET', ''),

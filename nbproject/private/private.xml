@@ -3,19 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/view_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Contents/ContentcategoryController.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/config/app.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Installer/SetupController.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Controller.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/create_html.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/edit_js.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Prefferences/AccessControl/MenupermissionsController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Prefferences/AccessControl/UserpermissionsController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Prefferences/AccessControl/UsermodulesController.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Auth/AppController.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/create_js.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/view_html.blade.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Contentcategory/edit_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Prefferences/AccessControl/UsertokensController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Prefferences/AccessControl/UserlocationsController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/config/app.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Prefferences/AccessControl/UsergroupsController.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Prefferences/AccessControl/GrouppermissionsController.php</file>
         </group>
     </open-files>
 </project-private>
