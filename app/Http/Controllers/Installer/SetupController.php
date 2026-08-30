@@ -113,16 +113,16 @@ class SetupController extends Controller {
                 ]
             ]
         ];
-        //$qq = $this->__init_master_data_menuns($request);
-        $rr = $this->__init_master_data_permissions($request);
+        $qq = $this->__init_master_data_menuns($request);
+        //$rr = $this->__init_master_data_permissions($request);
         //$ss = $this->__init_master_data_groups($request);
         //$tt = $this->__init_master_data_modules($request);
         //$uu = $this->__init_master_data_users($request);
         //$uu2 = $this->__init_master_data_user_groups($request);
         //$vv = $this->__init_master_data_registered_types($request);
         //$xx = $this->__init_master_data_locations($request);
-        $yy = $this->__init_master_data_group_permission($request);
-        dd($rr);
+        //$yy = $this->__init_master_data_group_permission($request);
+        dd($qq);
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
@@ -507,6 +507,7 @@ class SetupController extends Controller {
             'table_name' => 'tbl_a_uac_permissions_p',
             'data' => $insertData
         ];
+        dd($insert);
         return $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert, 'mysql_bak');
     }
 
