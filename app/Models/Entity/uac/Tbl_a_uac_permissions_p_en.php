@@ -41,7 +41,7 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
         }
         $paramCheckName = [
             'table_name' => 'tbl_a_uac_permissions_p',
-            'select' => ['a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 'a.__segment1', 'a.__segment2', 'a.__segment3', 'a.__segment4', 'a.__segment5', 'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS permission_id', 'b.__is_allowed'],
+            'select' => ['a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 'a.__segment1', 'a.__segment2', 'a.__segment3', 'a.__segment4', 'a.__segment5', 'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS group_permission_id', 'b.__is_allowed AS __group_permission_is_allowed'],
             'join' => [
                 'leftJoin' => [
                     ['tbl_b_uac_group_permissions_r AS b', 'b.__permission_id', '=', 'a.id']
@@ -339,24 +339,24 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
 
 
     public function __get_where_by_url($url = null) {
-        $ArrUrl = $this->General->getSegmentByUrl($url);
+        $ArrUrl = $url;//$this->General->getSegmentByUrl($url);
         $cond = [];
         $arrCond = [];
         if ($ArrUrl) {
             $explodeUrl = explode('/', $ArrUrl);
             $maxSegment = count($explodeUrl);
-            $minSegment = $maxSegment - 3;
+            $minSegment = $maxSegment - 8;
             $no = 1;
             foreach ($explodeUrl AS $key => $value) {
                 if ($maxSegment > 2) {
                     $getRangeNumber = $this->General->getRangeNumber($minSegment, ($maxSegment - 1));
                     foreach ($getRangeNumber AS $k => $v) {
                         if ($key == ($v - 1)) {
-                            $arrCond[] = ['a.__segment' . $v, 'like', '%' . $explodeUrl[$key] . '%'];
+                            $arrCond[] = ['a.__segment' . $v, 'like', '%' . str_replace('-','', $explodeUrl[$key]) . '%'];
                         }
                     }
                 } else {
-                    $arrCond[] = ['a.__segment' . $no, 'like', '%' . $explodeUrl[$key] . '%'];
+                    $arrCond[] = ['a.__segment' . $no, 'like', '%' . str_replace('-','', $explodeUrl[$key]) . '%'];
                 }
                 $no++;
             }

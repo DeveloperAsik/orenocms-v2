@@ -125,24 +125,24 @@ class SetupController extends Controller {
                 ]
             ]
         ];
-//        $a = $this->__init_master_data_groups($request);
-//        $b = $this->__init_master_data_menus($request);
-//        $b1 = $this->__init_master_data_menu_permissions($request);
-//        $c = $this->__init_master_data_modules($request);
-//        $d = $this->__init_master_data_permissions($request);
-//        $e = $this->__init_master_data_users($request);
-//        $f = $this->__init_master_data_user_profies($request);
-//        $g = $this->__init_master_data_country($request);
-//        $h = $this->__init_master_data_provinces($request);
-//        $i = $this->__init_master_data_cities($request);
-//        $j = $this->__init_master_data_districts($request);
-//        $k = $this->__init_master_data_areas($request);
-//        $l = $this->__init_master_data_registered_types($request);
-//        $m = $this->__init_master_data_user_groups($request);
-//        $n = $this->__init_master_data_user_permissions($request);
-//        $o = $this->__init_master_data_group_permission($request);
-//        dd($d);
-//        dd('success');
+        //$a = $this->__init_master_data_groups($request);
+        //$b = $this->__init_master_data_menus($request);
+        //$c = $this->__init_master_data_menu_permissions($request);
+        //$d = $this->__init_master_data_modules($request);
+        $e = $this->__init_master_data_permissions($request);
+        //$f = $this->__init_master_data_users($request);
+        //$g = $this->__init_master_data_user_profies($request);
+        //$h = $this->__init_master_data_registered_types($request);
+        //$i = $this->__init_master_data_user_groups($request);
+        //$j = $this->__init_master_data_user_permissions($request);
+        //$k = $this->__init_master_data_group_permission($request);
+        //$l = $this->__init_master_data_country($request);
+        //$m = $this->__init_master_data_provinces($request);
+        //$n = $this->__init_master_data_cities($request);
+        //$o = $this->__init_master_data_districts($request);
+        //$p = $this->__init_master_data_areas($request);
+        dd($e);
+        dd('success');
 
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
@@ -191,7 +191,7 @@ class SetupController extends Controller {
     public function __init_data_groups($request) {
         return [
             ['system', '-', '1', '1', '-', '0', '0', '0', '0'],
-            ['superuser', '-', '2', '1', '-', '0', '0', '0', '0'],
+            ['superuser', '-', '2', '1', '-', '0', '0', '1', '1'],
             ['webmaster', '-', '3', '1', '-', '0', '0', '0', '0'],
             //-----------------------------------------------------//
             ['admin1', '-', '1', '2', '-', '2', '0', '1', '1'],
@@ -376,19 +376,24 @@ class SetupController extends Controller {
         $insertData = [];
         if (isset($data['data']) && !empty($data['data'])) {
             foreach ($data['data'] AS $keyword => $value) {
-                //$paramGroups = [
-                //    'table_name' => 'tbl_a_uac_menu_p',
-                //    'limit' => 1000
-                //];
-                //$dataGroups = $this->Tbl_a_uac_menu_p_en->__find($request, 'all', $paramGroups, 'mysql_bak');
-                $dataGroups = [2, 4, 5, 6, 7, 8, 9];
-                //if (isset($dataGroups['data']) && !empty($dataGroups['data'])) {
-                //    foreach ($dataGroups['data'] AS $key => $val) {
-                if (isset($dataGroups) && !empty($dataGroups)) {
-                    foreach ($dataGroups AS $key => $val) {
-                        $insertData[] = [
+                $paramGroups = [
+                    'table_name' => 'tbl_a_uac_groups_p',
+                    'conditions' => [
+                        'where' => [
+                            ['a.__is_group_project', '=', 1]
+                        ]
+                    ],
+                    'limit' => 1000
+                ];
+                $dataGroups = $this->Tbl_a_uac_groups_p_en->__find($request, 'all', $paramGroups, 'mysql_bak');
+                //$dataGroups = [2, 4, 5, 6, 7];
+                if (isset($dataGroups['data']) && !empty($dataGroups['data'])) {
+                    foreach ($dataGroups['data'] AS $key => $val) {
+                        //if (isset($dataGroups) && !empty($dataGroups)) {
+                        //foreach ($dataGroups AS $key => $val) {
+                        $insertData[$val->id][] = [
                             '__menu_id' => $value->id,
-                            '__group_id' => $val,
+                            '__group_id' => $val->id,
                             '__module_id' => 3,
                             '__is_menu' => 0,
                             '__is_allowed' => 1,
@@ -402,11 +407,16 @@ class SetupController extends Controller {
                 }
             }
         }
-        $insert = [
-            'table_name' => 'tbl_b_uac_menu_permissions_r',
-            'data' => $insertData
-        ];
-        return $this->Tbl_b_uac_menu_permissions_r_en->__insert($request, $insert, 'mysql_bak');
+        if (isset($insertData) && !empty($insertData)) {
+            foreach ($insertData AS $key => $value) {
+                $insert = [
+                    'table_name' => 'tbl_b_uac_menu_permissions_r',
+                    'data' => $value
+                ];
+                $this->Tbl_b_uac_menu_permissions_r_en->__insert($request, $insert, 'mysql_bak');
+            }
+        }
+        return true;
     }
 
     public function __init_master_data_modules(Request $request) {
@@ -452,7 +462,7 @@ class SetupController extends Controller {
         if (isset($data_permissions) && !empty($data_permissions)) {
             foreach ($data_permissions AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
-                switch($value[3]){
+                switch ($value[3]) {
                     case "AuthentificationMD":
                     case "AppController":
                     case "AjaxController":
@@ -503,8 +513,8 @@ class SetupController extends Controller {
             ['extraweb-logout', 'extraweb/logout/', 'extraweb/logout/', 'AppController', 'logout', 'get', 'extraweb', 'logout', '', '', '', '', '', ''],
             ['extraweb-forgot-password', 'extraweb/forgot-password/', 'extraweb/forgot-password/', 'AppController', 'forgot_password', 'get', 'extraweb', 'forgot-password', '', '', '', '', '', ''],
             ['extraweb-register', 'extraweb/register/', 'extraweb/register/', 'AppController', 'register', 'get', 'extraweb', 'register', '', '', '', '', '', ''],
-            ['extraweb-validate-auth', 'extraweb/validate-auth/', 'extraweb/validate-auth/', 'AppController', '__validate', 'post', 'extraweb', 'validate-auth', '', '', '', '', '', ''],
-            ['extraweb-authentification-init', 'extraweb/authentification/init/', 'extraweb/authentification/init/', 'AppController', '__init', 'post', 'extraweb', 'authentification', '', '', '', '', '', ''],
+            //['extraweb-validate-auth', 'extraweb/validate-auth/', 'extraweb/validate-auth/', 'AppController', '__validate', 'post', 'extraweb', 'validate-auth', '', '', '', '', '', ''],
+            ['extraweb-authentification-init', 'extraweb/authentification/init/', 'extraweb/authentification/init/', 'AppController', '__init', 'post', 'extraweb', 'authentification', 'init', '', '', '', '', ''],
             ['extraweb-dashboard', 'extraweb/dashboard/', 'extraweb/dashboard/', 'AppController', 'dashboard', 'get', 'extraweb', 'dashboard', '', '', '', '', '', ''],
             ['extraweb-ajax-get', 'extraweb/ajax/get', 'extraweb/ajax/get', 'AjaxController', '__fn_ajax_get', 'get', 'extraweb', 'ajax', 'get', '{param}', '', '', '', ''],
             ['extraweb-ajax-post', 'extraweb/ajax/post/', 'extraweb/ajax/post/', 'AjaxController', '__fn_ajax_post', 'post', 'extraweb', 'ajax', 'post', '{param}', '', '', '', ''],
@@ -2371,15 +2381,18 @@ class SetupController extends Controller {
     public function __init_master_data_group_permission($request) {
         $param_user_groups = [
             'table_name' => 'tbl_b_uac_user_group_c',
-            'select' => ['a.id', 'a.__uac_user_id', 'a.__uac_group_id']
+            'select' => ['a.id', 'a.__uac_user_id', 'a.__uac_group_id'],
+            'limit' => 1000
         ];
         $user_groups = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $param_user_groups, 'mysql_bak');
+        dd($user_groups);
         $insertData = [];
         if (isset($user_groups['data']) && !empty($user_groups['data'])) {
             foreach ($user_groups['data'] AS $key => $value) {
                 $moduleid = $this->__get_data_user_modules($request, $value->__uac_user_id);
                 $param_permissions = [
                     'table_name' => 'tbl_a_uac_permissions_p',
+                    'limit' => 1000
                 ];
                 $permissions = $this->Tbl_a_uac_permissions_p_en->__find($request, 'all', $param_permissions, 'mysql_bak');
                 if (isset($permissions['data']) && !empty($permissions['data'])) {
@@ -2401,8 +2414,10 @@ class SetupController extends Controller {
             }
             $insertDistricts = [
                 'table_name' => 'tbl_b_uac_group_permissions_r',
+                'limit' => 1000,
                 'data' => $insertData
             ];
+            dd($insertDistricts);
             $this->Tbl_b_uac_group_permissions_r_en->__insert($request, $insertDistricts, 'mysql_bak');
         }
     }
