@@ -352,11 +352,11 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
                     $getRangeNumber = $this->General->getRangeNumber($minSegment, ($maxSegment - 1));
                     foreach ($getRangeNumber AS $k => $v) {
                         if ($key == ($v - 1)) {
-                            $arrCond[] = ['a.__segment' . $v, 'like', '%' . str_replace('-','', $explodeUrl[$key]) . '%'];
+                            $arrCond[] = ['a.__segment' . $v, 'like', '%' . str_replace('-','_', $explodeUrl[$key]) . '%'];
                         }
                     }
                 } else {
-                    $arrCond[] = ['a.__segment' . $no, 'like', '%' . str_replace('-','', $explodeUrl[$key]) . '%'];
+                    $arrCond[] = ['a.__segment' . $no, 'like', '%' . str_replace('-','_', $explodeUrl[$key]) . '%'];
                 }
                 $no++;
             }

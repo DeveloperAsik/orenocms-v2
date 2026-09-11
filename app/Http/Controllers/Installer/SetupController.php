@@ -129,13 +129,13 @@ class SetupController extends Controller {
         //$b = $this->__init_master_data_menus($request);
         //$c = $this->__init_master_data_menu_permissions($request);
         //$d = $this->__init_master_data_modules($request);
-        $e = $this->__init_master_data_permissions($request);
+        //$e = $this->__init_master_data_permissions($request);
         //$f = $this->__init_master_data_users($request);
-        //$g = $this->__init_master_data_user_profies($request);
-        //$h = $this->__init_master_data_registered_types($request);
-        //$i = $this->__init_master_data_user_groups($request);
-        //$j = $this->__init_master_data_user_permissions($request);
-        //$k = $this->__init_master_data_group_permission($request);
+        $g = $this->__init_master_data_user_profies($request);
+//        $h = $this->__init_master_data_registered_types($request);
+//        $i = $this->__init_master_data_user_groups($request);
+//        $j = $this->__init_master_data_user_permissions($request);
+//        $k = $this->__init_master_data_group_permission($request);
         //$l = $this->__init_master_data_country($request);
         //$m = $this->__init_master_data_provinces($request);
         //$n = $this->__init_master_data_cities($request);
@@ -591,7 +591,7 @@ class SetupController extends Controller {
             ['extraweb-master-uac-users', 'extraweb/master/uac/users/remove/{id}', 'extraweb/master/uac/users/remove/{id}', 'UserController', 'remove', 'get', 'extraweb', 'master', 'uac', 'users', 'remove', '{id}', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['extraweb-master-uac-groups', 'extraweb/master/uac/groups/view', 'extraweb/master/uac/groups/view', 'GroupsController', 'view', 'get', 'extraweb', 'master', 'uac', 'groups', 'view', '', '', ''],
-            ['extraweb-master-uac-groups', 'extraweb/master/uac/groups/tree-view', 'extraweb/master/uac/groups/tree-view', 'GroupsController', 'tree_view', 'get', 'extraweb', 'master', 'uac', 'groups', 'tree-view', '', '', ''],
+            ['extraweb-master-uac-groups', 'extraweb/master/uac/groups/tree-view', 'extraweb/master/uac/groups/tree-view', 'GroupsController', 'tree_view', 'get', 'extraweb', 'master', 'uac', 'groups', 'treeview', '', '', ''],
             ['extraweb-master-uac-groups', 'extraweb/master/uac/groups/get_list', 'extraweb/master/uac/groups/get_list', 'GroupsController', 'get_list', 'post', 'extraweb', 'master', 'uac', 'groups', 'get_list', '', '', ''],
             ['extraweb-master-uac-groups', 'extraweb/master/uac/groups/edit/{id}', 'extraweb/master/uac/groups/edit', 'GroupsController', 'edit', 'get', 'extraweb', 'master', 'uac', 'groups', 'edit', '{id}', '', ''],
             ['extraweb-master-uac-groups', 'extraweb/master/uac/groups/update/{id}', 'extraweb/master/uac/groups/update', 'GroupsController', 'update', 'post', 'extraweb', 'master', 'uac', 'groups', 'update', '{id}', '', ''],
@@ -849,7 +849,7 @@ class SetupController extends Controller {
         $insert = [
             'table_name' => 'tbl_a_uac_users_p',
             'data' => $insertData
-        ];
+        ]; 
         return $this->Tbl_a_uac_users_p_en->__insert($request, $insert, 'mysql_bak');
     }
 
@@ -866,7 +866,7 @@ class SetupController extends Controller {
         $params = [
             'table_name' => 'tbl_a_uac_users_p',
         ];
-        $data = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $params);
+        $data = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $params, 'mysql_bak');
         if (isset($data['data']) && !empty($data['data'])) {
             foreach ($data['data'] AS $keyword => $value) {
                 $insertDataProfile = [
