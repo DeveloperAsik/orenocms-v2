@@ -16,12 +16,16 @@ use App\Libraries\Oreno\Encrypter;
 use App\Libraries\Oreno\Date;
 use App\Models\Entity\uac\Tbl_b_uac_user_permissions_r_en;
 use App\Models\Entity\uac\Tbl_b_uac_user_group_c_en;
+use App\Models\Entity\uac\Tbl_a_uac_user_profiles_c_en;
+use App\Models\Entity\uac\Tbl_a_uac_user_locations_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_users_module_c_en;
 use App\Models\Entity\uac\Tbl_a_uac_users_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
 use App\Models\Entity\uac\Tbl_b_uac_group_permissions_r_en;
 use App\Models\Entity\uac\Tbl_a_uac_modules_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_menu_p_en;
+use App\Models\Entity\uac\Tbl_b_uac_menu_permissions_r_en;
+use App\Models\Entity\uac\Tbl_a_uac_permissions_p_en;
 use App\Models\Entity\uac\Tbl_a_uac_user_registered_type_c_en;
 use App\Models\Entity\uac\Tbl_d_uac_installer_list_p_en;
 use App\Models\Entity\uac\Tbl_c_uac_location_a_country_p_en;
@@ -44,7 +48,10 @@ class SetupController extends Controller {
     protected $Date;
     protected $Tbl_d_uac_installer_list_p_en;
     protected $Tbl_b_uac_user_permissions_r_en;
+    protected $Tbl_a_uac_user_profiles_c_en;
+    protected $Tbl_a_uac_user_locations_p_en;
     protected $Tbl_b_uac_group_permissions_r_en;
+    protected $Tbl_a_uac_permissions_p_en;
     protected $Tbl_b_uac_user_group_c_en;
     protected $Tbl_a_uac_user_registered_type_c_en;
     protected $Tbl_a_uac_users_p_en;
@@ -57,6 +64,7 @@ class SetupController extends Controller {
     protected $Tbl_c_uac_location_d_districts_p_en;
     protected $Tbl_c_uac_location_e_areas_p_en;
     protected $Tbl_a_uac_menu_p_en;
+    protected $Tbl_b_uac_menu_permissions_r_en;
 
     public function __construct(Request $request) {
         parent::__construct($request);
@@ -65,6 +73,9 @@ class SetupController extends Controller {
         $this->Encrypter = new Encrypter();
         $this->Date = new Date();
         $this->Tbl_d_uac_installer_list_p_en = new Tbl_d_uac_installer_list_p_en();
+        $this->Tbl_a_uac_permissions_p_en = new Tbl_a_uac_permissions_p_en();
+        $this->Tbl_a_uac_user_profiles_c_en = new Tbl_a_uac_user_profiles_c_en();
+        $this->Tbl_a_uac_user_locations_p_en = new Tbl_a_uac_user_locations_p_en();
         $this->Tbl_b_uac_user_permissions_r_en = new Tbl_b_uac_user_permissions_r_en();
         $this->Tbl_b_uac_group_permissions_r_en = new Tbl_b_uac_group_permissions_r_en();
         $this->Tbl_b_uac_user_group_c_en = new Tbl_b_uac_user_group_c_en();
@@ -79,6 +90,7 @@ class SetupController extends Controller {
         $this->Tbl_c_uac_location_d_districts_p_en = new Tbl_c_uac_location_d_districts_p_en();
         $this->Tbl_c_uac_location_e_areas_p_en = new Tbl_c_uac_location_e_areas_p_en();
         $this->Tbl_a_uac_menu_p_en = new Tbl_a_uac_menu_p_en();
+        $this->Tbl_b_uac_menu_permissions_r_en = new Tbl_b_uac_menu_permissions_r_en();
     }
 
     public function view(Request $request) {
@@ -113,16 +125,25 @@ class SetupController extends Controller {
                 ]
             ]
         ];
-        $qq = $this->__init_master_data_menuns($request);
-        //$rr = $this->__init_master_data_permissions($request);
-        //$ss = $this->__init_master_data_groups($request);
-        //$tt = $this->__init_master_data_modules($request);
-        //$uu = $this->__init_master_data_users($request);
-        //$uu2 = $this->__init_master_data_user_groups($request);
-        //$vv = $this->__init_master_data_registered_types($request);
-        //$xx = $this->__init_master_data_locations($request);
-        //$yy = $this->__init_master_data_group_permission($request);
-        dd($qq);
+        $a = $this->__init_master_data_groups($request);
+        $b = $this->__init_master_data_menus($request);
+        $b1 = $this->__init_master_data_menu_permissions($request);
+        $c = $this->__init_master_data_modules($request);
+        $d = $this->__init_master_data_permissions($request);
+        $e = $this->__init_master_data_users($request);
+        $f = $this->__init_master_data_user_profies($request);
+//        $g = $this->__init_master_data_country($request);
+//        $h = $this->__init_master_data_provinces($request);
+//        $i = $this->__init_master_data_cities($request);
+//        $j = $this->__init_master_data_districts($request);
+//        $k = $this->__init_master_data_areas($request);
+        $l = $this->__init_master_data_registered_types($request);
+        $m = $this->__init_master_data_user_groups($request);
+        $n = $this->__init_master_data_user_permissions($request);
+        $o = $this->__init_master_data_group_permission($request);
+//        dd($d);
+       dd('success');
+
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
@@ -135,344 +156,53 @@ class SetupController extends Controller {
         return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
     }
 
-    public function get_list(Request $request) {
-        $data = $request->all();
-        if (isset($data) && !empty($data)) {
-            if (isset($data['a']) && !empty($data['a'])) {
-                //    switch ($data['a']) {
-                //        case 1:
-                //            return $this->__get_list_path_segment($request);
-                //            break;
-                //    }
-            } else {
-                return $this->__get_list_default($request);
-            }
-        }
-    }
-
-    public function __get_list_default($request) {
-        $draw = $request->draw;
-        $limit = ($request->length) ? $request->length : 10;
-        if ($request->length == '-1') {
-            $limit = 1000;
-        }
-        $offset = ($request->start) ? $request->start : 0;
-        $search = $request->search['value'];
-        $conditions = [];
-        if (isset($search) && !empty($search)) {
-            $conditions = [
-                'orWhere' => [
-                    ['a.__name', 'like', '%' . $search . '%'],
-                    ['a.__path', 'like', '%' . $search . '%'],
-                    ['a.__controller', 'like', '%' . $search . '%'],
-                    ['a.__action', 'like', '%' . $search . '%']
-                ]
-            ];
-        }
-        $params = [
-            'table_name' => 'tbl_d_uac_installer_list_p',
-            'select' => ['a.*'],
-            'conditions' => $conditions,
-            'limit' => 100,
-            'offset' => 0
-        ];
-        $data = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params);
-        if (isset($data['data']) && !empty($data['data'])) {
-            if ($offset == 0) {
-                $i = 1;
-            } else {
-                $i = ($offset + 1);
-            }
-            $arrData = array();
-            foreach ($data['data'] AS $keyword => $value) {
-                $is_active = '';
-                if ($value->is_active == 1) {
-                    $is_active = ' checked';
-                }
-                $arrData[] = [
-                    'id' => $i,
-                    '__subject' => $value->__subject,
-                    '__target_table' => $value->__target_table,
-                    '__action' => $value->__action,
-                    '__run_count' => $value->__run_count,
-                    'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
-                    'action' => '<div class="btn-group">
-                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/generate/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Generate Installer Data"><i class="fa fa-play"></i></a></button>
-                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
-                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
-                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
-                      </div>',
-                ];
-                if ($i <= $data['meta']['total']) {
-                    $i++;
-                }
-            }
-            $output = array(
-                'draw' => $draw,
-                'recordsTotal' => $data['meta']['total'],
-                'recordsFiltered' => $data['meta']['total'],
-                'data' => $arrData,
-            );
-            echo json_encode($output);
-        } else {
-            echo json_encode(array());
-        }
-    }
-
-    public function __get_list_path_segment($request) {
-        $data = $request->json()->all();
-        $get_segment_by_url = $this->General->getSegmentByUrl($data["value"]);
-        $segmented = explode('/', $get_segment_by_url);
-        if (isset($segmented) && !empty($segmented)) {
-            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching and reformat data', 'valid' => true, 'data' => $segmented]);
-        }
-    }
-
-    public function __get_list_by_controller($request, $keywords = null) {
-        if (isset($keywords) && !empty($keywords) && $keywords !== null) {
-            $params = [
-                'table_name' => 'tbl_d_uac_installer_list_p',
-                'select' => ['a.*'],
-                'conditions' => [
-                    'where' => [
-                        ['a.__controller', '=', $keywords]
-                    ]
-                ],
-                'limit' => 100
-            ];
-            return $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params, 'mysql_bak');
-        }
-    }
-
-    public function create(Request $request) {
-        $title_for_layout = config('app.default_variables.title_for_layout');
-        $_config = [
-            'title_for_header' => '<b>Permission</b> master data management page',
-            'pages' => [
-                'title' => 'Create Page Master Data Installer',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/installer/setup/create'
-            ],
-            'header' => [
-                'title' => 'View',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/installer/setup/view'
-            ],
-            'form' => [
-                'el-id' => 'frm_create_installer',
-                'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
-                ],
-                'dt_tbl_th' => [
-                    '<th> ID </th>',
-                    '<th> Subject </th>',
-                    '<th> Target Table </th>',
-                    '<th> Controller </th>',
-                    '<th> Action </th>',
-                    '<th> Running Count </th>',
-                    '<th> Status </th>',
-                    '<th> Action </th>'
-                ]
-            ]
-        ];
-        $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
-        ]);
-        $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
-        ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
-    }
-
-    public function insert(Request $request) {
-        $data = $request->json()->all();
+    public function __init_master_data_groups(Request $request) {
+        $data_permissions = $this->__init_data_groups($request);
         $insertData = [];
-        if (isset($data) && !empty($data)) {
-            $insertData = [
-                'code' => $this->General->getRandomChar(20),
-                '__subject' => $data['a'],
-                '__target_table' => $data['b'],
-                '__action' => $data['c'],
-                '__run_count' => 0,
-                '__description' => $data['d'],
-                'is_active' => $data['e'],
-                'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                'created_date' => $this->Date->now(),
-                'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                'updated_date' => $this->Date->now()
-            ];
+        if (isset($data_permissions) && !empty($data_permissions)) {
+            foreach ($data_permissions AS $key => $value) {
+                $code = $this->General->getRandomChar(20);
+                $insertData[] = [
+                    'code' => $code,
+                    '__name' => $value[0],
+                    '__icon' => $value[1],
+                    '__rank' => (int) $value[2],
+                    '__level' => (int) $value[3],
+                    '__description' => $value[4],
+                    '__uac_group_parent_id' => (int) $value[5],
+                    '__is_key_group' => (int) $value[6],
+                    '__is_menu' => (int) $value[7],
+                    '__is_group_project' => (int) $value[8],
+                    'is_active' => 1,
+                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'updated_date' => $this->Date->now()
+                ];
+            }
         }
         $insert = [
-            'table_name' => 'tbl_d_uac_installer_list_p',
+            'table_name' => 'tbl_a_uac_groups_p',
             'data' => $insertData
         ];
-        $response = $this->Tbl_d_uac_installer_list_p_en->__insert($request, $insert); //, 'mysql_bak');
-        if ($response) {
-            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
-        } else {
-            return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
-        }
+        return $this->Tbl_a_uac_groups_p_en->__insert($request, $insert, 'mysql_bak');
     }
 
-    public function edit(Request $request, $params = null) {
-        $id = base64_decode($params);
-        $title_for_layout = config('app.default_variables.title_for_layout');
-        $_config = [
-            'title_for_header' => '<b>Permission</b> master data management page',
-            'pages' => [
-                'title' => 'Edit Page Master Data Installer',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/installer/setup/edit/' . $params
-            ],
-            'header' => [
-                'title' => 'View',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/installer/setup/view'
-            ],
-            'form' => [
-                'el-id' => 'frm_create_installer',
-                'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
-                ],
-                'dt_tbl_th' => [
-                    '<th> ID </th>',
-                    '<th> Subject </th>',
-                    '<th> Target Table </th>',
-                    '<th> Controller </th>',
-                    '<th> Action </th>',
-                    '<th> Running Count </th>',
-                    '<th> Status </th>',
-                    '<th> Action </th>'
-                ]
-            ]
+    public function __init_data_groups($request) {
+        return [
+            ['system', '-', '1', '1', '-', '0', '0', '0', '0'],
+            ['superuser', '-', '2', '1', '-', '0', '0', '0', '0'],
+            ['webmaster', '-', '3', '1', '-', '0', '0', '0', '0'],
+            //-----------------------------------------------------//
+            ['admin1', '-', '1', '2', '-', '2', '0', '1', '1'],
+            ['admin2', '-', '2', '2', '-', '2', '0', '1', '1'],
+            //-----------------------------------------------------//
+            ['officer1', '-', '1', '2', '-', '3', '1', '1', '1'],
+            ['officer2', '-', '2', '2', '-', '3', '1', '1', '1']
         ];
-        $params = [
-            'table_name' => 'tbl_d_uac_installer_list_p',
-            'select' => ['a.*'],
-            'conditions' => [
-                'where' => [
-                    ['a.id', '=', $id]
-                ]
-            ],
-            'limit' => 100,
-            'offset' => 0
-        ];
-        $installers = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'first', $params);
-        $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
-        ]);
-        $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
-        ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'installers'));
     }
 
-    public function update(Request $request, $params = null) {
-        $data = $request->json()->all();
-        if (isset($data) && !empty($data)) {
-            $id = base64_decode($params);
-            switch ($data['a']) {
-                case 'is_active':
-                    $update_data = [
-                        'is_active' => $data['b'],
-                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                        'updated_date' => $this->Date->now()
-                    ];
-                    break;
-                default:
-                    $alias = strtolower(str_replace(' ', '-', $data['name']));
-                    $update_data = [
-                        '__subject' => $data['a'],
-                        '__target_table' => $data['b'],
-                        '__action' => $data['c'],
-                        '__description' => $data['d'],
-                        'is_active' => $data['e'],
-                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                        'updated_date' => $this->Date->now()
-                    ];
-                    break;
-            }
-            $paramsUpdate = [
-                'table_name' => 'tbl_d_uac_installer_list_p',
-                'conditions' => [
-                    'keyword' => 'id',
-                    'value' => $id
-                ]
-            ];
-            $response = $this->Tbl_d_uac_installer_list_p_en->__update($request, $update_data, $paramsUpdate);
-            if ($response) {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
-            } else {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
-            }
-        }
-    }
-
-    public function remove(Request $request, $params = null) {
-        if ($params != null) {
-            $data = (['a' => 'is_active']);
-            //$request->request->add($data);
-            $request->json()->replace([
-                'a' => 'is_active',
-                'b' => 0
-            ]);
-            $resp = $this->update($request, $params);
-            $response = json_decode($resp);
-            if ($response && $response->status->code == 200) {
-                return redirect()->back()->with('success', 'successfully update data');
-            } else {
-                return redirect()->back()->with('error', 'failed update data.');
-            }
-        }
-    }
-
-    public function delete(Request $request, $params = null) {
-        if ($params != null) {
-            $id = base64_decode($params);
-            $params = [
-                'table_name' => 'tbl_d_uac_installer_list_p',
-                'select' => ['a.*'],
-                'conditions' => [
-                    'where' => [
-                        ['a.id', '=', $id]
-                    ]
-                ]
-            ];
-            $existData = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'first', $params);
-            if ($existData && $existData['data']) {
-                $insertUserInstallerBackup = [
-                    'table_name' => 'tbl_d_uac_installer_list_p',
-                    'data' => (array) $existData['data']
-                ];
-                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserInstallerBackup, 'mysql_bak');
-                $deleteParams = [
-                    'table_name' => 'tbl_d_uac_installer_list_p',
-                    'conditions' => [
-                        'keyword' => 'id',
-                        'value' => $id
-                    ]
-                ];
-                $response = $this->Tbl_d_uac_installer_list_p_en->__delete($request, $deleteParams, 'mysql');
-                return redirect()->back()->with('success', 'successfully delete data');
-            } else {
-                return redirect()->back()->with('error', 'failed delete data.');
-            }
-        }
-    }
-
-    public function __init_master_data_menuns(Request $request) {
+    public function __init_master_data_menus(Request $request) {
         $data_menus = $this->__init_data_menus($request);
         $insertData = [];
         if (isset($data_menus) && !empty($data_menus)) {
@@ -483,18 +213,18 @@ class SetupController extends Controller {
                     '__name' => $value[0],
                     '__path' => $value[1],
                     '__icon' => $value[2],
-                    '__level' => $value[3],
-                    '__rank' => $value[4],
+                    '__level' => (int) $value[3],
+                    '__rank' => (int) $value[4],
                     '__badge' => $value[5],
                     '__badge_value' => $value[6],
-                    '__badge_id' => $value[7],
-                    '__is_badge' => $value[8],
-                    '__uac_menu_parent_id' => $value[9],
-                    '__is_dashboard' => $value[10],
-                    '__is_selected' => $value[11],
-                    '__is_basic' => $value[12],
-                    '__is_open' => $value[13],
-                    '__is_disabled' => $value[14],
+                    '__badge_id' => (int) $value[7],
+                    '__is_badge' => (int) $value[8],
+                    '__uac_menu_parent_id' => (int) (int) $value[9],
+                    '__is_dashboard' => (int) $value[10],
+                    '__is_selected' => (int) $value[11],
+                    '__is_basic' => (int) $value[12],
+                    '__is_open' => (int) $value[13],
+                    '__is_disabled' => (int) $value[14],
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -504,137 +234,215 @@ class SetupController extends Controller {
             }
         }
         $insert = [
-            'table_name' => 'tbl_a_uac_permissions_p',
+            'table_name' => 'tbl_a_uac_menu_p',
             'data' => $insertData
         ];
-        dd($insert);
-        return $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert, 'mysql_bak');
+        return $this->Tbl_a_uac_menu_p_en->__insert($request, $insert, 'mysql_bak');
     }
 
     public function __init_data_menus($request) {
         return [
             //name, path, icon, level, rank, badge, badge value, badge id, is badge, parent id, is dashboard, is selected, is basic, is open, is disabled
-            ['Dashboard', '/javascript:;', 'fa fa-dashboard', '1', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //1
+            ['Dashboard', '/javascript:;', 'fa fa-dashboard', '1', '1', '-', '-', '0', '0', '0', '0', '0', '1', '1', '0'], //1
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['Contents', '/javascript:;', 'fa fa-pencil-square-o', '2', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //2
-            ['Create', '/contents/create', '', '3', '1', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //3
-            ['View', '/contents/view', '', '3', '2', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //4
+            ['Contents', '/javascript:;', 'fa fa-pencil-square-o', '2', '1', '-', '-', '0', '0', '1', '0', '0', '1', '1', '0'], //2
+            ['Create', '/content/create', '', '3', '1', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //3
+            ['View', '/content/view', '', '3', '2', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //4
             ['Options', '/javascript:;', '', '3', '3', '-', '-', '0', '0', '2', '0', '0', '1', '0', '0'], //5
             ['Categories', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //6
-            ['Create', '/contents/options/category/create', '', '5', '1', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //7
-            ['View', '/contents/options/category/view', '', '5', '2', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //8
+            ['Create', '/content/options/category/create', '', '5', '1', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //7
+            ['View', '/content/options/category/view', '', '5', '2', '-', '-', '0', '0', '6', '0', '0', '1', '0', '0'], //8
             ['Types', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //9
-            ['Create', '/contents/options/category/create', '', '5', '1', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //10
-            ['View', '/contents/options/category/view', '', '5', '2', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //11
+            ['Create', '/content/options/type/create', '', '5', '1', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //10
+            ['View', '/content/options/type/view', '', '5', '2', '-', '-', '0', '0', '9', '0', '0', '1', '0', '0'], //11
             ['Meta', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //12
-            ['Create', '/contents/options/meta/create', '', '5', '1', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //13
-            ['View', '/contents/options/meta/view', '', '5', '2', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //14
+            ['Create', '/content/options/meta/create', '', '5', '1', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //13
+            ['View', '/content/options/meta/view', '', '5', '2', '-', '-', '0', '0', '12', '0', '0', '1', '0', '0'], //14
             ['Photo', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //15
-            ['Create', '/contents/options/photo/create', '', '5', '1', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //16
-            ['View', '/contents/options/photo/view', '', '5', '2', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //17
+            ['Create', '/content/options/photo/create', '', '5', '1', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //16
+            ['View', '/content/options/photo/view', '', '5', '2', '-', '-', '0', '0', '15', '0', '0', '1', '0', '0'], //17
             ['Attachments', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '5', '0', '0', '1', '0', '0'], //18
-            ['Create', '/contents/options/attachments/create', '', '5', '1', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //19
-            ['View', '/contents/options/attachment/view', '', '5', '2', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //20
+            ['Create', '/content/options/attachment/create', '', '5', '1', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //19
+            ['View', '/content/options/attachment/view', '', '5', '2', '-', '-', '0', '0', '18', '0', '0', '1', '0', '0'], //20
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['Masters', '/javascript:;', 'fa fa-key', '2', '2', '-', '-', '0', '0', '0', '0', '0', '1', '1', '0'], //21
-            ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'], //22
-            ['Users', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //23
-            ['Create', '/masters/uac/users/create', '', '5', '1', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //24
-            ['View', '/masters/uac/users/view', '', '5', '2', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //25
-            ['Groups', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //26
-            ['Create', '/masters/uac/groups/create', '', '5', '1', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //27 
-            ['List View', '/masters/uac/groups/view', '', '5', '2', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //28
-            ['Tree View', '/masters/uac/groups/tree-view', '', '5', '3', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //29
-            ['Permissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //30
-            ['Create', '/masters/uac/permissions/create', '', '5', '1', '-', '-', '0', '0', '29', '0', '0', '1', '0', '0'], //31
-            ['View', '/masters/uac/permissions/view', '', '5', '2', '-', '-', '0', '0', '29', '0', '0', '1', '0', '0'], //32
-            ['Menu', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //33
-            ['Create', '/masters/uac/menu/create', '', '5', '1', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //34
-            ['List View', '/masters/uac/menu/view', '', '5', '2', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //35
-            ['Tree View', '/masters/uac/menu/tree-view', '', '5', '3', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //36
+            ['Masters', '/javascript:;', 'fa fa-key', '2', '2', '-', '-', '0', '0', '1', '0', '0', '1', '1', '0'], //21
+            ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '21', '0', '0', '1', '0', '0'], //22
+            ['Users', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //23
+            ['Create', '/master/uac/users/create', '', '5', '1', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //24
+            ['View', '/master/uac/users/view', '', '5', '2', '-', '-', '0', '0', '23', '0', '0', '1', '0', '0'], //25
+            ['Groups', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //26
+            ['Create', '/master/uac/groups/create', '', '5', '1', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //27 
+            ['List View', '/master/uac/groups/view', '', '5', '2', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //28
+            ['Tree View', '/master/uac/groups/tree-view', '', '5', '3', '-', '-', '0', '0', '26', '0', '0', '1', '0', '0'], //29
+            ['Permissions', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //30
+            ['Create', '/master/uac/permissions/create', '', '5', '1', '-', '-', '0', '0', '30', '0', '0', '1', '0', '0'], //31
+            ['View', '/master/uac/permissions/view', '', '5', '2', '-', '-', '0', '0', '30', '0', '0', '1', '0', '0'], //32
+            ['Menu', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '22', '0', '0', '1', '0', '0'], //33
+            ['Create', '/master/uac/menu/create', '', '5', '1', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //34
+            ['List View', '/master/uac/menu/view', '', '5', '2', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //35
+            ['Tree View', '/master/uac/menu/tree-view', '', '5', '3', '-', '-', '0', '0', '33', '0', '0', '1', '0', '0'], //36
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['Assets', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '21', '0', '0', '1', '0', '0'], //37
-            ['Modules', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //38
-            ['Create', '/masters/assets/modules/create', '', '5', '1', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //39
-            ['View', '/masters/assets/modules/view', '', '5', '2', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //40
-            ['RegisteredType', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //41
-            ['Create', '/masters/assets/modules/register-type/create', '', '5', '1', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //42
-            ['View', '/masters/assets/modules/register-type/view', '', '5', '2', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //43
-            ['Locations', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //43
-            ['Countries', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //44
-            ['Create', '/masters/assets/locations/countries/create', '', '5', '1', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //45
-            ['View', '/masters/assets/locations/countries/view', '', '5', '2', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //46
-            ['Provinces', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //47
-            ['Create', '/masters/assets/locations/provinces/create', '', '5', '1', '-', '-', '0', '0', '47', '0', '0', '1', '0', '0'], //48
-            ['View', '/masters/assets/locations/provinces/view', '', '5', '2', '-', '-', '0', '0', '47', '0', '0', '1', '0', '0'], //49
-            ['Cities', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //50
-            ['Create', '/masters/assets/locations/cities/create', '', '5', '1', '-', '-', '0', '0', '50', '0', '0', '1', '0', '0'], //51
-            ['View', '/masters/assets/locations/cities/view', '', '5', '2', '-', '-', '0', '0', '50', '0', '0', '1', '0', '0'], //52
-            ['Districts', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //53
-            ['Create', '/masters/assets/locations/districts/create', '', '5', '1', '-', '-', '0', '0', '53', '0', '0', '1', '0', '0'], //54
-            ['View', '/masters/assets/locations/districts/view', '', '5', '2', '-', '-', '0', '0', '53', '0', '0', '1', '0', '0'], //55
-            ['Areas', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '43', '0', '0', '1', '0', '0'], //56
-            ['Create', '/masters/assets/locations/areas/create', '', '5', '1', '-', '-', '0', '0', '56', '0', '0', '1', '0', '0'], //57
-            ['View', '/masters/assets/locations/areas/view', '', '5', '2', '-', '-', '0', '0', '56', '0', '0', '1', '0', '0'], //58
+            ['Modules', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //38
+            ['Create', '/master/assets/modules/create', '', '5', '1', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //39
+            ['View', '/master/assets/modules/view', '', '5', '2', '-', '-', '0', '0', '38', '0', '0', '1', '0', '0'], //40
+            ['RegisteredType', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //41
+            ['Create', '/master/assets/modules/register-type/create', '', '5', '1', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //42
+            ['View', '/master/assets/modules/register-type/view', '', '5', '2', '-', '-', '0', '0', '41', '0', '0', '1', '0', '0'], //43
+            ['Locations', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //44
+            ['Countries', '/javascript:;', '', '5', '1', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //45
+            ['Create', '/master/assets/locations/countries/create', '', '6', '1', '-', '-', '0', '0', '45', '0', '0', '1', '0', '0'], //46
+            ['View', '/master/assets/locations/countries/view', '', '6', '2', '-', '-', '0', '0', '45', '0', '0', '1', '0', '0'], //47
+            ['Provinces', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //48
+            ['Create', '/master/assets/locations/provinces/create', '', '6', '1', '-', '-', '0', '0', '48', '0', '0', '1', '0', '0'], //49
+            ['View', '/master/assets/locations/provinces/view', '', '6', '2', '-', '-', '0', '0', '48', '0', '0', '1', '0', '0'], //50
+            ['Cities', '/javascript:;', '', '5', '3', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //51
+            ['Create', '/master/assets/locations/cities/create', '', '6', '1', '-', '-', '0', '0', '51', '0', '0', '1', '0', '0'], //52
+            ['View', '/master/assets/locations/cities/view', '', '6', '2', '-', '-', '0', '0', '51', '0', '0', '1', '0', '0'], //53
+            ['Districts', '/javascript:;', '', '5', '4', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //54
+            ['Create', '/master/assets/locations/districts/create', '', '6', '1', '-', '-', '0', '0', '54', '0', '0', '1', '0', '0'], //55
+            ['View', '/master/assets/locations/districts/view', '', '6', '2', '-', '-', '0', '0', '54', '0', '0', '1', '0', '0'], //56
+            ['Areas', '/javascript:;', '', '5', '5', '-', '-', '0', '0', '44', '0', '0', '1', '0', '0'], //57
+            ['Create', '/master/assets/locations/areas/create', '', '6', '1', '-', '-', '0', '0', '57', '0', '0', '1', '0', '0'], //58
+            ['View', '/master/assets/locations/areas/view', '', '6', '2', '-', '-', '0', '0', '57', '0', '0', '1', '0', '0'], //59
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['Tools', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '37', '0', '0', '1', '0', '0'], //59
-            ['Currency', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //60
-            ['Create', '/masters/assets/tools/currency/create', '', '5', '1', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //61
-            ['View', '/masters/assets/tools/currency/view', '', '5', '2', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //62
-            ['Documents', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //63
-            ['Create', '/masters/assets/tools/documents/create', '', '5', '1', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //64
-            ['View', '/masters/assets/tools/documents/view', '', '5', '2', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //65
-            ['icons', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //66
-            ['Create', '/masters/assets/tools/icons/create', '', '5', '1', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //67
-            ['View', '/masters/assets/tools/icons/view', '', '5', '2', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //68
-            ['ControllerList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //69
-            ['Create', '/masters/assets/tools/controller-list/create', '', '5', '1', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //70
-            ['View', '/masters/assets/tools/controller-list/view', '', '5', '2', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //71
-            ['MethodList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //72
-            ['Create', '/masters/assets/tools/method-list/create', '', '5', '1', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //73
-            ['View', '/masters/assets/tools/method-list/view', '', '5', '2', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //74
-            ['FormMethodList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //75
-            ['Create', '/masters/assets/tools/form-method-list/create', '', '5', '1', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //76
-            ['View', '/masters/assets/tools/form-method-list/view', '', '5', '2', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //77
-            ['ShortenURL', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //78
-            ['Create', '/masters/assets/tools/shorten-url/create', '', '5', '1', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //79
-            ['View', '/masters/assets/tools/shorten-url/view', '', '5', '2', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //80
-            ['SmartList', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //81
-            ['Create', '/masters/assets/tools/smart-list/create', '', '5', '1', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //82
-            ['View', '/masters/assets/tools/smart-list/view', '', '5', '2', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //83
-            ['WebParams', '/javascript:;', '', '5', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //84
-            ['Create', '/masters/assets/tools/web-params/create', '', '5', '1', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //85
-            ['View', '/masters/assets/tools/web-params/view', '', '5', '2', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //86
+            ['Tools', '/javascript:;', '', '2', '1', '-', '-', '0', '0', '21', '0', '0', '1', '0', '0'], //60
+            ['Currency', '/javascript:;', '', '3', '1', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //61
+            ['Create', '/master/assets/tools/currency/create', '', '5', '1', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //62
+            ['View', '/master/assets/tools/currency/view', '', '5', '2', '-', '-', '0', '0', '60', '0', '0', '1', '0', '0'], //63
+            ['Documents', '/javascript:;', '', '3', '2', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //64
+            ['Create', '/master/assets/tools/documents/create', '', '5', '1', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //65
+            ['View', '/master/assets/tools/documents/view', '', '5', '2', '-', '-', '0', '0', '63', '0', '0', '1', '0', '0'], //66
+            ['icons', '/javascript:;', '', '3', '3', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //67
+            ['Create', '/master/assets/tools/icons/create', '', '5', '1', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //68
+            ['View', '/master/assets/tools/icons/view', '', '5', '2', '-', '-', '0', '0', '66', '0', '0', '1', '0', '0'], //69
+            ['ControllerList', '/javascript:;', '', '3', '4', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //70
+            ['Create', '/master/assets/tools/controller-list/create', '', '5', '1', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //71
+            ['View', '/master/assets/tools/controller-list/view', '', '5', '2', '-', '-', '0', '0', '69', '0', '0', '1', '0', '0'], //72
+            ['MethodList', '/javascript:;', '', '3', '5', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //73
+            ['Create', '/master/assets/tools/method-list/create', '', '5', '1', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //74
+            ['View', '/master/assets/tools/method-list/view', '', '5', '2', '-', '-', '0', '0', '72', '0', '0', '1', '0', '0'], //75
+            ['FormMethodList', '/javascript:;', '', '3', '6', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //76
+            ['Create', '/master/assets/tools/form-method-list/create', '', '5', '1', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //77
+            ['View', '/master/assets/tools/form-method-list/view', '', '5', '2', '-', '-', '0', '0', '75', '0', '0', '1', '0', '0'], //78
+            ['ShortenURL', '/javascript:;', '', '3', '7', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //79
+            ['Create', '/master/assets/tools/shorten-url/create', '', '5', '1', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //80
+            ['View', '/master/assets/tools/shorten-url/view', '', '5', '2', '-', '-', '0', '0', '78', '0', '0', '1', '0', '0'], //81
+            ['SmartList', '/javascript:;', '', '3', '8', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //82
+            ['Create', '/master/assets/tools/smart-list/create', '', '5', '1', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //83
+            ['View', '/master/assets/tools/smart-list/view', '', '5', '2', '-', '-', '0', '0', '81', '0', '0', '1', '0', '0'], //84
+            ['WebParams', '/javascript:;', '', '3', '9', '-', '-', '0', '0', '59', '0', '0', '1', '0', '0'], //85
+            ['Create', '/master/assets/tools/web-params/create', '', '5', '1', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //86
+            ['View', '/master/assets/tools/web-params/view', '', '5', '2', '-', '-', '0', '0', '84', '0', '0', '1', '0', '0'], //87
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['Prefferences', '/javascript:;', 'icon-settings', '2', '3', '-', '-', '0', '0', '0', '0', '0', '1', '1', '0'], //87
-            ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '87', '0', '0', '1', '0', '0'], //88
-            ['UserGroups', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //89
-            ['View', '/prefferences/uac/user-groups/view', '', '5', '2', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //90
-            ['UserPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //91
-            ['View', '/prefferences/uac/user-permissions/view', '', '5', '2', '-', '-', '0', '0', '91', '0', '0', '1', '0', '0'], //92
-            ['UserModules', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //93
-            ['View', '/prefferences/uac/user-modules/view', '', '5', '2', '-', '-', '0', '0', '93', '0', '0', '1', '0', '0'], //94
-            ['UserLocations', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //95
-            ['View', '/prefferences/uac/user-locations/view', '', '5', '2', '-', '-', '0', '0', '95', '0', '0', '1', '0', '0'], //96
-            ['UserTokens', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //97
-            ['View', '/prefferences/uac/user-token/view', '', '5', '2', '-', '-', '0', '0', '97', '0', '0', '1', '0', '0'], //98
-            ['GroupPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //99
-            ['View', '/prefferences/uac/group-permissions/view', '', '5', '2', '-', '-', '0', '0', '99', '0', '0', '1', '0', '0'], //100
-            ['MenuPermissions', '/javascript:;', '', '1', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //101
-            ['View', '/prefferences/uac/menu-permissions/view', '', '5', '2', '-', '-', '0', '0', '101', '0', '0', '1', '0', '0'], //102
+            ['Prefferences', '/javascript:;', 'icon-settings', '2', '3', '-', '-', '0', '0', '1', '0', '0', '1', '1', '0'], //88
+            ['UAC', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //89
+            ['UserGroups', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //90
+            ['View', '/prefferences/uac/user-groups/view', '', '5', '2', '-', '-', '0', '0', '90', '0', '0', '1', '0', '0'], //91
+            ['UserPermissions', '/javascript:;', '', '4', '2', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //92
+            ['View', '/prefferences/uac/user-permissions/view', '', '5', '2', '-', '-', '0', '0', '92', '0', '0', '1', '0', '0'], //93
+            ['UserModules', '/javascript:;', '', '4', '1', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //94
+            ['View', '/prefferences/uac/user-modules/view', '', '5', '2', '-', '-', '0', '0', '94', '0', '0', '1', '0', '0'], //95
+            ['UserLocations', '/javascript:;', '', '4', '3', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //96
+            ['View', '/prefferences/uac/user-locations/view', '', '5', '2', '-', '-', '0', '0', '96', '0', '0', '1', '0', '0'], //97
+            ['UserTokens', '/javascript:;', '', '4', '4', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //98
+            ['View', '/prefferences/uac/user-token/view', '', '5', '2', '-', '-', '0', '0', '98', '0', '0', '1', '0', '0'], //99
+            ['GroupPermissions', '/javascript:;', '', '4', '5', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //100
+            ['View', '/prefferences/uac/group-permissions/view', '', '5', '2', '-', '-', '0', '0', '100', '0', '0', '1', '0', '0'], //101
+            ['MenuPermissions', '/javascript:;', '', '4', '6', '-', '-', '0', '0', '89', '0', '0', '1', '0', '0'], //102
+            ['View', '/prefferences/uac/menu-permissions/view', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //103
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['Messaging', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //103
-            ['compose', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //104
-            ['inbox', '', '', '5', '1', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //105
-            ['draft', '', '', '5', '1', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //106
-            ['sent', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //107
-            ['delete', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //108
-            ['archive', '', '', '5', '2', '-', '-', '0', '0', '102', '0', '0', '1', '0', '0'], //109
+            ['Messaging', '/javascript:;', 'fa fa-star', '3', '4', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //104
+            ['compose', '', '', '4', '2', '-', '-', '0', '0', '104', '0', '0', '1', '0', '0'], //105
+            ['inbox', '', '', '4', '1', '-', '-', '0', '0', '104', '0', '0', '1', '0', '0'], //106
+            ['draft', '', '', '4', '1', '-', '-', '0', '0', '104', '0', '0', '1', '0', '0'], //107
+            ['sent', '', '', '4', '2', '-', '-', '0', '0', '104', '0', '0', '1', '0', '0'], //108
+            ['delete', '', '', '4', '2', '-', '-', '0', '0', '104', '0', '0', '1', '0', '0'], //109
+            ['archive', '', '', '4', '2', '-', '-', '0', '0', '104', '0', '0', '1', '0', '0'], //110
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['Styles', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //          
-            ['Templates', '/javascript:;', 'fa fa-star', '3', '1', '-', '-', '0', '0', '86', '0', '0', '1', '0', '0'], //       
+            ['Styles', '/javascript:;', 'fa fa-star', '3', '5', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], // 111      
+            ['Templates', '/javascript:;', 'fa fa-star', '3', '6', '-', '-', '0', '0', '88', '0', '0', '1', '0', '0'], //  112     
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['Reports', '/javascript:;', 'icon-docs', '2', '5', '-', '-', '0', '0', '0', '0', '0', '1', '0', '0'],
+            ['Reports', '/javascript:;', 'icon-docs', '2', '4', '-', '-', '0', '0', '1', '0', '0', '1', '0', '0'], //113
+        ];
+    }
+
+    public function __init_master_data_menu_permissions(Request $request) {
+        $params = [
+            'table_name' => 'tbl_a_uac_menu_p',
+            'limit' => 2000
+        ];
+        $data = $this->Tbl_a_uac_menu_p_en->__find($request, 'all', $params, 'mysql_bak');
+        $insertData = [];
+        if (isset($data['data']) && !empty($data['data'])) {
+            foreach ($data['data'] AS $keyword => $value) {
+                //$paramGroups = [
+                //    'table_name' => 'tbl_a_uac_menu_p',
+                //    'limit' => 1000
+                //];
+                //$dataGroups = $this->Tbl_a_uac_menu_p_en->__find($request, 'all', $paramGroups, 'mysql_bak');
+                $dataGroups = [2, 4, 5, 6, 7, 8, 9];
+                //if (isset($dataGroups['data']) && !empty($dataGroups['data'])) {
+                //    foreach ($dataGroups['data'] AS $key => $val) {
+                if (isset($dataGroups) && !empty($dataGroups)) {
+                    foreach ($dataGroups AS $key => $val) {
+                        $insertData[] = [
+                            '__menu_id' => $value->id,
+                            '__group_id' => $val,
+                            '__module_id' => 3,
+                            '__is_menu' => 0,
+                            '__is_allowed' => 1,
+                            'is_active' => 1,
+                            'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'updated_date' => $this->Date->now()
+                        ];
+                    }
+                }
+            }
+        }
+        $insert = [
+            'table_name' => 'tbl_b_uac_menu_permissions_r',
+            'data' => $insertData
+        ];
+        return $this->Tbl_b_uac_menu_permissions_r_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_master_data_modules(Request $request) {
+        $data_modules = $this->__init_data_modules($request);
+        $insertData = [];
+        if (isset($data_modules) && !empty($data_modules)) {
+            foreach ($data_modules AS $key => $value) {
+                $code = $this->General->getRandomChar(20);
+                $insertData[] = [
+                    'code' => $code,
+                    '__alias' => $value[0],
+                    '__name' => $value[1],
+                    '__default_path' => $value[2],
+                    '__rank' => $value[3],
+                    '__description' => $value[4],
+                    'is_active' => 1,
+                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'created_date' => $this->Date->now(),
+                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                    'updated_date' => $this->Date->now()
+                ];
+            }
+        }
+        $insert = [
+            'table_name' => 'tbl_a_uac_modules_p',
+            'data' => $insertData
+        ];
+        return $this->Tbl_a_uac_modules_p_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_data_modules($request) {
+        return [
+            ['cdn-static', 'CDN Static Files', 'cdn.static.files/v1/', 1, ''],
+            ['backend-api', 'Backend API', 'api/v1/', 2, ''],
+            ['backend-cms', 'Backend CMS', 'extraweb/', 3, ''],
+            ['frontend-application-home', 'Frontend Application Home', 'home/', 4, '']
         ];
     }
 
@@ -644,6 +452,16 @@ class SetupController extends Controller {
         if (isset($data_permissions) && !empty($data_permissions)) {
             foreach ($data_permissions AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
+                switch($value[3]){
+                    case "AuthentificationMD":
+                    case "AppController":
+                    case "AjaxController":
+                        $__is_public = 1;
+                        break;
+                    default:
+                        $__is_public = 0;
+                        break;
+                }
                 $insertData[] = [
                     'code' => $code,
                     '__alias' => $value[0],
@@ -662,7 +480,7 @@ class SetupController extends Controller {
                     '__segment8' => $value[13],
                     '__description' => 'name : ' . $value[1] . ' code : ' . $code,
                     '__is_basic' => 1,
-                    '__is_public' => 0,
+                    '__is_public' => $__is_public,
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -675,7 +493,6 @@ class SetupController extends Controller {
             'table_name' => 'tbl_a_uac_permissions_p',
             'data' => $insertData
         ];
-        dd($insert);
         return $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert, 'mysql_bak');
     }
 
@@ -882,50 +699,50 @@ class SetupController extends Controller {
             ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/delete/{id}', 'extraweb/master/assets/tools/icons/delete', 'IconsController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'icons', 'delete', '{id}', ''],
             ['extraweb-master-assets-tools-icons', 'extraweb/master/assets/tools/icons/remove/{id}', 'extraweb/master/assets/tools/icons/remove', 'IconsController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'icons', 'remove', '{id}', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/view', 'extraweb/master/assets/tools/controllerlist/view', 'ControllerlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'view', '', ''],
-            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/get_list', 'extraweb/master/assets/tools/controllerlist/get_list', 'ControllerlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'get_list', '', ''],
-            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/edit/{id}', 'extraweb/master/assets/tools/controllerlist/dit', 'ControllerlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'edit', '{id}', ''],
-            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/update/{id}', 'extraweb/master/assets/tools/controllerlist/update', 'ControllerlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'update', '{id}', '', ''],
-            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/create', 'extraweb/master/assets/tools/controllerlist/create', 'ControllerlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'create', '', ''],
-            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/insert', 'extraweb/master/assets/tools/controllerlist/insert', 'ControllerlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'insert', '', ''],
-            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/delete/{id}', 'extraweb/master/assets/tools/controllerlist/delete', 'ControllerlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'delete', '{id}', ''],
-            ['extraweb-master-assets-tools-controllerlist', 'extraweb/master/assets/tools/controllerlist/remove/{id}', 'extraweb/master/assets/tools/controllerlist/remove', 'ControllerlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'remove', '{id}', ''],
+            ['extraweb-master-assets-tools-controller-list', 'extraweb/master/assets/tools/controller-list/view', 'extraweb/master/assets/tools/controller-list/view', 'ControllerlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'view', '', ''],
+            ['extraweb-master-assets-tools-controller-list', 'extraweb/master/assets/tools/controller-list/get_list', 'extraweb/master/assets/tools/controller-list/get_list', 'ControllerlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-controller-list', 'extraweb/master/assets/tools/controller-list/edit/{id}', 'extraweb/master/assets/tools/controller-list/dit', 'ControllerlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-controller-list', 'extraweb/master/assets/tools/controller-list/update/{id}', 'extraweb/master/assets/tools/controller-list/update', 'ControllerlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-controller-list', 'extraweb/master/assets/tools/controller-list/create', 'extraweb/master/assets/tools/controller-list/create', 'ControllerlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'create', '', ''],
+            ['extraweb-master-assets-tools-controller-list', 'extraweb/master/assets/tools/controller-list/insert', 'extraweb/master/assets/tools/controller-list/insert', 'ControllerlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'insert', '', ''],
+            ['extraweb-master-assets-tools-controller-list', 'extraweb/master/assets/tools/controller-list/delete/{id}', 'extraweb/master/assets/tools/controller-list/delete', 'ControllerlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-controller-list', 'extraweb/master/assets/tools/controller-list/remove/{id}', 'extraweb/master/assets/tools/controller-list/remove', 'ControllerlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'controllerlist', 'remove', '{id}', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/view', 'extraweb/master/assets/tools/methodlist/view', 'MethodlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'view', '', ''],
-            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/get_list', 'extraweb/master/assets/tools/methodlist/get_list', 'MethodlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'get_list', '', ''],
-            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/edit/{id}', 'extraweb/master/assets/tools/methodlist/dit', 'MethodlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'edit', '{id}', ''],
-            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/update/{id}', 'extraweb/master/assets/tools/methodlist/update', 'MethodlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'update', '{id}', '', ''],
-            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/create', 'extraweb/master/assets/tools/methodlist/create', 'MethodlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'create', '', ''],
-            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/insert', 'extraweb/master/assets/tools/methodlist/insert', 'MethodlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'insert', '', ''],
-            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/delete/{id}', 'extraweb/master/assets/tools/methodlist/delete', 'MethodlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'delete', '{id}', ''],
-            ['extraweb-master-assets-tools-methodlist', 'extraweb/master/assets/tools/methodlist/remove/{id}', 'extraweb/master/assets/tools/methodlist/remove', 'MethodlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'remove', '{id}', ''],
+            ['extraweb-master-assets-tools-method-list', 'extraweb/master/assets/tools/method-list/view', 'extraweb/master/assets/tools/method-list/view', 'MethodlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'view', '', ''],
+            ['extraweb-master-assets-tools-method-list', 'extraweb/master/assets/tools/method-list/get_list', 'extraweb/master/assets/tools/method-list/get_list', 'MethodlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-method-list', 'extraweb/master/assets/tools/method-list/edit/{id}', 'extraweb/master/assets/tools/method-list/dit', 'MethodlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-method-list', 'extraweb/master/assets/tools/method-list/update/{id}', 'extraweb/master/assets/tools/method-list/update', 'MethodlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-method-list', 'extraweb/master/assets/tools/method-list/create', 'extraweb/master/assets/tools/method-list/create', 'MethodlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'create', '', ''],
+            ['extraweb-master-assets-tools-method-list', 'extraweb/master/assets/tools/method-list/insert', 'extraweb/master/assets/tools/method-list/insert', 'MethodlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'insert', '', ''],
+            ['extraweb-master-assets-tools-method-list', 'extraweb/master/assets/tools/method-list/delete/{id}', 'extraweb/master/assets/tools/method-list/delete', 'MethodlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-method-list', 'extraweb/master/assets/tools/method-list/remove/{id}', 'extraweb/master/assets/tools/method-list/remove', 'MethodlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'methodlist', 'remove', '{id}', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/view', 'extraweb/master/assets/tools/formmethodlist/view', 'FormmethodlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'view', '', ''],
-            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/get_list', 'extraweb/master/assets/tools/formmethodlist/get_list', 'FormmethodlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'get_list', '', ''],
-            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/edit/{id}', 'extraweb/master/assets/tools/formmethodlist/dit', 'FormmethodlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'edit', '{id}', ''],
-            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/update/{id}', 'extraweb/master/assets/tools/formmethodlist/update', 'FormmethodlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'update', '{id}', '', ''],
-            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/create', 'extraweb/master/assets/tools/formmethodlist/create', 'FormmethodlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'create', '', ''],
-            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/insert', 'extraweb/master/assets/tools/formmethodlist/insert', 'FormmethodlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'insert', '', ''],
-            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/delete/{id}', 'extraweb/master/assets/tools/formmethodlist/delete', 'FormmethodlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'delete', '{id}', ''],
-            ['extraweb-master-assets-tools-formmethodlist', 'extraweb/master/assets/tools/formmethodlist/remove/{id}', 'extraweb/master/assets/tools/formmethodlist/remove', 'FormmethodlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'remove', '{id}', ''],
+            ['extraweb-master-assets-tools-form-method-list', 'extraweb/master/assets/tools/form-method-list/view', 'extraweb/master/assets/tools/form-method-list/view', 'FormmethodlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'view', '', ''],
+            ['extraweb-master-assets-tools-form-method-list', 'extraweb/master/assets/tools/form-method-list/get_list', 'extraweb/master/assets/tools/form-method-list/get_list', 'FormmethodlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-form-method-list', 'extraweb/master/assets/tools/form-method-list/edit/{id}', 'extraweb/master/assets/tools/form-method-list/dit', 'FormmethodlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-form-method-list', 'extraweb/master/assets/tools/form-method-list/update/{id}', 'extraweb/master/assets/tools/form-method-list/update', 'FormmethodlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-form-method-list', 'extraweb/master/assets/tools/form-method-list/create', 'extraweb/master/assets/tools/form-method-list/create', 'FormmethodlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'create', '', ''],
+            ['extraweb-master-assets-tools-form-method-list', 'extraweb/master/assets/tools/form-method-list/insert', 'extraweb/master/assets/tools/form-method-list/insert', 'FormmethodlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'insert', '', ''],
+            ['extraweb-master-assets-tools-form-method-list', 'extraweb/master/assets/tools/form-method-list/delete/{id}', 'extraweb/master/assets/tools/form-method-list/delete', 'FormmethodlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-form-method-list', 'extraweb/master/assets/tools/form-method-list/remove/{id}', 'extraweb/master/assets/tools/form-method-list/remove', 'FormmethodlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'formmethodlist', 'remove', '{id}', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/view', 'extraweb/master/assets/tools/shortenurl/view', 'ShortenurlController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'view', '', ''],
-            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/get_list', 'extraweb/master/assets/tools/shortenurl/get_list', 'ShortenurlController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'get_list', '', ''],
-            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/edit/{id}', 'extraweb/master/assets/tools/shortenurl/dit', 'ShortenurlController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'edit', '{id}', ''],
-            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/update/{id}', 'extraweb/master/assets/tools/shortenurl/update', 'ShortenurlController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'update', '{id}', '', ''],
-            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/create', 'extraweb/master/assets/tools/shortenurl/create', 'ShortenurlController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'create', '', ''],
-            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/insert', 'extraweb/master/assets/tools/shortenurl/insert', 'ShortenurlController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'insert', '', ''],
-            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/delete/{id}', 'extraweb/master/assets/tools/shortenurl/delete', 'ShortenurlController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'delete', '{id}', ''],
-            ['extraweb-master-assets-tools-shortenurl', 'extraweb/master/assets/tools/shortenurl/remove/{id}', 'extraweb/master/assets/tools/shortenurl/remove', 'ShortenurlController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'remove', '{id}', ''],
+            ['extraweb-master-assets-tools-shorten-url', 'extraweb/master/assets/tools/shorten-url/view', 'extraweb/master/assets/tools/shorten-url/view', 'ShortenurlController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'view', '', ''],
+            ['extraweb-master-assets-tools-shorten-url', 'extraweb/master/assets/tools/shorten-url/get_list', 'extraweb/master/assets/tools/shorten-url/get_list', 'ShortenurlController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-shorten-url', 'extraweb/master/assets/tools/shorten-url/edit/{id}', 'extraweb/master/assets/tools/shorten-url/dit', 'ShortenurlController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-shorten-url', 'extraweb/master/assets/tools/shorten-url/update/{id}', 'extraweb/master/assets/tools/shorten-url/update', 'ShortenurlController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-shorten-url', 'extraweb/master/assets/tools/shorten-url/create', 'extraweb/master/assets/tools/shorten-url/create', 'ShortenurlController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'create', '', ''],
+            ['extraweb-master-assets-tools-shorten-url', 'extraweb/master/assets/tools/shorten-url/insert', 'extraweb/master/assets/tools/shorten-url/insert', 'ShortenurlController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'insert', '', ''],
+            ['extraweb-master-assets-tools-shorten-url', 'extraweb/master/assets/tools/shorten-url/delete/{id}', 'extraweb/master/assets/tools/shorten-url/delete', 'ShortenurlController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-shorten-url', 'extraweb/master/assets/tools/shorten-url/remove/{id}', 'extraweb/master/assets/tools/shorten-url/remove', 'ShortenurlController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'shortenurl', 'remove', '{id}', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/view', 'extraweb/master/assets/tools/smartlist/view', 'SmartlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'view', '', ''],
-            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/get_list', 'extraweb/master/assets/tools/smartlist/get_list', 'SmartlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'get_list', '', ''],
-            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/edit/{id}', 'extraweb/master/assets/tools/smartlist/dit', 'SmartlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'edit', '{id}', ''],
-            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/update/{id}', 'extraweb/master/assets/tools/smartlist/update', 'SmartlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'update', '{id}', '', ''],
-            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/create', 'extraweb/master/assets/tools/smartlist/create', 'SmartlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'create', '', ''],
-            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/insert', 'extraweb/master/assets/tools/smartlist/insert', 'SmartlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'insert', '', ''],
-            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/delete/{id}', 'extraweb/master/assets/tools/smartlist/delete', 'SmartlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'delete', '{id}', ''],
-            ['extraweb-master-assets-tools-smartlist', 'extraweb/master/assets/tools/smartlist/remove/{id}', 'extraweb/master/assets/tools/smartlist/remove', 'SmartlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'remove', '{id}', ''],
+            ['extraweb-master-assets-tools-smart-list', 'extraweb/master/assets/tools/smart-list/view', 'extraweb/master/assets/tools/smart-list/view', 'SmartlistController', 'view', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'view', '', ''],
+            ['extraweb-master-assets-tools-smart-list', 'extraweb/master/assets/tools/smart-list/get_list', 'extraweb/master/assets/tools/smart-list/get_list', 'SmartlistController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'get_list', '', ''],
+            ['extraweb-master-assets-tools-smart-list', 'extraweb/master/assets/tools/smart-list/edit/{id}', 'extraweb/master/assets/tools/smart-list/dit', 'SmartlistController', 'edit', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'edit', '{id}', ''],
+            ['extraweb-master-assets-tools-smart-list', 'extraweb/master/assets/tools/smart-list/update/{id}', 'extraweb/master/assets/tools/smart-list/update', 'SmartlistController', 'update', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'update', '{id}', '', ''],
+            ['extraweb-master-assets-tools-smart-list', 'extraweb/master/assets/tools/smart-list/create', 'extraweb/master/assets/tools/smart-list/create', 'SmartlistController', 'create', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'create', '', ''],
+            ['extraweb-master-assets-tools-smart-list', 'extraweb/master/assets/tools/smart-list/insert', 'extraweb/master/assets/tools/smart-list/insert', 'SmartlistController', 'insert', 'post', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'insert', '', ''],
+            ['extraweb-master-assets-tools-smart-list', 'extraweb/master/assets/tools/smart-list/delete/{id}', 'extraweb/master/assets/tools/smart-list/delete', 'SmartlistController', 'delete', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'delete', '{id}', ''],
+            ['extraweb-master-assets-tools-smart-list', 'extraweb/master/assets/tools/smart-list/remove/{id}', 'extraweb/master/assets/tools/smart-list/remove', 'SmartlistController', 'remove', 'get', 'extraweb', 'master', 'assets', 'tools', 'smartlist', 'remove', '{id}', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
             ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/view', 'extraweb/master/assets/web/params/view', 'WebparamsController', 'view', 'get', 'extraweb', 'master', 'assets', 'web-params', 'view', '', '', ''],
             ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/get_list', 'extraweb/master/assets/web/params/get_list', 'WebparamsController', 'get_list', 'post', 'extraweb', 'master', 'assets', 'web-params', 'get_list', '', '', ''],
@@ -936,137 +753,54 @@ class SetupController extends Controller {
             ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/delete/{id}', 'extraweb/master/assets/web/params/delete', 'WebparamsController', 'delete', 'get', 'extraweb', 'master', 'assets', 'web-params', 'delete', '{id}', '', ''],
             ['extraweb-master-assets-web-params', 'extraweb/master/assets/web/params/remove/{id}', 'extraweb/master/assets/web/params/remove', 'WebparamsController', 'remove', 'get', 'extraweb', 'master', 'assets', 'web-params', 'remove', '{id}', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/view', 'extraweb/prefferences/uac/usergroups/view', 'UsergroupsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'view', '', '', ''],
-            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/get_list', 'extraweb/prefferences/uac/usergroups/get_list', 'UsergroupsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usergroups', 'get_list', '', '', ''],
-            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/edit/{id}', 'extraweb/prefferences/uac/usergroups/dit', 'UsergroupsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'edit', '{id}', '', ''],
-            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/update/{id}', 'extraweb/prefferences/uac/usergroups/update', 'UsergroupsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usergroups', 'update', '{id}', '', '', ''],
-            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/delete/{id}', 'extraweb/prefferences/uac/usergroups/delete', 'UsergroupsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'delete', '{id}', '', ''],
-            ['extraweb-prefferences-uac-usergroups', 'extraweb/prefferences/uac/usergroups/remove/{id}', 'extraweb/prefferences/uac/usergroups/remove', 'UsergroupsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'remove', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-groups', 'extraweb/prefferences/uac/user-groups/view', 'extraweb/prefferences/uac/user-groups/view', 'UsergroupsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-user-groups', 'extraweb/prefferences/uac/user-groups/get_list', 'extraweb/prefferences/uac/user-groups/get_list', 'UsergroupsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usergroups', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-user-groups', 'extraweb/prefferences/uac/user-groups/edit/{id}', 'extraweb/prefferences/uac/user-groups/dit', 'UsergroupsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-groups', 'extraweb/prefferences/uac/user-groups/update/{id}', 'extraweb/prefferences/uac/user-groups/update', 'UsergroupsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usergroups', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-user-groups', 'extraweb/prefferences/uac/user-groups/delete/{id}', 'extraweb/prefferences/uac/user-groups/delete', 'UsergroupsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-groups', 'extraweb/prefferences/uac/user-groups/remove/{id}', 'extraweb/prefferences/uac/user-groups/remove', 'UsergroupsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usergroups', 'remove', '{id}', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/view', 'extraweb/prefferences/uac/userpermissions/view', 'UserpermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'view', '', '', ''],
-            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/get_list', 'extraweb/prefferences/uac/userpermissions/get_list', 'UserpermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'get_list', '', '', ''],
-            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/edit/{id}', 'extraweb/prefferences/uac/userpermissions/dit', 'UserpermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'edit', '{id}', '', ''],
-            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/update/{id}', 'extraweb/prefferences/uac/userpermissions/update', 'UserpermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'update', '{id}', '', '', ''],
-            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/delete/{id}', 'extraweb/prefferences/uac/userpermissions/delete', 'UserpermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'delete', '{id}', '', ''],
-            ['extraweb-prefferences-uac-userpermissions', 'extraweb/prefferences/uac/userpermissions/remove/{id}', 'extraweb/prefferences/uac/userpermissions/remove', 'UserpermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'remove', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-permissions', 'extraweb/prefferences/uac/user-permissions/view', 'extraweb/prefferences/uac/user-permissions/view', 'UserpermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-user-permissions', 'extraweb/prefferences/uac/user-permissions/get_list', 'extraweb/prefferences/uac/user-permissions/get_list', 'UserpermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-user-permissions', 'extraweb/prefferences/uac/user-permissions/edit/{id}', 'extraweb/prefferences/uac/user-permissions/dit', 'UserpermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-permissions', 'extraweb/prefferences/uac/user-permissions/update/{id}', 'extraweb/prefferences/uac/user-permissions/update', 'UserpermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-user-permissions', 'extraweb/prefferences/uac/user-permissions/delete/{id}', 'extraweb/prefferences/uac/user-permissions/delete', 'UserpermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-permissions', 'extraweb/prefferences/uac/user-permissions/remove/{id}', 'extraweb/prefferences/uac/user-permissions/remove', 'UserpermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'userpermissions', 'remove', '{id}', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/view', 'extraweb/prefferences/uac/usermodules/view', 'UsermodulesController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'view', '', '', ''],
-            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/get_list', 'extraweb/prefferences/uac/usermodules/get_list', 'UsermodulesController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usermodules', 'get_list', '', '', ''],
-            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/edit/{id}', 'extraweb/prefferences/uac/usermodules/dit', 'UsermodulesController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'edit', '{id}', '', ''],
-            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/update/{id}', 'extraweb/prefferences/uac/usermodules/update', 'UsermodulesController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usermodules', 'update', '{id}', '', '', ''],
-            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/delete/{id}', 'extraweb/prefferences/uac/usermodules/delete', 'UsermodulesController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'delete', '{id}', '', ''],
-            ['extraweb-prefferences-uac-usermodules', 'extraweb/prefferences/uac/usermodules/remove/{id}', 'extraweb/prefferences/uac/usermodules/remove', 'UsermodulesController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'remove', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-modules', 'extraweb/prefferences/uac/user-modules/view', 'extraweb/prefferences/uac/user-modules/view', 'UsermodulesController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-user-modules', 'extraweb/prefferences/uac/user-modules/get_list', 'extraweb/prefferences/uac/user-modules/get_list', 'UsermodulesController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usermodules', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-user-modules', 'extraweb/prefferences/uac/user-modules/edit/{id}', 'extraweb/prefferences/uac/user-modules/dit', 'UsermodulesController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-modules', 'extraweb/prefferences/uac/user-modules/update/{id}', 'extraweb/prefferences/uac/user-modules/update', 'UsermodulesController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usermodules', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-user-modules', 'extraweb/prefferences/uac/user-modules/delete/{id}', 'extraweb/prefferences/uac/user-modules/delete', 'UsermodulesController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-modules', 'extraweb/prefferences/uac/user-modules/remove/{id}', 'extraweb/prefferences/uac/user-modules/remove', 'UsermodulesController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usermodules', 'remove', '{id}', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/view', 'extraweb/prefferences/uac/userlocations/view', 'UserlocationsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'view', '', '', ''],
-            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/get_list', 'extraweb/prefferences/uac/userlocations/get_list', 'UserlocationsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'userlocations', 'get_list', '', '', ''],
-            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/edit/{id}', 'extraweb/prefferences/uac/userlocations/dit', 'UserlocationsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'edit', '{id}', '', ''],
-            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/update/{id}', 'extraweb/prefferences/uac/userlocations/update', 'UserlocationsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'userlocations', 'update', '{id}', '', '', ''],
-            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/delete/{id}', 'extraweb/prefferences/uac/userlocations/delete', 'UserlocationsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'delete', '{id}', '', ''],
-            ['extraweb-prefferences-uac-userlocations', 'extraweb/prefferences/uac/userlocations/remove/{id}', 'extraweb/prefferences/uac/userlocations/remove', 'UserlocationsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'remove', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-locations', 'extraweb/prefferences/uac/user-locations/view', 'extraweb/prefferences/uac/user-locations/view', 'UserlocationsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-user-locations', 'extraweb/prefferences/uac/user-locations/get_list', 'extraweb/prefferences/uac/user-locations/get_list', 'UserlocationsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'userlocations', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-user-locations', 'extraweb/prefferences/uac/user-locations/edit/{id}', 'extraweb/prefferences/uac/user-locations/dit', 'UserlocationsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-locations', 'extraweb/prefferences/uac/user-locations/update/{id}', 'extraweb/prefferences/uac/user-locations/update', 'UserlocationsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'userlocations', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-user-locations', 'extraweb/prefferences/uac/user-locations/delete/{id}', 'extraweb/prefferences/uac/user-locations/delete', 'UserlocationsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-locations', 'extraweb/prefferences/uac/user-locations/remove/{id}', 'extraweb/prefferences/uac/user-locations/remove', 'UserlocationsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'userlocations', 'remove', '{id}', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/view', 'extraweb/prefferences/uac/usertokens/view', 'UsertokensController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'view', '', '', ''],
-            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/get_list', 'extraweb/prefferences/uac/usertokens/get_list', 'UsertokensController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usertokens', 'get_list', '', '', ''],
-            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/edit/{id}', 'extraweb/prefferences/uac/usertokens/dit', 'UsertokensController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'edit', '{id}', '', ''],
-            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/update/{id}', 'extraweb/prefferences/uac/usertokens/update', 'UsertokensController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usertokens', 'update', '{id}', '', '', ''],
-            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/delete/{id}', 'extraweb/prefferences/uac/usertokens/delete', 'UsertokensController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'delete', '{id}', '', ''],
-            ['extraweb-prefferences-uac-usertokens', 'extraweb/prefferences/uac/usertokens/remove/{id}', 'extraweb/prefferences/uac/usertokens/remove', 'UsertokensController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'remove', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-tokens', 'extraweb/prefferences/uac/user-tokens/view', 'extraweb/prefferences/uac/user-tokens/view', 'UsertokensController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-user-tokens', 'extraweb/prefferences/uac/user-tokens/get_list', 'extraweb/prefferences/uac/user-tokens/get_list', 'UsertokensController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'usertokens', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-user-tokens', 'extraweb/prefferences/uac/user-tokens/edit/{id}', 'extraweb/prefferences/uac/user-tokens/dit', 'UsertokensController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-tokens', 'extraweb/prefferences/uac/user-tokens/update/{id}', 'extraweb/prefferences/uac/user-tokens/update', 'UsertokensController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'usertokens', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-user-tokens', 'extraweb/prefferences/uac/user-tokens/delete/{id}', 'extraweb/prefferences/uac/user-tokens/delete', 'UsertokensController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-user-tokens', 'extraweb/prefferences/uac/user-tokens/remove/{id}', 'extraweb/prefferences/uac/user-tokens/remove', 'UsertokensController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'usertokens', 'remove', '{id}', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/view', 'extraweb/prefferences/uac/grouppermissions/view', 'GrouppermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'view', '', '', ''],
-            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/get_list', 'extraweb/prefferences/uac/grouppermissions/get_list', 'GrouppermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'get_list', '', '', ''],
-            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/edit/{id}', 'extraweb/prefferences/uac/grouppermissions/dit', 'GrouppermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'edit', '{id}', '', ''],
-            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/update/{id}', 'extraweb/prefferences/uac/grouppermissions/update', 'GrouppermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'update', '{id}', '', '', ''],
-            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/delete/{id}', 'extraweb/prefferences/uac/grouppermissions/delete', 'GrouppermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'delete', '{id}', '', ''],
-            ['extraweb-prefferences-uac-grouppermissions', 'extraweb/prefferences/uac/grouppermissions/remove/{id}', 'extraweb/prefferences/uac/grouppermissions/remove', 'GrouppermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'remove', '{id}', '', ''],
+            ['extraweb-prefferences-uac-group-permissions', 'extraweb/prefferences/uac/group-permissions/view', 'extraweb/prefferences/uac/group-permissions/view', 'GrouppermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-group-permissions', 'extraweb/prefferences/uac/group-permissions/get_list', 'extraweb/prefferences/uac/group-permissions/get_list', 'GrouppermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-group-permissions', 'extraweb/prefferences/uac/group-permissions/edit/{id}', 'extraweb/prefferences/uac/group-permissions/dit', 'GrouppermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-group-permissions', 'extraweb/prefferences/uac/group-permissions/update/{id}', 'extraweb/prefferences/uac/group-permissions/update', 'GrouppermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-group-permissions', 'extraweb/prefferences/uac/group-permissions/delete/{id}', 'extraweb/prefferences/uac/group-permissions/delete', 'GrouppermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-group-permissions', 'extraweb/prefferences/uac/group-permissions/remove/{id}', 'extraweb/prefferences/uac/group-permissions/remove', 'GrouppermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'grouppermissions', 'remove', '{id}', '', ''],
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/view', 'extraweb/prefferences/uac/menupermissions/view', 'MenupermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'view', '', '', ''],
-            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/get_list', 'extraweb/prefferences/uac/menupermissions/get_list', 'MenupermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'get_list', '', '', ''],
-            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/edit/{id}', 'extraweb/prefferences/uac/menupermissions/dit', 'MenupermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'edit', '{id}', '', ''],
-            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/update/{id}', 'extraweb/prefferences/uac/menupermissions/update', 'MenupermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'update', '{id}', '', '', ''],
-            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/delete/{id}', 'extraweb/prefferences/uac/menupermissions/delete', 'MenupermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'delete', '{id}', '', ''],
-            ['extraweb-prefferences-uac-menupermissions', 'extraweb/prefferences/uac/menupermissions/remove/{id}', 'extraweb/prefferences/uac/menupermissions/remove', 'MenupermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'remove', '{id}', '', ''],
-        ];
-    }
-
-    public function __init_master_data_groups(Request $request) {
-        $data_permissions = $this->__init_data_groups($request);
-        $insertData = [];
-        if (isset($data_permissions) && !empty($data_permissions)) {
-            foreach ($data_permissions AS $key => $value) {
-                $code = $this->General->getRandomChar(20);
-                $insertData[] = [
-                    'code' => $code,
-                    '__name' => $value[0],
-                    '__icon' => $value[1],
-                    '__rank' => $value[2],
-                    '__level' => $value[3],
-                    '__description' => $value[4],
-                    '__uac_group_parent_id' => $value[5],
-                    '__is_key_group' => $value[6],
-                    '__is_menu' => $value[7],
-                    '__is_group_project' => $value[8],
-                    'is_active' => 1,
-                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'created_date' => $this->Date->now(),
-                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'updated_date' => $this->Date->now()
-                ];
-            }
-        }
-        $insert = [
-            'table_name' => 'tbl_a_uac_groups_p',
-            'data' => $insertData
-        ];
-        return $this->Tbl_a_uac_groups_p_en->__insert($request, $insert, 'mysql_bak');
-    }
-
-    public function __init_data_groups($request) {
-        return [
-            ['system', '-', '1', '1', '-', '0', '0', '0', '0'],
-            ['superuser', '-', '2', '1', '-', '0', '0', '0', '0'],
-            ['webmaster', '-', '3', '1', '-', '0', '0', '0', '0'],
-            //-----------------------------------------------------//
-            ['admin1', '-', '1', '2', '-', '2', '0', '1', '1'],
-            ['admin2', '-', '2', '2', '-', '2', '0', '1', '1'],
-            //-----------------------------------------------------//
-            ['officer1', '-', '1', '2', '-', '3', '1', '1', '1'],
-            ['officer2', '-', '2', '2', '-', '3', '1', '1', '1']
-        ];
-    }
-
-    public function __init_master_data_modules(Request $request) {
-        $data_modules = $this->__init_data_modules($request);
-        $insertData = [];
-        if (isset($data_modules) && !empty($data_modules)) {
-            foreach ($data_modules AS $key => $value) {
-                $code = $this->General->getRandomChar(20);
-                $insertData[] = [
-                    'code' => $code,
-                    '__alias' => $value[0],
-                    '__name' => $value[1],
-                    '__default_path' => $value[2],
-                    '__rank' => $value[3],
-                    '__description' => $value[4],
-                    'is_active' => 1,
-                    'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'created_date' => $this->Date->now(),
-                    'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
-                    'updated_date' => $this->Date->now()
-                ];
-            }
-        }
-        $insert = [
-            'table_name' => 'tbl_a_uac_modules_p',
-            'data' => $insertData
-        ];
-        return $this->Tbl_a_uac_modules_p_en->__insert($request, $insert, 'mysql_bak');
-    }
-
-    public function __init_data_modules($request) {
-        return [
-            ['cdn-static', 'CDN Static Files', 'cdn.static.files/v1/', 1, ''],
-            ['backend-api', 'Backend API', 'api/v1/', 2, ''],
-            ['backend-cms', 'Backend CMS', 'extraweb/', 3, ''],
-            ['frontend-application-home', 'Frontend Application Home', 'home/', 4, '']
+            ['extraweb-prefferences-uac-menu-permissions', 'extraweb/prefferences/uac/menu-permissions/view', 'extraweb/prefferences/uac/menu-permissions/view', 'MenupermissionsController', 'view', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'view', '', '', ''],
+            ['extraweb-prefferences-uac-menu-permissions', 'extraweb/prefferences/uac/menu-permissions/get_list', 'extraweb/prefferences/uac/menu-permissions/get_list', 'MenupermissionsController', 'get_list', 'post', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'get_list', '', '', ''],
+            ['extraweb-prefferences-uac-menu-permissions', 'extraweb/prefferences/uac/menu-permissions/edit/{id}', 'extraweb/prefferences/uac/menu-permissions/dit', 'MenupermissionsController', 'edit', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'edit', '{id}', '', ''],
+            ['extraweb-prefferences-uac-menu-permissions', 'extraweb/prefferences/uac/menu-permissions/update/{id}', 'extraweb/prefferences/uac/menu-permissions/update', 'MenupermissionsController', 'update', 'post', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'update', '{id}', '', '', ''],
+            ['extraweb-prefferences-uac-menu-permissions', 'extraweb/prefferences/uac/menu-permissions/delete/{id}', 'extraweb/prefferences/uac/menu-permissions/delete', 'MenupermissionsController', 'delete', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'delete', '{id}', '', ''],
+            ['extraweb-prefferences-uac-menu-permissions', 'extraweb/prefferences/uac/menu-permissions/remove/{id}', 'extraweb/prefferences/uac/menu-permissions/remove', 'MenupermissionsController', 'remove', 'get', 'extraweb', 'prefferences', 'uac', 'menupermissions', 'remove', '{id}', '', ''],
         ];
     }
 
@@ -1090,7 +824,7 @@ class SetupController extends Controller {
                     '__password' => $pwd_encr,
                     '__salt' => $value[6],
                     '__description' => $desc,
-                    '__score' => $value[7],
+                    '__score' => (int) $value[7],
                     '__uac_user_profile_id' => $value[8],
                     '__uac_user_registered_type_id' => $value[9],
                     '__uac_user_location_id' => $value[10],
@@ -1118,80 +852,93 @@ class SetupController extends Controller {
         ];
     }
 
-    public function __init_master_data_user_groups($request) {
-        $data_user_groups = $this->__init_data_user_groups($request);
-        $insertData = [];
-        if (isset($data_user_groups) && !empty($data_user_groups)) {
-            foreach ($data_user_groups AS $key => $value) {
-                $code = $this->General->getRandomChar(20);
-                $desc = 'code : ' . $code;
-                $insertData[] = [
-                    'code' => $code,
-                    '__uac_user_id' => $value[0],
-                    '__uac_group_id' => $value[1],
+    public function __init_master_data_user_profies(Request $request) {
+        $params = [
+            'table_name' => 'tbl_a_uac_users_p',
+        ];
+        $data = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $params);
+        if (isset($data['data']) && !empty($data['data'])) {
+            foreach ($data['data'] AS $keyword => $value) {
+                $insertDataProfile = [
+                    'code' => $this->General->getRandomChar(20),
+                    '__address' => $this->General->getRandomChar(150),
+                    '__lat' => $this->General->getRandomNumber(12),
+                    '__lng' => $this->General->getRandomNumber(12),
+                    '__zoom' => 4,
+                    '__socmed_fb' => 'fb-' . $this->General->getRandomChar(150),
+                    '__socmed_tw' => 'tw-' . $this->General->getRandomChar(150),
+                    '__socmed_ins' => 'ins-' . $this->General->getRandomChar(150),
+                    '__socmed_lnkd' => 'lnkd-' . $this->General->getRandomChar(150),
+                    '__photos' => '-',
+                    '__last_education' => 'S1',
+                    '__last_education_institution' => 'UIUIUI',
+                    '__skill' => $this->General->getRandomChar(150),
+                    '__notes' => $this->General->getRandomChar(150),
+                    '__description' => $this->General->getRandomChar(150),
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
                     'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'updated_date' => $this->Date->now()
                 ];
-            }
-        }
-        $insert = [
-            'table_name' => 'tbl_b_uac_user_group_c',
-            'data' => $insertData
-        ];
-        return $this->Tbl_b_uac_user_group_c_en->__insert($request, $insert, 'mysql_bak');
-    }
-
-    public function __init_data_user_groups($request) {
-        return [
-            [1, 1],
-            [1, 2],
-            [1, 3],
-            [2, 1],
-            [3, 4],
-            [4, 6]
-        ];
-    }
-
-    public function __init_master_data_registered_types(Request $request) {
-        $data_permissions = $this->__init_data_user_registered_types($request);
-        $insertData = [];
-        if (isset($data_permissions) && !empty($data_permissions)) {
-            foreach ($data_permissions AS $key => $value) {
-                $pwd = $this->General->getRandomChar(6);
-                $pwd_encr = $this->Encrypter->encrypt($pwd);
-                $code = $this->General->getRandomChar(20);
-                $desc = 'Registered type name : ' . $value[0];
-                $insertData[] = [
-                    'code' => $code,
-                    '__name' => strtolower($value[0]),
-                    '__description' => $desc,
+                $insertProfile = [
+                    'table_name' => 'tbl_a_uac_user_profiles_c',
+                    'data' => $insertDataProfile
+                ];
+                $user_profile_id = $this->Tbl_a_uac_user_profiles_c_en->__insert_get_id($request, $insertProfile, 'mysql_bak');
+                if ($user_profile_id) {
+                    $update_data = [
+                        '__uac_user_profile_id' => $user_profile_id,
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+                    $paramsUpdate = [
+                        'table_name' => 'tbl_a_uac_users_p',
+                        'conditions' => [
+                            'keyword' => 'id',
+                            'value' => $value->id
+                        ]
+                    ];
+                    $this->Tbl_a_uac_users_p_en->__update($request, $update_data, $paramsUpdate);
+                }
+                $insertDataLocations = [
+                    'code' => $this->General->getRandomChar(20),
+                    '__country_id' => 1,
+                    '__province_id' => 6,
+                    '__city_id' => 55,
+                    '__district_id' => 3,
+                    '__area_id' => 16,
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
                     'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'updated_date' => $this->Date->now()
                 ];
+                $insertLocations = [
+                    'table_name' => 'tbl_a_uac_user_locations_p',
+                    'data' => $insertDataLocations
+                ];
+                $user_location_id = $this->Tbl_a_uac_user_locations_p_en->__insert_get_id($request, $insertLocations, 'mysql_bak');
+                if ($user_location_id) {
+                    $update_data = [
+                        '__uac_user_location_id' => $user_location_id,
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+                    $paramsUpdate = [
+                        'table_name' => 'tbl_a_uac_users_p',
+                        'conditions' => [
+                            'keyword' => 'id',
+                            'value' => $value->id
+                        ]
+                    ];
+                    $this->Tbl_a_uac_users_p_en->__update($request, $update_data, $paramsUpdate);
+                }
             }
         }
-        $insert = [
-            'table_name' => 'tbl_a_uac_user_registered_type_c',
-            'data' => $insertData
-        ];
-        return $this->Tbl_a_uac_user_registered_type_c_en->__insert($request, $insert, 'mysql_bak');
     }
 
-    public function __init_data_user_registered_types($request) {
-        return [
-            ['system.auto.create'],
-            ['superuser.manual.create'],
-            ['self.register']
-        ];
-    }
-
-    public function __init_master_data_locations(Request $request) {
+    public function __init_master_data_country(Request $request) {
         $data_locations = $this->__init_data_locations($request);
         $insertData = [];
         if (isset($data_locations['countries']) && !empty($data_locations['countries'])) {
@@ -1217,7 +964,10 @@ class SetupController extends Controller {
             'data' => $insertData
         ];
         $this->Tbl_c_uac_location_a_country_p_en->__insert($request, $insert, 'mysql_bak');
+    }
 
+    public function __init_master_data_provinces(Request $request) {
+        $data_locations = $this->__init_data_locations($request);
         if (isset($data_locations['provinces']) && !empty($data_locations['provinces'])) {
             foreach ($data_locations['provinces'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
@@ -1242,6 +992,10 @@ class SetupController extends Controller {
             ];
             $this->Tbl_c_uac_location_b_provinces_p_en->__insert($request, $insertProvinces, 'mysql_bak');
         }
+    }
+
+    public function __init_master_data_cities(Request $request) {
+        $data_locations = $this->__init_data_locations($request);
         if (isset($data_locations['cities']) && !empty($data_locations['cities'])) {
             foreach ($data_locations['cities'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
@@ -1266,11 +1020,14 @@ class SetupController extends Controller {
             ];
             $this->Tbl_c_uac_location_c_cities_p_en->__insert($request, $insertCities, 'mysql_bak');
         }
+    }
 
+    public function __init_master_data_districts(Request $request) {
+        $data_locations = $this->__init_data_locations($request);
         if (isset($data_locations['districts']) && !empty($data_locations['districts'])) {
             foreach ($data_locations['districts'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
-                $desc = 'districts code  : ' . $code . ', ' . $value[2];
+                $desc = "districts code  : " . $code . ' - ' . $value[2];
                 $insertDataDistricts[] = [
                     'code' => $code,
                     '__initial' => $value[0],
@@ -1292,20 +1049,23 @@ class SetupController extends Controller {
             ];
             $this->Tbl_c_uac_location_d_districts_p_en->__insert($request, $insertDistricts, 'mysql_bak');
         }
+    }
 
+    public function __init_master_data_areas(Request $request) {
+        $data_locations = $this->__init_data_locations($request);
         if (isset($data_locations['areas']) && !empty($data_locations['areas'])) {
             foreach ($data_locations['areas'] AS $key => $value) {
                 $code = $this->General->getRandomChar(20);
-                $desc = 'areas name : ' . $code . ' ' . $value[2];
+                $desc = 'areas name : ' . $code;
                 $insertDataDistricts[] = [
                     'code' => $code,
                     '__initial' => $value[0],
                     '__name' => strtolower($value[1]),
-                    '__description' => $desc,
-                    '__country_id' => $value[3],
-                    '__province_id' => $value[4],
-                    '__city_id' => $value[5],
-                    '__disctrict_id' => $value[6],
+                    '__description' => "'" . $desc . "'",
+                    '__country_id' => (int) $value[3],
+                    '__province_id' => (int) $value[4],
+                    '__city_id' => (int) $value[5],
+                    '__disctrict_id' => (int) $value[6],
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -2493,20 +2253,19 @@ class SetupController extends Controller {
         ];
     }
 
-    public function __init_master_data_group_permission($request) {
-        $data_users = $this->__get_data_users($request);
+    public function __init_master_data_registered_types(Request $request) {
+        $data_permissions = $this->__init_data_user_registered_types($request);
         $insertData = [];
-        if (isset($data_users) && !empty($data_users)) {
-            foreach ($data_users AS $key => $value) {
+        if (isset($data_permissions) && !empty($data_permissions)) {
+            foreach ($data_permissions AS $key => $value) {
+                $pwd = $this->General->getRandomChar(6);
+                $pwd_encr = $this->Encrypter->encrypt($pwd);
                 $code = $this->General->getRandomChar(20);
-                $moduleid = $this->__get_data_user_modules($request, $value->id);
+                $desc = 'Registered type name : ' . $value[0];
                 $insertData[] = [
                     'code' => $code,
-                    '__user_id' => $value->id,
-                    '__group_id' => $value->__uac_group_id,
-                    '__permission_id' => 1,
-                    '__module_id' => $moduleid->__module_id,
-                    '__is_allowed' => 1,
+                    '__name' => strtolower($value[0]),
+                    '__description' => $desc,
                     'is_active' => 1,
                     'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                     'created_date' => $this->Date->now(),
@@ -2514,12 +2273,474 @@ class SetupController extends Controller {
                     'updated_date' => $this->Date->now()
                 ];
             }
+        }
+        $insert = [
+            'table_name' => 'tbl_a_uac_user_registered_type_c',
+            'data' => $insertData
+        ];
+        return $this->Tbl_a_uac_user_registered_type_c_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_data_user_registered_types($request) {
+        return [
+            ['system.auto.create'],
+            ['superuser.manual.create'],
+            ['self.register']
+        ];
+    }
+
+    public function __init_master_data_user_groups($request) {
+        $param_users = [
+            'table_name' => 'tbl_a_uac_users_p',
+            'select' => ['a.id', 'a.__email']
+        ];
+        $users = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $param_users);
+        $insertData = [];
+        if (isset($users['data']) && !empty($users['data'])) {
+            foreach ($users['data'] AS $key => $value) {
+                $code = $this->General->getRandomChar(20);
+                $desc = 'code : ' . $code;
+                $param_groups = [
+                    'table_name' => 'tbl_a_uac_groups_p',
+                    'select' => ['a.id', 'a.__name', 'a.__is_key_group'],
+                    'conditions' => [
+                        'where' => [
+                            ['a.__is_key_group', '=', 1]
+                        ]
+                    ]
+                ];
+                $groups = $this->Tbl_a_uac_groups_p_en->__find($request, 'all', $param_groups);
+                if (isset($groups['data']) && !empty($groups['data'])) {
+                    foreach ($groups['data'] AS $keyword2 => $value2) {
+                        $insertData[] = [
+                            'code' => $code,
+                            '__uac_user_id' => $value->id,
+                            '__uac_group_id' => $value2->id,
+                            'is_active' => 1,
+                            'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'updated_date' => $this->Date->now()
+                        ];
+                    }
+                }
+            }
+        }
+        $insert = [
+            'table_name' => 'tbl_b_uac_user_group_c',
+            'data' => $insertData
+        ];
+        return $this->Tbl_b_uac_user_group_c_en->__insert($request, $insert, 'mysql_bak');
+    }
+
+    public function __init_master_data_user_permissions($request) {
+        $param_users = [
+            'table_name' => 'tbl_a_uac_users_p',
+            'select' => ['a.id', 'a.__email']
+        ];
+        $users = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $param_users);
+        $insertData = [];
+        if (isset($users['data']) && !empty($users['data'])) {
+            foreach ($users['data'] AS $keyword => $value) {
+                $param_permissions = [
+                    'table_name' => 'tbl_a_uac_permissions_p',
+                ];
+                $permissions = $this->Tbl_a_uac_permissions_p_en->__find($request, 'all', $param_permissions, 'mysql_bak');
+                if (isset($permissions['data']) && !empty($permissions['data'])) {
+                    foreach ($permissions['data'] AS $keyword2 => $value2) {
+                        $insertData[] = [
+                            '__user_id' => $value->id,
+                            '__permission_id' => $value2->id,
+                            '__is_denied' => 0
+                        ];
+                    }
+                }
+            }
+        }
+        $response = false;
+        if (isset($insertData) && !empty($insertData)) {
+            $insert = [
+                'table_name' => 'tbl_b_uac_user_permissions_r',
+                'data' => $insertData
+            ];
+            $response = $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insert, 'mysql_bak');
+        }
+        return $response;
+    }
+
+    public function __init_master_data_group_permission($request) {
+        $param_user_groups = [
+            'table_name' => 'tbl_b_uac_user_group_c',
+            'select' => ['a.id', 'a.__uac_user_id', 'a.__uac_group_id']
+        ];
+        $user_groups = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $param_user_groups, 'mysql_bak');
+        $insertData = [];
+        if (isset($user_groups['data']) && !empty($user_groups['data'])) {
+            foreach ($user_groups['data'] AS $key => $value) {
+                $moduleid = $this->__get_data_user_modules($request, $value->__uac_user_id);
+                $param_permissions = [
+                    'table_name' => 'tbl_a_uac_permissions_p',
+                ];
+                $permissions = $this->Tbl_a_uac_permissions_p_en->__find($request, 'all', $param_permissions, 'mysql_bak');
+                if (isset($permissions['data']) && !empty($permissions['data'])) {
+                    foreach ($permissions['data'] AS $keyword2 => $value2) {
+                        $insertData[] = [
+                            '__user_id' => $value->__uac_user_id,
+                            '__group_id' => $value->__uac_group_id,
+                            '__permission_id' => $value2->id,
+                            '__module_id' => isset($moduleid->__module_id) ? $moduleid->__module_id : 0,
+                            '__is_allowed' => 1,
+                            'is_active' => 1,
+                            'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'created_date' => $this->Date->now(),
+                            'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                            'updated_date' => $this->Date->now()
+                        ];
+                    }
+                }
+            }
             $insertDistricts = [
                 'table_name' => 'tbl_b_uac_group_permissions_r',
                 'data' => $insertData
             ];
-            dd($insertDistricts);
             $this->Tbl_b_uac_group_permissions_r_en->__insert($request, $insertDistricts, 'mysql_bak');
+        }
+    }
+
+    public function get_list(Request $request) {
+        $data = $request->all();
+        if (isset($data) && !empty($data)) {
+            if (isset($data['a']) && !empty($data['a'])) {
+                //    switch ($data['a']) {
+                //        case 1:
+                //            return $this->__get_list_path_segment($request);
+                //            break;
+                //    }
+            } else {
+                return $this->__get_list_default($request);
+            }
+        }
+    }
+
+    public function __get_list_default($request) {
+        $draw = $request->draw;
+        $limit = ($request->length) ? $request->length : 10;
+        if ($request->length == '-1') {
+            $limit = 1000;
+        }
+        $offset = ($request->start) ? $request->start : 0;
+        $search = $request->search['value'];
+        $conditions = [];
+        if (isset($search) && !empty($search)) {
+            $conditions = [
+                'orWhere' => [
+                    ['a.__name', 'like', '%' . $search . '%'],
+                    ['a.__path', 'like', '%' . $search . '%'],
+                    ['a.__controller', 'like', '%' . $search . '%'],
+                    ['a.__action', 'like', '%' . $search . '%']
+                ]
+            ];
+        }
+        $params = [
+            'table_name' => 'tbl_d_uac_installer_list_p',
+            'select' => ['a.*'],
+            'conditions' => $conditions,
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $data = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params);
+        if (isset($data['data']) && !empty($data['data'])) {
+            if ($offset == 0) {
+                $i = 1;
+            } else {
+                $i = ($offset + 1);
+            }
+            $arrData = array();
+            foreach ($data['data'] AS $keyword => $value) {
+                $is_active = '';
+                if ($value->is_active == 1) {
+                    $is_active = ' checked';
+                }
+                $arrData[] = [
+                    'id' => $i,
+                    '__subject' => $value->__subject,
+                    '__target_table' => $value->__target_table,
+                    '__action' => $value->__action,
+                    '__run_count' => $value->__run_count,
+                    'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    'action' => '<div class="btn-group">
+                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/generate/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Generate Installer Data"><i class="fa fa-play"></i></a></button>
+                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
+                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
+                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/installer/setup/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
+                      </div>',
+                ];
+                if ($i <= $data['meta']['total']) {
+                    $i++;
+                }
+            }
+            $output = array(
+                'draw' => $draw,
+                'recordsTotal' => $data['meta']['total'],
+                'recordsFiltered' => $data['meta']['total'],
+                'data' => $arrData,
+            );
+            echo json_encode($output);
+        } else {
+            echo json_encode(array());
+        }
+    }
+
+    public function __get_list_path_segment($request) {
+        $data = $request->json()->all();
+        $get_segment_by_url = $this->General->getSegmentByUrl($data["value"]);
+        $segmented = explode('/', $get_segment_by_url);
+        if (isset($segmented) && !empty($segmented)) {
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching and reformat data', 'valid' => true, 'data' => $segmented]);
+        }
+    }
+
+    public function __get_list_by_controller($request, $keywords = null) {
+        if (isset($keywords) && !empty($keywords) && $keywords !== null) {
+            $params = [
+                'table_name' => 'tbl_d_uac_installer_list_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.__controller', '=', $keywords]
+                    ]
+                ],
+                'limit' => 100
+            ];
+            return $this->Tbl_d_uac_installer_list_p_en->__find($request, 'all', $params, 'mysql_bak');
+        }
+    }
+
+    public function create(Request $request) {
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Permission</b> master data management page',
+            'pages' => [
+                'title' => 'Create Page Master Data Installer',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/installer/setup/create'
+            ],
+            'header' => [
+                'title' => 'View',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/installer/setup/view'
+            ],
+            'form' => [
+                'el-id' => 'frm_create_installer',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Subject </th>',
+                    '<th> Target Table </th>',
+                    '<th> Controller </th>',
+                    '<th> Action </th>',
+                    '<th> Running Count </th>',
+                    '<th> Status </th>',
+                    '<th> Action </th>'
+                ]
+            ]
+        ];
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+    }
+
+    public function insert(Request $request) {
+        $data = $request->json()->all();
+        $insertData = [];
+        if (isset($data) && !empty($data)) {
+            $insertData = [
+                'code' => $this->General->getRandomChar(20),
+                '__subject' => $data['a'],
+                '__target_table' => $data['b'],
+                '__action' => $data['c'],
+                '__run_count' => 0,
+                '__description' => $data['d'],
+                'is_active' => $data['e'],
+                'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                'created_date' => $this->Date->now(),
+                'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                'updated_date' => $this->Date->now()
+            ];
+        }
+        $insert = [
+            'table_name' => 'tbl_d_uac_installer_list_p',
+            'data' => $insertData
+        ];
+        $response = $this->Tbl_d_uac_installer_list_p_en->__insert($request, $insert); //, 'mysql_bak');
+        if ($response) {
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
+        } else {
+            return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);
+        }
+    }
+
+    public function edit(Request $request, $params = null) {
+        $id = base64_decode($params);
+        $title_for_layout = config('app.default_variables.title_for_layout');
+        $_config = [
+            'title_for_header' => '<b>Permission</b> master data management page',
+            'pages' => [
+                'title' => 'Edit Page Master Data Installer',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/installer/setup/edit/' . $params
+            ],
+            'header' => [
+                'title' => 'View',
+                'icon' => '<i class="fa fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/installer/setup/view'
+            ],
+            'form' => [
+                'el-id' => 'frm_create_installer',
+                'btn-tools' => [
+                    '<li><a href="javascript:;"> Print </a></li>',
+                    '<li><a href="javascript:;">Save as PDF </a></li>',
+                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                ],
+                'dt_tbl_th' => [
+                    '<th> ID </th>',
+                    '<th> Subject </th>',
+                    '<th> Target Table </th>',
+                    '<th> Controller </th>',
+                    '<th> Action </th>',
+                    '<th> Running Count </th>',
+                    '<th> Status </th>',
+                    '<th> Action </th>'
+                ]
+            ]
+        ];
+        $params = [
+            'table_name' => 'tbl_d_uac_installer_list_p',
+            'select' => ['a.*'],
+            'conditions' => [
+                'where' => [
+                    ['a.id', '=', $id]
+                ]
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $installers = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'first', $params);
+        $this->load_css([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css"
+        ]);
+        $this->load_js([
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
+        ]);
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'installers'));
+    }
+
+    public function update(Request $request, $params = null) {
+        $data = $request->json()->all();
+        if (isset($data) && !empty($data)) {
+            $id = base64_decode($params);
+            switch ($data['a']) {
+                case 'is_active':
+                    $update_data = [
+                        'is_active' => $data['b'],
+                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+                    break;
+                default:
+                    $alias = strtolower(str_replace(' ', '-', $data['name']));
+                    $update_data = [
+                        '__subject' => $data['a'],
+                        '__target_table' => $data['b'],
+                        '__action' => $data['c'],
+                        '__description' => $data['d'],
+                        'is_active' => $data['e'],
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+                    break;
+            }
+            $paramsUpdate = [
+                'table_name' => 'tbl_d_uac_installer_list_p',
+                'conditions' => [
+                    'keyword' => 'id',
+                    'value' => $id
+                ]
+            ];
+            $response = $this->Tbl_d_uac_installer_list_p_en->__update($request, $update_data, $paramsUpdate);
+            if ($response) {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
+            } else {
+                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
+            }
+        }
+    }
+
+    public function remove(Request $request, $params = null) {
+        if ($params != null) {
+            $data = (['a' => 'is_active']);
+            //$request->request->add($data);
+            $request->json()->replace([
+                'a' => 'is_active',
+                'b' => 0
+            ]);
+            $resp = $this->update($request, $params);
+            $response = json_decode($resp);
+            if ($response && $response->status->code == 200) {
+                return redirect()->back()->with('success', 'successfully update data');
+            } else {
+                return redirect()->back()->with('error', 'failed update data.');
+            }
+        }
+    }
+
+    public function delete(Request $request, $params = null) {
+        if ($params != null) {
+            $id = base64_decode($params);
+            $params = [
+                'table_name' => 'tbl_d_uac_installer_list_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.id', '=', $id]
+                    ]
+                ]
+            ];
+            $existData = $this->Tbl_d_uac_installer_list_p_en->__find($request, 'first', $params);
+            if ($existData && $existData['data']) {
+                $insertUserInstallerBackup = [
+                    'table_name' => 'tbl_d_uac_installer_list_p',
+                    'data' => (array) $existData['data']
+                ];
+                $this->Tbl_b_uac_user_permissions_r_en->__insert($request, $insertUserInstallerBackup, 'mysql_bak');
+                $deleteParams = [
+                    'table_name' => 'tbl_d_uac_installer_list_p',
+                    'conditions' => [
+                        'keyword' => 'id',
+                        'value' => $id
+                    ]
+                ];
+                $response = $this->Tbl_d_uac_installer_list_p_en->__delete($request, $deleteParams, 'mysql_bak');
+                return redirect()->back()->with('success', 'successfully delete data');
+            } else {
+                return redirect()->back()->with('error', 'failed delete data.');
+            }
         }
     }
 

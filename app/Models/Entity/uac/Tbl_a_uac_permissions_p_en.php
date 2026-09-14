@@ -345,7 +345,7 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
         if ($ArrUrl) {
             $explodeUrl = explode('/', $ArrUrl);
             $maxSegment = count($explodeUrl);
-            $minSegment = $maxSegment - 2;
+            $minSegment = $maxSegment - 3;
             $no = 1;
             foreach ($explodeUrl AS $key => $value) {
                 if ($maxSegment > 2) {
