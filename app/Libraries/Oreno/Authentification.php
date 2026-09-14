@@ -72,7 +72,7 @@ class Authentification {
         }
         $permissionCheck = $this->Tbl_a_uac_permissions_p_en->__get_permission($request, $urlpathonly);
         $response = false;
-        if (isset($permissionCheck['data']) && !empty($permissionCheck['data']) && $permissionCheck['data']->__is_allowed == 1) {
+        if (isset($permissionCheck['data']) && !empty($permissionCheck['data']) && $permissionCheck['data']->__group_permission_is_allowed == 1) {
             $response = true;
         }
         return $response;
