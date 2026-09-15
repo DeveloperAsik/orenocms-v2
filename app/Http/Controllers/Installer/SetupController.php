@@ -131,17 +131,18 @@ class SetupController extends Controller {
         //$d = $this->__init_master_data_modules($request);
         //$e = $this->__init_master_data_permissions($request);
         //$f = $this->__init_master_data_users($request);
-        $g = $this->__init_master_data_user_profies($request);
-//        $h = $this->__init_master_data_registered_types($request);
-//        $i = $this->__init_master_data_user_groups($request);
-//        $j = $this->__init_master_data_user_permissions($request);
-//        $k = $this->__init_master_data_group_permission($request);
-        //$l = $this->__init_master_data_country($request);
-        //$m = $this->__init_master_data_provinces($request);
-        //$n = $this->__init_master_data_cities($request);
-        //$o = $this->__init_master_data_districts($request);
-        //$p = $this->__init_master_data_areas($request);
-        dd($e);
+        //$g = $this->__init_master_data_user_profies($request);
+        //$h = $this->__init_master_data_registered_types($request);
+        //$i = $this->__init_master_data_user_groups($request);
+        //$j = $this->__init_master_data_user_permissions($request);
+        //$k = $this->__init_master_data_group_permission($request);
+        
+        $l = $this->__init_master_data_country($request);
+        $m = $this->__init_master_data_provinces($request);
+        $n = $this->__init_master_data_cities($request);
+        $o = $this->__init_master_data_districts($request);
+        $p = $this->__init_master_data_areas($request);
+        //dd($e);
         dd('success');
 
         $this->load_css([
@@ -2385,7 +2386,6 @@ class SetupController extends Controller {
             'limit' => 1000
         ];
         $user_groups = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $param_user_groups, 'mysql_bak');
-        dd($user_groups);
         $insertData = [];
         if (isset($user_groups['data']) && !empty($user_groups['data'])) {
             foreach ($user_groups['data'] AS $key => $value) {
@@ -2417,7 +2417,6 @@ class SetupController extends Controller {
                 'limit' => 1000,
                 'data' => $insertData
             ];
-            dd($insertDistricts);
             $this->Tbl_b_uac_group_permissions_r_en->__insert($request, $insertDistricts, 'mysql_bak');
         }
     }

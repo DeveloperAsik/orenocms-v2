@@ -70,10 +70,16 @@ class Authentification {
         if ($urlCorrect == true) {
             return true;
         }
-        $permissionCheck = $this->Tbl_a_uac_permissions_p_en->__get_permission($request, $urlpathonly);
+        $permissionCheck = $this->Tbl_a_uac_permissions_p_en->__get_permission($request, $urlpathonly, 0);
         $response = false;
         if (isset($permissionCheck['data']) && !empty($permissionCheck['data']) && $permissionCheck['data']->__group_permission_is_allowed == 1) {
             $response = true;
+        }
+        if ($permissionCheck['data'] == null) {
+            $permissionCheck2 = $this->Tbl_a_uac_permissions_p_en->__get_permission($request, $urlpathonly, 1);
+            if (isset($permissionCheck2['data']) && !empty($permissionCheck2['data']) && $permissionCheck2['data']->__group_permission_is_allowed == 1) {
+                $response = true;
+            }
         }
         return $response;
     }
