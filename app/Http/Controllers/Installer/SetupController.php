@@ -125,6 +125,7 @@ class SetupController extends Controller {
                 ]
             ]
         ];
+
         //$a = $this->__init_master_data_groups($request);
         //$b = $this->__init_master_data_menus($request);
         //$c = $this->__init_master_data_menu_permissions($request);
@@ -137,13 +138,14 @@ class SetupController extends Controller {
         //$j = $this->__init_master_data_user_permissions($request);
         //$k = $this->__init_master_data_group_permission($request);
         
-        $l = $this->__init_master_data_country($request);
-        $m = $this->__init_master_data_provinces($request);
-        $n = $this->__init_master_data_cities($request);
-        $o = $this->__init_master_data_districts($request);
-        $p = $this->__init_master_data_areas($request);
+        //$l = $this->__init_master_data_country($request);
+        //$m = $this->__init_master_data_provinces($request);
+        //$n = $this->__init_master_data_cities($request);
+        //$o = $this->__init_master_data_districts($request);
+        //$p = $this->__init_master_data_areas($request);
         //dd($e);
         dd('success');
+
 
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
