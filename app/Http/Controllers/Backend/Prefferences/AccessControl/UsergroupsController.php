@@ -25,7 +25,7 @@ use App\Models\Entity\uac\Tbl_b_uac_user_group_c_en;
  *
  * @author 64146
  */
-class UsergroupsController {
+class UsergroupsController extends Controller {
 
     //put your code here
     //put your code here
@@ -67,17 +67,14 @@ class UsergroupsController {
                     '<th> ID </th>',
                     '<th> User </th>',
                     '<th> Group </th>',
-                    '<th> Status </th>',
-                    '<th> Action </th>'
+                    '<th> Status </th>'
                 ]
             ]
         ];
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
         ]);
         $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"
         ]);
@@ -112,7 +109,13 @@ class UsergroupsController {
         }
         $params = [
             'table_name' => 'tbl_b_uac_user_group_c',
-            'select' => ['a.*'],
+            'select' => ['a.*', 'b.id AS __user_id', 'b.__user_name', 'c.id AS __group_id', 'c.__name AS __group_name'],
+            'join' => [
+                'leftJoin' => [
+                    ['tbl_a_uac_users_p AS b', 'b.id', '=', 'a.__uac_user_id'],
+                    ['tbl_a_uac_groups_p AS c', 'c.id', '=', 'a.__uac_group_id']
+                ]
+            ],
             'conditions' => $conditions,
             'limit' => 100,
             'offset' => 0
@@ -132,19 +135,9 @@ class UsergroupsController {
                 }
                 $arrData[] = [
                     'id' => $i,
-                    '__name' => $value->__name,
-                    '__path' => $value->__path,
-                    '__controller' => $value->__controller,
-                    '__action' => $value->__action,
-                    '__method' => $value->__method,
-                    'basic' => '<input type="checkbox"' . $is_basic . ' name="is_basic" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
-                    'public' => '<input type="checkbox"' . $is_public . ' name="is_public" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    '__user' => 'ID : ' . $value->__user_id . ' <br/> Name : ' . $value->__user_name,
+                    '__group' => 'ID : ' . $value->__group_id . ' <br/> Name : ' . $value->__group_name,
                     'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
-                    'action' => '<div class="btn-group">
-                        <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/prefferences/uac/user-groups/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
-                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/prefferences/uac/user-groups/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
-                        <button type="button" class="btn btn-sm red"><a href="' . config('app.base_extraweb_uri') . '/prefferences/uac/user-groups/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Delete"><i class="fa fa-trash-o"></i></a></button>
-                      </div>',
                 ];
                 if ($i <= $data['meta']['total']) {
                     $i++;
@@ -177,24 +170,9 @@ class UsergroupsController {
                 default:
                     $alias = strtolower(str_replace(' ', '-', $data['name']));
                     $update_data = [
-                        '__alias' => $data['a'],
-                        '__name' => $__path,
-                        '__path' => $__path,
-                        '__controller' => $data['c'],
-                        '__action' => $action['data'][0]->__name,
-                        '__method' => $action['data'][0]->__method,
-                        '__segment1' => $__segment1,
-                        '__segment2' => $__segment2,
-                        '__segment3' => $__segment3,
-                        '__segment4' => $__segment4,
-                        '__segment5' => $__segment5,
-                        '__segment6' => $__segment6,
-                        '__segment7' => $__segment7,
-                        '__segment8' => $__segment8,
-                        '__description' => isset($data['f']) ? $data['f'] : '-',
-                        '__is_basic' => $data['f'],
-                        '__is_public' => $data['g'],
-                        'is_active' => $data['h'],
+                        '__uac_user_id' => $data['a'],
+                        '__uac_group_id' => $data['b'],
+                        'is_active' => $data['c'],
                         'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
