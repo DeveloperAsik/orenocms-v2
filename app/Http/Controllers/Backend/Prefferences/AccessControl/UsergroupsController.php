@@ -54,7 +54,7 @@ class UsergroupsController extends Controller {
             'header' => [
                 'title' => 'Create',
                 'icon' => '<i class="fa fa-plus-square"></i>',
-                'link' => config('app.base_extraweb_uri') . '/prefferences/uac/user-groups/create'
+                'link' => 'data-toggle="modal" href="#md_create_user_group"'
             ],
             'tables' => [
                 'el-id' => 'dt_tbl_permissions',
@@ -69,7 +69,13 @@ class UsergroupsController extends Controller {
                     '<th> Group </th>',
                     '<th> Status </th>'
                 ]
+            ],
+            'modals' => [
+                'el-id' => 'md_create_user_group'
             ]
+        ];
+        $_modal_data = [
+            'html.modals.prefferences.uac.user-groups.md_create'
         ];
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
@@ -78,7 +84,7 @@ class UsergroupsController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', '_modal_data'));
     }
 
     public function get_list(Request $request) {

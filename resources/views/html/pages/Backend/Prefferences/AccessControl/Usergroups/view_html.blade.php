@@ -1,6 +1,6 @@
 <div class="col-md-12" style="padding-left:0px !important">
     <div class="btn-group" style="margin:0px 0px 5px 0px">
-        <a href="{!! $_config['header']['link'] !!}" id="sample_editable_1_new" class="btn green">
+        <a {!! $_config['header']['link'] !!}class="btn green">
             {!! $_config['header']['title'] !!} {!! $_config['header']['icon'] !!}
         </a>
     </div>
