@@ -10,6 +10,7 @@
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/config/app.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/modals/prefferences/uac/user-groups/md_create.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Prefferences/AccessControl/UsergroupsController.php</file>
         </group>
     </open-files>
