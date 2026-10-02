@@ -30,7 +30,8 @@
                         {"data": "id", width: "5%", className: "dt-center", targets: '_all'},
                         {"data": "__user"},
                         {"data": "__group"},
-                        {"data": "status", width: "8%", className: "dt-center", targets: '_all'}
+                        {"data": "status", width: "8%", className: "dt-center", targets: '_all'},
+                        {"data": "action", width: "8%", className: "dt-center", targets: '_all'}
                     ]
                 });
 

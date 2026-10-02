@@ -67,7 +67,8 @@ class UsergroupsController extends Controller {
                     '<th> ID </th>',
                     '<th> User </th>',
                     '<th> Group </th>',
-                    '<th> Status </th>'
+                    '<th> Status </th>',
+                    '<th> Action </th>'
                 ]
             ],
             'modals' => [
@@ -144,6 +145,9 @@ class UsergroupsController extends Controller {
                     '__user' => 'ID : ' . $value->__user_id . ' <br/> Name : ' . $value->__user_name,
                     '__group' => 'ID : ' . $value->__group_id . ' <br/> Name : ' . $value->__group_name,
                     'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                    'action' => '<div class="btn-group">
+                        <button type="button" class="btn btn-sm yellow"><a href="' . config('app.base_extraweb_uri') . '/prefferences/uac/user-groups/remove/' . $this->Converter->base64_basic($value->id, 'encode', ['rep' => 3]) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fa fa-minus-square"></i></a></button>
+                      </div>',
                 ];
                 if ($i <= $data['meta']['total']) {
                     $i++;
@@ -164,12 +168,12 @@ class UsergroupsController extends Controller {
     public function update(Request $request, $params = null) {
         $data = $request->json()->all();
         if (isset($data) && !empty($data)) {
-            $id = base64_decode($params);
+            $id = $this->Converter->base64_basic($params, 'decode',['rep'=>3]);//base64_decode(base64_decode(base64_decode($params)));
             switch ($data['a']) {
                 case 'is_active':
                     $update_data = [
                         'is_active' => $data['b'],
-                        'updated_by' => $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
                     break;
