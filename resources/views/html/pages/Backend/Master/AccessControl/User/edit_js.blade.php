@@ -30,15 +30,15 @@
                             country_id: id
                         }
                         var options = {
-                            url: _base_extraweb_uri + '/master/uac/users/get_list?a=2',
-                            methodType: 'POST',
-                            dataType: 'json',
-                            file: false,
-                            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                            async: false,
-                            timeout: 2000
+                            'url': _base_extraweb_uri + '/master/uac/users/get_list?a=2',
+                            'type': 'POST',
+                            'dataType': 'json',
+                            'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            'async': false,
+                            'timeout': 2000,
+                            'data': JSON.stringify(formdata)
                         };
-                        var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                        var response = __ajax_send(options);
                         if (response && response.responseText) {
                             $('select#x').html(response.responseText);
                         }
@@ -52,15 +52,15 @@
                             province_id: id
                         }
                         var options = {
-                            url: _base_extraweb_uri + '/master/uac/users/get_list?a=3',
-                            methodType: 'POST',
-                            dataType: 'json',
-                            file: false,
-                            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                            async: false,
-                            timeout: 2000
+                            'url': _base_extraweb_uri + '/master/uac/users/get_list?a=3',
+                            'type': 'POST',
+                            'dataType': 'json',
+                            'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            'async': false,
+                            'timeout': 2000,
+                            'data': JSON.stringify(formdata)
                         };
-                        var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                        var response = __ajax_send( options);
                         if (response && response.responseText) {
                             $('select#y').html(response.responseText);
                         }
@@ -74,15 +74,15 @@
                             city_id: id
                         }
                         var options = {
-                            url: _base_extraweb_uri + '/master/uac/users/get_list?a=4',
-                            methodType: 'POST',
-                            dataType: 'json',
-                            file: false,
-                            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                            async: false,
-                            timeout: 2000
+                            'url': _base_extraweb_uri + '/master/uac/users/get_list?a=4',
+                            'type': 'POST',
+                            'dataType': 'json',
+                            'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            'async': false,
+                            'timeout': 2000,
+                            'data': JSON.stringify(formdata)
                         };
-                        var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                        var response = __ajax_send(, options);
                         if (response && response.responseText) {
                             $('select#z').html(response.responseText);
                         }
@@ -96,15 +96,15 @@
                             district_id: id
                         }
                         var options = {
-                            url: _base_extraweb_uri + '/master/uac/users/get_list?a=5',
-                            methodType: 'POST',
-                            dataType: 'json',
-                            file: false,
-                            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                            async: false,
-                            timeout: 2000
+                            'url': _base_extraweb_uri + '/master/uac/users/get_list?a=5',
+                            'type': 'POST',
+                            'dataType': 'json',
+                            'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            'async': false,
+                            'timeout': 2000,
+                            'data': JSON.stringify(formdata)
                         };
-                        var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                        var response = __ajax_send(options);
                         if (response && response.responseText) {
                             $('select#aa').html(response.responseText);
                         }
@@ -136,15 +136,15 @@
 
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/user/update',
-                        methodType: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: 2000
+                        'url': _base_extraweb_uri + '/master/uac/user/update',
+                        'type': 'POST',
+                        'dataType': 'json',
+                        'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        'async': false,
+                        'timeout': 2000,
+                        'data': JSON.stringify(formdata)
                     };
-                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var response = __ajax_send(options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';

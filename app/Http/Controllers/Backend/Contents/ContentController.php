@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Date;
-use App\Models\Entity\uac\Tbl_a_app_contents_p_en;
+use App\Models\Entity\app\Tbl_a_app_contents_p_en;
+
 /**
  * Description of ContentController
  *
@@ -48,15 +49,10 @@ class ContentController extends Controller {
                     'title' => 'Create',
                     'icon' => '<i class="fa fa-plus-square"></i>',
                     'link' => config('app.base_extraweb_uri') . '/content/create'
-                ],
-                [
-                    'title' => 'Tree View',
-                    'icon' => '<i class="fa fa-plus-square"></i>',
-                    'link' => config('app.base_extraweb_uri') . '/content/tree-view'
                 ]
             ],
             'tables' => [
-                'el-id' => 'dt_tbl_groups',
+                'el-id' => 'dt_tbl_contents',
                 'btn-tools' => [
                     '<li><a href="javascript:;"> Print </a></li>',
                     '<li><a href="javascript:;">Save as PDF </a></li>',
@@ -65,22 +61,23 @@ class ContentController extends Controller {
                 'dt_tbl_th' => [
                     '<th> ID </th>',
                     '<th> Alias </th>',
-                    '<th> Name </th>',
                     '<th> Content Title </th>',
+                    '<th> Content Icon </th>',
+                    '<th> Contents </th>',
                     '<th> Content Type </th>',
                     '<th> Content Category  </th>',
+                    '<th> Content Photo  </th>',
                     '<th> Content Meta  </th>',
                     '<th> Status </th>',
                     '<th> Action </th>'
                 ]
             ]
         ];
+
         $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css",
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css"
+            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"
         ]);
         $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"
         ]);
@@ -115,20 +112,35 @@ class ContentController extends Controller {
             $conditions = [
                 'orWhere' => [
                     ['a.__code', 'like', '%' . $search . '%'],
+                    ['a.__alias', 'like', '%' . $search . '%'],
                     ['a.__name', 'like', '%' . $search . '%'],
-                    ['a.__level', 'like', '%' . $search . '%'],
-                    ['a.__rank', 'like', '%' . $search . '%']
+                    ['a.__content_title', 'like', '%' . $search . '%'],
+                    ['a.__content_raw', 'like', '%' . $search . '%']
                 ]
             ];
         }
         $params = [
-            'table_name' => 'tbl_a_uac_groups_p',
-            'select' => ['a.*'],
+            'table_name' => 'tbl_a_app_contents_p',
+            'select' => [
+                'a.*',
+                'b.id AS content_type_id', 'b.__name AS content_type_name',
+                'c.id AS content_category_id', 'c.__name AS content_category_name',
+                'd.id AS content_photos_id', 'd.__path AS content_photo_path',
+                'e.id AS content_meta_id', 'e.__name AS content_meta_name', 'e.__meta_keyword AS content_meta_keyword', 'e.__meta_description AS content_meta_description'
+            ],
             'conditions' => $conditions,
-            'limit' => 100,
-            'offset' => 0
+            'join' => [
+                'leftJoin' => [
+                    ['tbl_a_app_contents_types_c AS b', 'b.id', '=', 'a.__uac_content_type_id'],
+                    ['tbl_a_app_contents_categories_c AS c', 'c.id', '=', 'a.__uac_content_category_id'],
+                    ['tbl_a_app_contents_photo_c AS d', 'd.id', '=', 'a.__uac_content_photo_id'],
+                    ['tbl_a_app_contents_meta_c AS e', 'e.id', '=', 'a.__uac_content_meta_id']
+                ]
+            ],
+            'limit' => (int) $limit,
+            'offset' => $offset
         ];
-        $data = $this->Tbl_a_app_contents_p_en->__find($request, 'all', $params);
+        $data = $this->Tbl_a_app_contents_p_en->__find($request, 'all', $params, 'mysql_app');
         if (isset($data['data']) && !empty($data['data'])) {
             if ($offset == 0) {
                 $i = 1;
@@ -137,31 +149,20 @@ class ContentController extends Controller {
             }
             $arrData = array();
             foreach ($data['data'] AS $keyword => $value) {
-                $__is_key_group = '';
-                if ($value->__is_key_group == 1) {
-                    $__is_key_group = ' checked';
-                }
-                $__is_menu = '';
-                if ($value->__is_menu == 1) {
-                    $__is_menu = ' checked';
-                }
-                $__is_group_project = '';
-                if ($value->__is_group_project == 1) {
-                    $__is_group_project = ' checked';
-                }
                 $is_active = '';
                 if ($value->is_active == 1) {
                     $is_active = ' checked';
                 }
                 $arrData[] = [
                     'id' => $i,
-                    '__name' => $value->__name,
-                    '__icon' => $value->__icon,
-                    '__rank' => $value->__rank,
-                    '__level' => $value->__level,
-                    '__is_key_group' => '<input type="checkbox"' . $__is_key_group . ' name="__is_key_group" class="make-switch" data-size="small" data-id="' . $this->Converter->base64_basic($value->id, 'encode', ['rep' => 3]) . '">',
-                    '__is_menu' => '<input type="checkbox"' . $__is_menu . ' name="__is_menu" class="make-switch" data-size="small" data-id="' . $this->Converter->base64_basic($value->id, 'encode', ['rep' => 3]) . '">',
-                    '__is_group_project' => '<input type="checkbox"' . $__is_group_project . ' name="__is_group_project" class="make-switch" data-size="small" data-id="' . $this->Converter->base64_basic($value->id, 'encode', ['rep' => 3]) . '">',
+                    '__alias' => $value->__alias,
+                    '__content_title' => $value->__content_title,
+                    '__content_icon' => $value->__content_icon,
+                    '__content_sanitize' => substr($value->__content_sanitize, 0, 100),
+                    '__content_type_name' => $value->content_type_name,
+                    '__content_category_name' => $value->content_category_name,
+                    '__content_photo_path' => $value->content_photo_path,
+                    '__content_meta_keyword' => substr($value->content_meta_keyword, 0, 100),
                     'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . $this->Converter->base64_basic($value->id, 'encode', ['rep' => 3]) . '">',
                     'action' => '<div class="btn-group">
                         <button type="button" class="btn btn-sm blue"><a href="' . config('app.base_extraweb_uri') . '/content/edit/' . $this->Converter->base64_basic($value->id, 'encode', ['rep' => 3]) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fa fa-edit"></i></a></button>
@@ -192,7 +193,7 @@ class ContentController extends Controller {
             $dataArrTreeView = [];
         } else {
             $params = [
-                'table_name' => 'tbl_a_uac_groups_p',
+                'table_name' => 'tbl_a_app_contents_p',
                 'select' => ['a.*'],
                 'conditions' => [
                     'where' => [
@@ -211,56 +212,6 @@ class ContentController extends Controller {
         return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching data', 'valid' => true, 'data' => $dataArrTreeView]);
     }
 
-    public function tree_view(Request $request) {
-        $title_for_layout = config('app.default_variables.title_for_layout');
-        $_config = [
-            'title_for_header' => '<b>Tree View Group</b> master data management page',
-            'pages' => [
-                'title' => 'View Page Master Data Groups',
-                'icon' => '<i class="fa fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/content/tree-view'
-            ],
-            'header' => [
-                [
-                    'title' => 'Create',
-                    'icon' => '<i class="fa fa-plus-square"></i>',
-                    'link' => config('app.base_extraweb_uri') . '/content/create'
-                ],
-                [
-                    'title' => 'List View',
-                    'icon' => '<i class="fa fa-list"></i>',
-                    'link' => config('app.base_extraweb_uri') . '/content/view'
-                ]
-            ],
-            'tables' => [
-                'el-id' => 'dt_tbl_menus',
-                'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
-                ],
-                'dt_tbl_th' => [
-                    '<th> ID </th>',
-                    '<th> Name </th>',
-                    '<th> Icon </th>',
-                    '<th> Rank </th>',
-                    '<th> Level </th>',
-                    '<th> Is key_group </th>',
-                    '<th> Is menu </th>',
-                    '<th> Is group_project </th>',
-                    '<th> Status </th>'
-                ]
-            ]
-        ];
-        $this->load_css([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css"
-        ]);
-        $this->load_js([
-            config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jstree/dist/jstree.min.js"
-        ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
-    }
-
     public function create(Request $request) {
         $title_for_layout = config('app.default_variables.title_for_layout');
         $_config = [
@@ -275,11 +226,6 @@ class ContentController extends Controller {
                     'title' => 'List View',
                     'icon' => '<i class="fa fa-list"></i>',
                     'link' => config('app.base_extraweb_uri') . '/content/view'
-                ],
-                [
-                    'title' => 'Tree View',
-                    'icon' => '<i class="fa fa-list"></i>',
-                    'link' => config('app.base_extraweb_uri') . '/content/tree-view'
                 ]
             ],
             'form' => [
@@ -294,13 +240,14 @@ class ContentController extends Controller {
                 ],
                 'dt_tbl_th' => [
                     '<th> ID </th>',
-                    '<th> Name </th>',
+                    '<th> Alias </th>',
+                    '<th> Title </th>',
                     '<th> Icon </th>',
-                    '<th> Rank </th>',
-                    '<th> Level </th>',
-                    '<th> Is key_group </th>',
-                    '<th> Is menu </th>',
-                    '<th> Is group_project </th>',
+                    '<th> Content </th>',
+                    '<th> Category </th>',
+                    '<th> Type </th>',
+                    '<th> Photo Cover </th>',
+                    '<th> Meta </th>',
                     '<th> Status </th>'
                 ]
             ]
@@ -339,7 +286,7 @@ class ContentController extends Controller {
         if (isset($data) && !empty($data)) {
             $code = $this->General->getRandomChar(20);
             $params = [
-                'table_name' => 'tbl_a_uac_groups_p',
+                'table_name' => 'tbl_a_app_contents_p',
                 'select' => ['a.id', 'a.__name', 'a.__path', 'a.__icon', 'a.__level', 'a.__rank', 'a.__badge', 'a.__badge_value', 'a.__badge_id', 'a.__is_badge', 'a.__uac_menu_parent_id', 'a.__is_dashboard', 'a.__is_selected', 'a.__is_basic', 'a.__is_open', 'a.__is_disabled'],
                 'conditions' => [
                     'where' => [
@@ -372,7 +319,7 @@ class ContentController extends Controller {
                     'updated_date' => $this->Date->now()
                 ];
                 $insert = [
-                    'table_name' => 'tbl_a_uac_groups_p_en',
+                    'table_name' => 'tbl_a_app_contents_p_en',
                     'data' => $insertData
                 ];
                 $this->Tbl_a_app_contents_p_en->__insert($request, $insert);
@@ -408,7 +355,7 @@ class ContentController extends Controller {
                 $new_level = $parent_menu['__level'] + 1;
             } else {
                 $params = [
-                    'table_name' => 'tbl_a_uac_groups_p',
+                    'table_name' => 'tbl_a_app_contents_p',
                     'select' => ['a.id', 'a.__name', 'a.__path', 'a.__icon', 'a.__level', 'a.__rank', 'a.__badge', 'a.__badge_value', 'a.__badge_id', 'a.__is_badge', 'a.__uac_menu_parent_id', 'a.__is_dashboard', 'a.__is_selected', 'a.__is_basic', 'a.__is_open', 'a.__is_disabled'],
                     'conditions' => [
                         'where' => [
@@ -445,7 +392,7 @@ class ContentController extends Controller {
                 '__is_selected' => 0,
                 '__is_basic' => 1,
                 '__is_open' => 1,
-                '__is_disabled' => 0, 
+                '__is_disabled' => 0,
                 'is_active' => 1,
                 'created_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                 'created_date' => $this->Date->now(),
@@ -453,7 +400,7 @@ class ContentController extends Controller {
                 'updated_date' => $this->Date->now()
             ];
             $param_insert = [
-                'table_name' => 'tbl_a_uac_groups_p',
+                'table_name' => 'tbl_a_app_contents_p',
                 'data' => $param_data
             ];
             $response = $this->Tbl_a_app_contents_p_en->__insert($request, $param_insert);
@@ -507,7 +454,7 @@ class ContentController extends Controller {
             ]
         ];
         $params = [
-            'table_name' => 'tbl_a_uac_groups_p',
+            'table_name' => 'tbl_a_app_contents_p',
             'select' => ['a.*'],
             'conditions' => [
                 'where' => [
@@ -607,7 +554,7 @@ class ContentController extends Controller {
                     break;
             }
             $paramsUpdate = [
-                'table_name' => 'tbl_a_uac_groups_p',
+                'table_name' => 'tbl_a_app_contents_p',
                 'conditions' => [
                     'keyword' => 'id',
                     'value' => $id

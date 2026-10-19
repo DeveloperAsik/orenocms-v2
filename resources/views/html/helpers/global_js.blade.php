@@ -24,7 +24,7 @@
             setInterval(function () {
                 console.log(ii + ' seconds');
                 ii = parseInt(ii) + 1;
-                if (ii == 1200) { //20 minutes idle
+                if (ii == 1200) { 
                     loadingImg('img-loading', 'start');
                     setTimeout(function () {
                         console.log('system detected idle session..... close all apps and poweroff... please relogin');
@@ -47,122 +47,7 @@
                 __fn_init_info_line(i);
             }, 30000);
         }
-    };
-
-    var __fn_alert_message = function (k, t, o) {
-        var c = 'color:green;font-size:12px';
-        if (o && o.console && o.console == true) {
-            console.log('%c log: ' + string, color);
-        } else {
-            const toastParams = Swal.mixin({
-                toast: true,
-                position: 'top',
-                timer: 3000
-            });
-            const hTXT = '';
-            if (o.header) {
-                hTXT = o.header;
-            }
-            toastr.option = {
-                "closeButton": o.closeButton,
-                "debug": o.debug,
-                "newestOnTop": o.newestOnTop,
-                "progressBar": o.progressBar,
-                "positionClass": o.positionClass,
-                "preventDuplicates": o.preventDuplicates,
-                "onclick": o.onclick,
-                "showDuration": o.showDuration,
-                "hideDuration": o.hideDuration,
-                "timeOut": o.timeOut,
-                "extendedTimeOut": o.extendedTimeOut,
-                "showEasing": o.showEasing,
-                "hideEasing": o.hideEasing,
-                "showMethod": o.showMethod,
-                "hideMethod": o.hideMethod
-            };
-            switch (t) {
-                case "info":
-                case "warning":
-                    if (o.type == 'swal') {
-                        Toast.fire({
-                            type: 'warning',
-                            title: k
-                        });
-                    } else {
-                        (_env && _env !== 'production') ? toastr.info(k, hTXT) : '';
-                    }
-                    color = 'color:#fe8642; font-size:12px';
-                    break;
-                case "success":
-                    if (o.type == 'swal') {
-                        Toast.fire({
-                            type: 'success',
-                            title: k
-                        });
-                    } else {
-                        (_env && _env !== 'production') ? toastr.success(k, hTXT) : '';
-                    }
-                    break;
-                case "error":
-                case "danger":
-                    if (o.type == 'swal') {
-                        Toast.fire({
-                            type: 'danger',
-                            title: k
-                        });
-                    } else {
-                        (_env && _env !== 'production') ? toastr.error(k, hTXT) : '';
-                    }
-                    c = 'color:#a40000; font-size:12px';
-                    break;
-            }
-            console.log('%c log: ' + k, c);
-            if (o.withHtml == true) {
-                __fn_alert_html(k, t);
-            }
-        }
-    };
-
-    var __fn_alert_html = function (k, t, o) {
-        var s = '<div class="row"><div class="col-md-12">';
-        switch (t) {
-            case 'success':
-                s = s + '<div id="alert_info" class="alert alert-success alert-dismissible">';
-                s = s + '  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
-                s = s + '  <h5><i class="icon fas fa-check"></i> Alert!</h5>';
-                s = s + k;
-                s = s + '</div>';
-                break;
-            case 'error':
-                s = s + '<div id="alert_info" class="alert alert-danger alert-dismissible">';
-                s = s + '  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
-                s = s + '  <h5><i class="icon fas fa-ban"></i> Alert!</h5>';
-                s = s + k;
-                s = s + '</div>';
-                break;
-            case 'warning':
-                s = s + '<div id="alert_info" class="alert alert-warning alert-dismissible">';
-                s = s + '  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
-                s = s + '  <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>';
-                s = s + k;
-                s = s + '</div>';
-                break;
-            default :
-                s = s + '<div id="alert_info" class="alert alert-info alert-dismissible">';
-                s = s + '  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
-                s = s + '  <h5><i class="icon fas fa-info"></i> Alert!</h5>';
-                s = s + k;
-                s = s + '</div>';
-                break;
-        }
-        s = s + '</div></div>';
-        if (o && o['element']) {
-            $(el).append(s);
-        } else {
-            $('.content-header > .container-fluid').append(s);
-        }
-    };
-    
+    };   
     var __fn_loading_bg = function(a, e, m, r){
         if(a == 'start' || e == '' ){
             console.log('loading background . . . ');
@@ -180,75 +65,10 @@
                $(e).html('<p style="color:' + c + '">' + m + '</p>');
             }
         }
-    };
-    
-    var __fn_loading_img = function(e,a,o){
-        if(!e) e = 'img-loading';
-        if(!o) o = 'circle-loading';
-        var animation = bodymovin.loadAnimation({container: document.getElementById(e),
-            path: _path_json + '/lottie/' + o + '.json',
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            name: "Loading cuy... sabar ye"
-        });
-        if (a === 'play' || a == 'start') {
-            __fn_loading_bg('start');
-            $('#' + e).show();
-            animation.play();
-        }
-        if (a === 'destroy' || a === 'stop') {
-            __fn_loading_bg('stop');
-            animation.destroy();
-            $('#' + e).hide();
-        }
-    };
-
-    var __fn_ajax_send = function(d, o){
-        //var options = {
-        //  uri : '',
-        //  methodType : '',
-        //  dataType: 'json',
-        //  file : '',
-        //  header : '',
-        //  async : '',
-        //  timeout : ''
-        //};
-        //__fn_ajax_send = {arrdata, arrOptions};
-        var url = o.url;
-        var methodType = o.methodType;
-        var file = o.file;
-        var header = o.header;
-        var dataType = o.dataType;
-        var async = o.async;
-        var timeout = o.timeout;
-        var param_ajax = {
-            url: url, 
-            type: methodType, 
-            dataType: dataType, 
-            data: d, 
-            headers: (header) ? header : '', 
-            async: async, 
-            CrossDomain: true, 
-            timeout: timeout
-        }
-        if (file == true){
-            param_ajax = {
-                url: url,
-                cache: false,
-                type: methodType,
-                data: d,
-                headers: (header) ? header : '',
-                async: async,
-                enctype: 'multipart/form-data',
-                processData: false,
-                contentType: true,
-                CrossDomain: true,
-                timeout: timeout
-            };
-        }
-        return $.ajax(param_ajax);
-    };
+    };    
+    var __fn_alert_message=function(e,o,t){var s="color:green;font-size:12px";if(t&&t.console&&1==t.console)console.log("%c log: "+string,color);else{Swal.mixin({toast:!0,position:"top",timer:3e3});const n="";switch(t.header&&(n=t.header),toastr.option={closeButton:t.closeButton,debug:t.debug,newestOnTop:t.newestOnTop,progressBar:t.progressBar,positionClass:t.positionClass,preventDuplicates:t.preventDuplicates,onclick:t.onclick,showDuration:t.showDuration,hideDuration:t.hideDuration,timeOut:t.timeOut,extendedTimeOut:t.extendedTimeOut,showEasing:t.showEasing,hideEasing:t.hideEasing,showMethod:t.showMethod,hideMethod:t.hideMethod},o){case"info":case"warning":"swal"==t.type?Toast.fire({type:"warning",title:e}):_env&&"production"!==_env&&toastr.info(e,n),color="color:#fe8642; font-size:12px";break;case"success":"swal"==t.type?Toast.fire({type:"success",title:e}):_env&&"production"!==_env&&toastr.success(e,n);break;case"error":case"danger":"swal"==t.type?Toast.fire({type:"danger",title:e}):_env&&"production"!==_env&&toastr.error(e,n),s="color:#a40000; font-size:12px"}console.log("%c log: "+e,s),1==t.withHtml&&__fn_alert_html(e,o)}};
+    var __fn_alert_html=function(a,t,i){var s='<div class="row"><div class="col-md-12">';switch(t){case"success":s+='<div id="alert_info" class="alert alert-success alert-dismissible">',s+='  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>',s+='  <h5><i class="icon fas fa-check"></i> Alert!</h5>',s+=a,s+="</div>";break;case"error":s+='<div id="alert_info" class="alert alert-danger alert-dismissible">',s+='  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>',s+='  <h5><i class="icon fas fa-ban"></i> Alert!</h5>',s+=a,s+="</div>";break;case"warning":s+='<div id="alert_info" class="alert alert-warning alert-dismissible">',s+='  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>',s+='  <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>',s+=a,s+="</div>";break;default:s+='<div id="alert_info" class="alert alert-info alert-dismissible">',s+='  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>',s+='  <h5><i class="icon fas fa-info"></i> Alert!</h5>',s+=a,s+="</div>"}s+="</div></div>",i&&i.element?$(el).append(s):$(".content-header > .container-fluid").append(s)};
+    var __fn_loading_img=function(o,a,n){o||(o="img-loading"),n||(n="circle-loading");var t=bodymovin.loadAnimation({container:document.getElementById(o),path:_path_json+"/lottie/"+n+".json",renderer:"svg",loop:!0,autoplay:!0,name:"Loading cuy... sabar ye"});"play"!==a&&"start"!=a||(__fn_loading_bg("start"),$("#"+o).show(),t.play()),"destroy"!==a&&"stop"!==a||(__fn_loading_bg("stop"),t.destroy(),$("#"+o).hide())};
     var __fn_set_sleep = function (ms) { return new Promise(resolve => setTimeout(resolve, ms)); };
     var __str_slug = function (s) { var str = s.replace(/\+/g, ''); str = str.replace(/:/g, ''); str = str.replace(/,/g, ''); str = str.replace(/\./g, ''); str = str.replace(/&/g, ''); str = str.replace(/\|/g, ''); str = str.replace(/ /g, '-'); str = str.replace(/\--/g, '-'); str = str.replace(/\---/g, '-'); return str.toLowerCase(); };
     var __fn_set_pagination_info = function (e, d) { if (e) { for (var i = 0; i < Object.keys(d).length; i++) { var key = Object.keys(d)[i]; $(e).attr(key, d[key]); } } };
@@ -264,84 +84,20 @@
     var __fn_hex_to_rgba = function(hex){ var c; if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){ c= hex.substring(1).split(''); if(c.length== 3){ c= [c[0], c[0], c[1], c[1], c[2], c[2]]; } c= '0x'+c.join(''); return 'rgb('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+')'; } throw new Error('Bad Hex'); };
     
     //custom request between dbs
-    var __fn_reload_total_chat = function(){ if (typeof __session_is_logged_in !== 'undefined') { var uri = _base_extraweb_uri + '/messaging/inbox/get_list?a=2'; var response = __fn_ajax_send({}, {url : _base_extraweb_uri + '/messaging/inbox/get_list?a=2', methodType : 'POST', dataType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000}); if(response.responseJSON){ $('span#total_chat').html(response.responseJSON.total_chat); } } return false; };
+    var __fn_reload_total_chat = function(){ if (typeof __session_is_logged_in !== 'undefined') { var uri = _base_extraweb_uri + '/messaging/inbox/get_list?a=2'; var response = __ajax_send({}, {url : _base_extraweb_uri + '/messaging/inbox/get_list?a=2', type : 'POST', contentType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000}); if(response.data){ $('span#total_chat').html(response.total_chat); } } return false; };
     var __fn_fetch_notif = function(){ var i = 0; setInterval(function(){ i++; if(i%10 == 0){ var full_url = document.URL; var segment = full_url.replace(_base_extraweb_uri ,''); switch(segment){ case "/messaging/inbox": __fn_reload_datatables('#inbox'); break;  default: __fn_reload_total_chat();  break; } } },1000); };
-    
-    
-    var __fn_init_info_board  = function(i){
-        //__fn_loading_bg('start','sidebarWrapper');
-        var sh = screen.height;
-        var eh = parseInt(sh * 0.7);
-        $('#sidebar_info').css({'height': eh + 'px', 'width':'100%', 'overflow-y': 'auto'});
-        var divIDVar = $('#sidebar_info').length;
-        if (divIDVar !== 0){
-            var arrOptions = {
-                url : _base_extraweb_uri + '/ajax/post/get_information_board',
-                methodType : 'POST',
-                dataType: 'json',
-                file : '',
-                header :  {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                async :false,
-                timeout : 2000
-            };
-            var response = __fn_ajax_send({}, arrOptions);
-            var resp = JSON.parse(response.responseText);
-            if (resp && resp.data && resp.data.strHtml) {
-                var total_update = resp.data.is_total_update;
-                var el_total_update = $('#sidebar_info').attr('data-id');
-                if (el_total_update == 0 || total_update > el_total_update){
-                    setTimeout(function(){
-                        //__fn_loading_bg('stop','sidebarWrapper');
-                        $('#sidebar_info').attr('data-id', total_update);
-                        $('#sidebar_info').html(resp.data.strHtml);
-                    }, 2000);
-                } else{
-                    $('#sidebar_info').attr('data-id', total_update);
-                }
-            }
-        }
-    };
-    
-    var __fn_init_info_line = function(i){
-        var arrOptions = {
-                url : _base_extraweb_uri + '/ajax/post/get_information_line',
-                methodType : 'POST',
-                dataType: 'json',
-                file : '',
-                header :  {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                async :false,
-                timeout : 2000
-            };
-        var response = __fn_ajax_send({}, arrOptions);
-        var resp = JSON.parse(response.responseText);
-        var divIDVar = $('#informational_line_msg').length;
-        if (divIDVar !== 0){
-            $('#informational_line_msg').css({'height':' 55px','width':'100%','overflow-y': 'auto'});
-            if (resp && resp.data && resp.data.strHtml) {
-                var total_update = resp.data.is_total_update;
-                var el_total_update = $('#informational_line_msg').attr('data-id');
-                if(el_total_update == 0 || total_update >= el_total_update ){
-                    setTimeout(function(){
-                        $('#informational_line_msg').attr('data-id',total_update);
-                        $('#informational_line_msg').html(resp.data.strHtml);
-                    },2000);
-                }else{
-                    $('#informational_line_msg').attr('data-id',total_update);
-                }
-            }
-        }
-    };
-    
+    var __fn_init_info_board=function(t){var a=screen.height,i=parseInt(.7*a);if($("#sidebar_info").css({height:i+"px",width:"100%","overflow-y":"auto"}),0!==$("#sidebar_info").length){var e={url:_base_extraweb_uri+"/ajax/post/get_information_board",type:"POST",headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")},contentType:"application/json",data:{}},n=__ajax_send(e).data;if(n&&n.strHtml){var r=n.is_total_update,o=$("#sidebar_info").attr("data-id");0==o||r>o?setTimeout(function(){$("#sidebar_info").attr("data-id",r),$("#sidebar_info").html(n.strHtml)},2e3):$("#sidebar_info").attr("data-id",r)}}};
+    var __fn_init_info_line=function(t){var a={url:_base_extraweb_uri+"/ajax/post/get_information_line",type:"POST",contentType:"application/json",file:!1,headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")},async:!1,timeout:2e3},i=__ajax_send(a).data;if(0!==$("#informational_line_msg").length&&($("#informational_line_msg").css({height:" 55px",width:"100%","overflow-y":"auto"}),i&&i.strHtml)){var n=i.is_total_update,e=$("#informational_line_msg").attr("data-id");0==e||n>=e?setTimeout(function(){$("#informational_line_msg").attr("data-id",n),$("#informational_line_msg").html(i.strHtml)},2e3):$("#informational_line_msg").attr("data-id",n)}};
     var Globaljs = function () {
         return {
             //main function to initiate the module
             init: function () {
-                __fn_welcome_greetings();
+                //__fn_welcome_greetings();
                 __fn_alert_message('Globaljs successfully load', 'success', {type: 'toastr', timeOut: 2000});
                 $('.close').on('click', function () {
                     var t = $(this).attr('data-dismiss');
                     if (t == 'alert') {
-                        __fn_ajax_send({methodType: t, close: true}, {url : _base_url + '/remove-session-flash', type : 'POST', dataType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000});
+                        __ajax_send({methodType: t, close: true}, {url : _base_url + '/remove-session-flash', type : 'POST', contentType: 'json', file : '', header : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, async : false, timeout : 2000});
                     }
                 });
             }

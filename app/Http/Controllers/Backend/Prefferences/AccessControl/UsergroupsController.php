@@ -14,6 +14,8 @@ use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Date;
 use App\Models\Entity\uac\Tbl_b_uac_user_group_c_en;
+use App\Models\Entity\uac\Tbl_a_uac_users_p_en;
+use App\Models\Entity\uac\Tbl_a_uac_groups_p_en;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -33,6 +35,8 @@ class UsergroupsController extends Controller {
     protected $Converter;
     protected $Date;
     protected $Tbl_b_uac_user_group_c_en;
+    protected $Tbl_a_uac_users_p_en;
+    protected $Tbl_a_uac_groups_p_en;
 
     public function __construct(Request $request) {
         parent::__construct($request);
@@ -40,6 +44,8 @@ class UsergroupsController extends Controller {
         $this->Converter = new Converter();
         $this->Date = new Date();
         $this->Tbl_b_uac_user_group_c_en = new Tbl_b_uac_user_group_c_en();
+        $this->Tbl_a_uac_users_p_en = new Tbl_a_uac_users_p_en();
+        $this->Tbl_a_uac_groups_p_en = new Tbl_a_uac_groups_p_en();
     }
 
     public function view(Request $request) {
@@ -72,6 +78,7 @@ class UsergroupsController extends Controller {
                 ]
             ],
             'modals' => [
+                'title' => 'Assign User with Group',
                 'el-id' => 'md_create_user_group'
             ]
         ];
@@ -89,10 +96,66 @@ class UsergroupsController extends Controller {
     }
 
     public function get_list(Request $request) {
-        $data = $request->all();
-        if (isset($data) && !empty($data)) {
+        $data = $request->json()->all();
+        if (isset($data['a']) && !empty($data['a'])) {
+            switch ($data['a']) {
+                case 1:
+                    return $this->__get_list_users($request);
+                    break;
+                case 2 :
+                    return $this->__get_list_groups($request);
+                    break;
+            }
+        } else {
             return $this->__get_list_default($request);
         }
+    }
+
+    public function __get_list_users($request) {
+        $params = [
+            'table_name' => 'tbl_a_uac_users_p',
+            'select' => ['a.id', 'a.__user_name', 'a.__first_name', 'a.__last_name', 'a.__email'],
+            'conditions' => [
+                'where' => [
+                    ['a.is_active', '=', '1']
+                ],
+                'whereNotIn' => [
+                    ['a.id', [1]]
+                ]
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $data = $this->Tbl_a_uac_users_p_en->__find($request, 'all', $params);
+        $arrData = '<option value="0">-- select one --</option>';
+        if (isset($data['data']) && !empty($data['data'])) {
+            foreach ($data['data'] AS $keyword => $value) {
+                $arrData .= '<option value="' . $value->id . '">' . $value->__email . '</option>';
+            }
+        }
+        return $arrData;
+    }
+
+    public function __get_list_groups($request) {
+        $params = [
+            'table_name' => 'tbl_a_uac_groups_p',
+            'select' => ['a.id', 'a.__name'],
+            'conditions' => [
+                'whereNotIn' => [
+                    ['a.id', [1]]
+                ]
+            ],
+            'limit' => 100,
+            'offset' => 0
+        ];
+        $data = $this->Tbl_a_uac_groups_p_en->__find($request, 'all', $params);
+        $arrData = '<option value="0">-- select one --</option>';
+        if (isset($data['data']) && !empty($data['data'])) {
+            foreach ($data['data'] AS $keyword => $value) {
+                $arrData .= '<option value="' . $value->id . '">' . $value->__name . '</option>';
+            }
+        }
+        return $arrData;
     }
 
     public function __get_list_default($request) {
@@ -167,8 +230,11 @@ class UsergroupsController extends Controller {
 
     public function update(Request $request, $params = null) {
         $data = $request->json()->all();
+        $insert_data = [];
+        $update_data = [];
         if (isset($data) && !empty($data)) {
-            $id = $this->Converter->base64_basic($params, 'decode',['rep'=>3]);//base64_decode(base64_decode(base64_decode($params)));
+            dd($data);
+            $id = $this->Converter->base64_basic($params, 'decode', ['rep' => 3]); //base64_decode(base64_decode(base64_decode($params)));
             switch ($data['a']) {
                 case 'is_active':
                     $update_data = [
@@ -176,6 +242,16 @@ class UsergroupsController extends Controller {
                         'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
                         'updated_date' => $this->Date->now()
                     ];
+                    break;
+                case 'is_insert':
+                    $insert_data = [
+                        '__uac_user_id' => $data['b'],
+                        '__uac_group_id' => $data['c'],
+                        'is_active' => $data['b'],
+                        'updated_by' => (int) $this->Converter->base64_basic($this->__user_id, 'decode', ['rep' => 3]),
+                        'updated_date' => $this->Date->now()
+                    ];
+
                     break;
                 default:
                     $alias = strtolower(str_replace(' ', '-', $data['name']));
@@ -188,20 +264,56 @@ class UsergroupsController extends Controller {
                     ];
                     break;
             }
-            $paramsUpdate = [
-                'table_name' => 'tbl_b_uac_user_group_c',
-                'conditions' => [
-                    'keyword' => 'id',
-                    'value' => $id
-                ]
-            ];
-            $response = $this->Tbl_b_uac_user_group_c_en->__update($request, $update_data, $paramsUpdate);
-            if ($response) {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
+            $code = 200;
+            if ($data['a'] == 'is_insert') {
+                $validate_exist = $this->__validate_user_group_exist($request, $data['b'], $data['c']);
+                dd($validate_exist);
+                $msg_success = 'successfully insert data';
+                $msg_failed = 'failed insert data.';
+                $paramsInsert = [
+                    'table_name' => 'tbl_b_uac_user_group_c',
+                    'data' => (array) $insert_data
+                ];
+                dd($paramsInsert);
+                $response = $this->Tbl_b_uac_user_group_c_en->__insert($request, $paramsInsert);
             } else {
-                return $this->General->_set_response('json', ['code' => 200, 'message' => 'failed update data.', 'valid' => false]);
+                $msg_success = 'successfully update data';
+                $msg_failed = 'failed update data.';
+                $paramsUpdate = [
+                    'table_name' => 'tbl_b_uac_user_group_c',
+                    'conditions' => [
+                        'keyword' => 'id',
+                        'value' => $id
+                    ]
+                ];
+                $response = $this->Tbl_b_uac_user_group_c_en->__update($request, $update_data, $paramsUpdate);
+            }
+            if ($response) {
+                return $this->General->_set_response('json', ['code' => $code, 'message' => $msg, 'valid' => true]);
+            } else {
+                return $this->General->_set_response('json', ['code' => $code, 'message' => $msg_failed, 'valid' => false]);
             }
         }
+    }
+
+    public function __validate_user_group_exist($request, $user_id, $group_id) {
+        $params = [
+            'table_name' => 'tbl_a_uac_groups_p',
+            'select' => ['a.id', 'a.__name'],
+            'conditions' => [
+                'where' => [
+                    ['a.__uac_user_id', '=', $user_id],
+                    ['a.__uac_group_id', '=', $group_id]
+                ]
+            ]
+        ];
+        $data = $this->Tbl_a_uac_groups_p_en->__find($request, 'first', $params);
+        $response = '';
+        if (isset($data) && !empty($data)) {
+            dd($data);
+            $response = '';
+        }
+        return $response;
     }
 
     public function remove(Request $request, $params = null) {

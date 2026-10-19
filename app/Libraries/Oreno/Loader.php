@@ -53,6 +53,10 @@ class Loader {
         $this->month_name = $month_name;
         View::share('_months_name', $month_name);
 
+        //init asnyc js
+        $path_app_async_js = 'html.helpers.ajax_js';
+        View::share('_path_app_asnyc_js', $path_app_async_js);
+        
         //init global js
         $path_app_global_js = 'html.helpers.global_js';
         View::share('_path_app_global_js', $path_app_global_js);

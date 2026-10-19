@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
 use App\Libraries\Oreno\Date;
-use App\Models\Entity\uac\Tbl_a_app_contents_categories_c_en;
+use App\Models\Entity\app\Tbl_a_app_contents_categories_c_en;
 
 /**
  * Description of ContentcategoryController

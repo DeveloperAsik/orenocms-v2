@@ -29,20 +29,19 @@ class Tbl_b_uac_group_permissions_r_en extends Tbl_b_uac_group_permissions_r {
     }
 
     public function __get_permission_group(Request $request, $keyword) {
-        $__get_segment_by_url = $this->General->getSegmentByUrl($keyword);
+        $__get_segment_by_url = $this->General->getWhereByURL($keyword);
         $paramCheckName = [
             'table_name' => 'tbl_a_uac_permissions_p',
-            'select' => ['a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS permission_id', 'b.__is_allowed'],
+            'select' => [
+                'a.id', 'a.__alias', 'a.__name', 'a.__path', 'a.__controller', 'a.__action', 'a.__method', 
+                'a.__segment1', 'a.__segment2', 'a.__segment3', 'a.__segment4', 'a.__segment5', 'a.__segment6', 'a.__segment7', 'a.__segment8', 
+                'a.__is_basic', 'a.__is_public', 'a.is_active', 'b.id AS permission_id', 'b.__is_allowed'],
             'join' => [
                 'leftJoin' => [
                     ['tbl_b_uac_group_permissions_r AS b', 'b.__permission_id', '=', 'a.id']
                 ]
             ],
-            'conditions' => [
-                'where' => [
-                    ['a.__path', 'like', $__get_segment_by_url . '%']
-                ]
-            ]
+            'conditions' => $__get_segment_by_url
         ];
         return $this->Tbl_b_uac_group_permissions_r->__find($request, 'first', $paramCheckName);
     }
