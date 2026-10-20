@@ -21,7 +21,7 @@
                         m: ($('input[type="checkbox"][name="m"]:checked').val()) ? 1 : 0
                     };
                     var options = {
-                        'url': _base_extraweb_uri + '/master/uac/groups/insert/',
+                        'url': _base_extraweb_uri + '/content/insert/',
                         'type': 'POST',
                         'dataType': 'json',
                         'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -31,7 +31,7 @@
                     };
                     var response = __ajax_send(options);
                     var msg = 'error';
-                    if (response.responseJSON.status.code == 200) {
+                    if (response.status.code == 200) {
                         msg = 'success';
                     }
                     setTimeout(function () {

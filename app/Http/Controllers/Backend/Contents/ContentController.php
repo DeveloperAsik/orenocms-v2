@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Libraries\Oreno\General;
 use App\Libraries\Oreno\Converter;
+use App\Libraries\Oreno\Formater;
 use App\Libraries\Oreno\Date;
 use App\Models\Entity\app\Tbl_a_app_contents_p_en;
 
@@ -22,17 +23,19 @@ use App\Models\Entity\app\Tbl_a_app_contents_p_en;
 class ContentController extends Controller {
 
     //put your code here
-    protected $General;
     protected $Tbl_a_app_contents_p_en;
+    protected $General;
     protected $Converter;
     protected $Date;
+    protected $Formater;
 
     public function __construct(Request $request) {
         parent::__construct($request);
+        $this->Tbl_a_app_contents_p_en = new Tbl_a_app_contents_p_en();
         $this->General = new General();
         $this->Converter = new Converter();
         $this->Date = new Date();
-        $this->Tbl_a_app_contents_p_en = new Tbl_a_app_contents_p_en();
+        $this->Formater = new Formater();
     }
 
     public function view(Request $request) {
@@ -40,7 +43,7 @@ class ContentController extends Controller {
         $_config = [
             'title_for_header' => '<b>Group</b> master data management page',
             'pages' => [
-                'title' => 'View Page Master Data Groups',
+                'title' => 'View Page Master Data Content',
                 'icon' => '<i class="fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/content/create'
             ],
@@ -217,7 +220,7 @@ class ContentController extends Controller {
         $_config = [
             'title_for_header' => '<b>Group</b> master data management page',
             'pages' => [
-                'title' => 'Create Page Master Data Groups',
+                'title' => 'Create Page Master Data Content',
                 'icon' => '<i class="fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/content/create'
             ],
@@ -229,30 +232,125 @@ class ContentController extends Controller {
                 ]
             ],
             'form' => [
-                'el-id' => 'frm_create_group',
-                'btn-tools' => [
-                    '<li><a href="javascript:;
-                    "> Print </a></li>',
-                    '<li><a href="javascript:;
-                ">Save as PDF </a></li>',
-                    '<li><a href="javascript:;
-                    ">Export to Excel </a></li>'
+                [
+                    'label' => 'Alias', 'type' => 'input', 'name' => 'alias', 'default' => '',
+                    'el' => [
+                        'id' => 'a', 'class' => 'form-control', 'placeholder' => 'Enter Alias for content fields',
+                        'info' => [
+                            'class' => 'help-block',
+                            'label' => 'Please insert correct data',
+                            'style' => ''
+                        ],
+                        'custom' => [
+                            ['title' => 'id', 'value' => '200'], ['title' => 'style', 'value' => 'test']
+                        ],
+                    //'style' => ''
+                    ]
                 ],
-                'dt_tbl_th' => [
-                    '<th> ID </th>',
-                    '<th> Alias </th>',
-                    '<th> Title </th>',
-                    '<th> Icon </th>',
-                    '<th> Content </th>',
-                    '<th> Category </th>',
-                    '<th> Type </th>',
-                    '<th> Photo Cover </th>',
-                    '<th> Meta </th>',
-                    '<th> Status </th>'
+                [
+                    'label' => 'Name', 'type' => 'input', 'name' => 'name', 'default' => '',
+                    'el' => [
+                        'id' => 'b', 'class' => 'form-control', 'placeholder' => 'Enter Name for content fields',
+                    //'custom' => [
+                    //    ['title' => '', 'value' => ''], ['title' => '', 'value' => '']
+                    //],
+                    //'style' => ''
+                    ]
+                ], //
+                [
+                    'label' => 'Is Active', 'type' => 'checkbox', 'name' => 'is_active', 'default' => '1',
+                    'el' => [
+                        'id' => 'c', 'class' => 'md-check',
+                        'custom' => [
+                            ['title' => 'id', 'value' => '200'], ['title' => 'style', 'value' => 'test']
+                        ],
+                    //'style' => ''
+                    ]
+                ],
+                [
+                    'label' => 'select radio', 'type' => 'radio', 'styleType' => 'list',
+                    'list' => [
+                        [
+                            'label' => 'Option A',
+                            'id' => 'd-1',
+                            'class' => 'md-radiobtn',
+                            'name' => 'opt',
+                            'value' => '1',
+                        //'style' => ''
+                        //'el' => [
+                        //    'custom' => [
+                        //        ['title' => 'id', 'value' => '200'],
+                        //        ['title' => 'style', 'value' => 'test']
+                        //    ],
+                        //],
+                        ],
+                        [
+                            'label' => 'Option B',
+                            'id' => 'd-2',
+                            'class' => 'md-radiobtn',
+                            'name' => 'opt',
+                            'value' => '2',
+                        //'style' => ''
+                        //'el' => [
+                        //    'custom' => [
+                        //        ['title' => 'id', 'value' => '200'],
+                        //        ['title' => 'style', 'value' => 'test']
+                        //    ],
+                        //],
+                        //'style' => ''
+                        ]
+                    ]
+                ],
+                [
+                    'label' => 'select radio inline', 'type' => 'radio', 'styleType' => 'inline',
+                    'list' => [
+                        [
+                            'label' => 'Option 1',
+                            'id' => 'e-1',
+                            'class' => 'md-radiobtn',
+                            'name' => 'opta',
+                            'value' => '1',
+                        //'style' => ''
+                        //'el' => [
+                        //    'custom' => [
+                        //        ['title' => 'id', 'value' => '200'],
+                        //        ['title' => 'style', 'value' => 'test']
+                        //    ],
+                        //],
+                        ],
+                        [
+                            'label' => 'Option 2',
+                            'id' => 'e-2',
+                            'class' => 'md-radiobtn',
+                            'name' => 'opta',
+                            'value' => '2',
+                        //'style' => ''
+                        //'el' => [
+                        //    'custom' => [
+                        //        ['title' => 'id', 'value' => '200'],
+                        //        ['title' => 'style', 'value' => 'test']
+                        //    ],
+                        //],
+                        //'style' => ''
+                        ]
+                    ]
+                ],
+                [
+                    'label' => 'select option inline', 'name' => 'f', 'type' => 'select', 'class' => 'form-control', 'id' => 'form-control-1', 'style' => '',
+                    'list' => [
+                        [
+                            'label' => 'Option 1',
+                            'value' => '1',
+                        ],
+                        [
+                            'label' => 'Option 2',
+                            'value' => '2',
+                        ],
+                    ]
                 ]
             ]
         ];
-
+        $forms = $this->Formater->__fn_generate_form($_config);
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -263,7 +361,7 @@ class ContentController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'forms'));
     }
 
     public function insert(Request $request) {
@@ -290,7 +388,7 @@ class ContentController extends Controller {
                 'select' => ['a.id', 'a.__name', 'a.__path', 'a.__icon', 'a.__level', 'a.__rank', 'a.__badge', 'a.__badge_value', 'a.__badge_id', 'a.__is_badge', 'a.__uac_menu_parent_id', 'a.__is_dashboard', 'a.__is_selected', 'a.__is_basic', 'a.__is_open', 'a.__is_disabled'],
                 'conditions' => [
                     'where' => [
-                        ['a.__path', '=', $data['b']]
+                        ['a.__path', ' = ', $data['b']]
                     ]
                 ]
             ];
@@ -359,7 +457,7 @@ class ContentController extends Controller {
                     'select' => ['a.id', 'a.__name', 'a.__path', 'a.__icon', 'a.__level', 'a.__rank', 'a.__badge', 'a.__badge_value', 'a.__badge_id', 'a.__is_badge', 'a.__uac_menu_parent_id', 'a.__is_dashboard', 'a.__is_selected', 'a.__is_basic', 'a.__is_open', 'a.__is_disabled'],
                     'conditions' => [
                         'where' => [
-                            ['a.id', '=', $data['parent_id']]
+                            ['a.id', ' = ', $data['parent_id']]
                         ]
                     ]
                 ];
@@ -416,28 +514,28 @@ class ContentController extends Controller {
         $_config = [
             'title_for_header' => '<b>Group</b> master data management page',
             'pages' => [
-                'title' => 'Edit Page Master Data Groups',
-                'icon' => '<i class="fa fa-list"></i>',
+                'title' => 'Edit Page Master Data Content',
+                'icon' => '<i class = "fa fa-list"></i>',
                 'link' => config('app.base_extraweb_uri') . '/content/edit/' . $params
             ],
             'header' => [
                 [
                     'title' => 'List View',
-                    'icon' => '<i class="fa fa-list"></i>',
+                    'icon' => '<i class = "fa fa-list"></i>',
                     'link' => config('app.base_extraweb_uri') . '/content/view'
                 ],
                 [
                     'title' => 'Tree View',
-                    'icon' => '<i class="fa fa-list"></i>',
+                    'icon' => '<i class = "fa fa-list"></i>',
                     'link' => config('app.base_extraweb_uri') . '/content/tree-view'
                 ]
             ],
             'form' => [
                 'el-id' => 'frm_create_group',
                 'btn-tools' => [
-                    '<li><a href="javascript:;"> Print </a></li>',
-                    '<li><a href="javascript:;">Save as PDF </a></li>',
-                    '<li><a href="javascript:;">Export to Excel </a></li>'
+                    '<li><a href = "javascript:;"> Print </a></li>',
+                    '<li><a href = "javascript:;">Save as PDF </a></li>',
+                    '<li><a href = "javascript:;">Export to Excel </a></li>'
                 ],
                 'dt_tbl_th' => [
                     '<th> ID </th>',
@@ -458,7 +556,7 @@ class ContentController extends Controller {
             'select' => ['a.*'],
             'conditions' => [
                 'where' => [
-                    ['a.id', '=', $id]
+                    ['a.id', ' = ', $id]
                 ]
             ],
             'limit' => 100,
@@ -595,17 +693,17 @@ class ContentController extends Controller {
                 'select' => ['a.*'],
                 'conditions' => [
                     'where' => [
-                        ['a.id', '=', $id]
+                        ['a.id', ' = ', $id]
                     ]
                 ]
             ];
             $existData = $this->Tbl_a_uac_menus_p_en->__find($request, 'first', $params);
             if ($existData && $existData['data']) {
-                $insertUserGroupsBackup = [
+                $insertUserContentBackup = [
                     'table_name' => 'tbl_a_uac_menus_p',
                     'data' => (array) $existData['data']
                 ];
-                $this->Tbl_a_app_contents_p_en->__insert($request, $insertUserGroupsBackup, 'mysql_bak');
+                $this->Tbl_a_app_contents_p_en->__insert($request, $insertUserContentBackup, 'mysql_bak');
                 $deleteParams = [
                     'table_name' => 'tbl_a_uac_menus_p',
                     'conditions' => [
