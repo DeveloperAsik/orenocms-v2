@@ -3,7 +3,7 @@
         <div class="btn-group" style="margin:0px 0px 5px 0px">
             @if(isset($_config['header']) && !empty($_config['header']))
             @foreach($_config['header'] AS $k => $v)
-            <a href="{!! $v['link'] !!}" class="btn green" style="margin:0px 0px 0px 5px">
+            <a href="{!! $v['link'] !!}" class="btn green" style="margin:0px 0px 0px 0px">
                 {!! $v['title'] !!} {!! $v['icon'] !!}
             </a>
             @endforeach
@@ -27,13 +27,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="portlet-body form">
-                        <div class="col-md-6" style="min-height:600px!important">
-                            <div class="form-body">
-                                {!! isset($forms) ? $forms : $forms !!}
-                            </div>
-                        </div>
-                    </div>
+                    <div class="portlet-body form">{!! isset($strHtml) ? $strHtml : $strHtml !!}</div>
                 </div>
             </div>
         </div>

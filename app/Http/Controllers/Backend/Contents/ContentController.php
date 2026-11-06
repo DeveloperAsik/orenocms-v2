@@ -215,6 +215,47 @@ class ContentController extends Controller {
         return $this->General->_set_response('json', ['code' => 200, 'message' => 'successfully fetching data', 'valid' => true, 'data' => $dataArrTreeView]);
     }
 
+    public function __fn_get_form_generator(Request $request, $code = null, $level = 1) {
+        $response = [];
+        if ($code != null) {
+            $params = [
+                'table_name' => 'tbl_e_form_generator_p',
+                'select' => ['a.*'],
+                'conditions' => [
+                    'where' => [
+                        ['a.parent_code', '=', $code],
+                        ['a.__level', '=', $level]
+                    ]
+                ]
+            ];
+            $data = $this->Tbl_a_app_contents_p_en->__find($request, 'all', $params, 'mysql_app_bak');
+            if (isset($data['data']) && !empty($data['data'])) {
+                $response = $data['data'];
+            }
+        }
+        return $response;
+    }
+
+    public function __fn_get_html_input_generator(Request $request, $id = null) {
+        $strResponse = [];
+        if ($id != null) {
+            $params = [
+                'table_name' => 'tbl_e_form_generator_types',
+                'conditions' => [
+                    'where' => [
+                        ['a.id', '=', $id]
+                    ]
+                ]
+            ];
+            $data = $this->Tbl_a_app_contents_p_en->__find($request, 'all', $params, 'mysql_app_bak');
+            dd($data);
+            if (isset($data['data']) && !empty($data['data'])) {
+                $response = $data['data'];
+            }
+        }
+        return $strResponse;
+    }
+
     public function create(Request $request) {
         $title_for_layout = config('app.default_variables.title_for_layout');
         $_config = [
@@ -233,124 +274,73 @@ class ContentController extends Controller {
             ],
             'form' => [
                 [
-                    'label' => 'Alias', 'type' => 'input', 'name' => 'alias', 'default' => '',
-                    'el' => [
-                        'id' => 'a', 'class' => 'form-control', 'placeholder' => 'Enter Alias for content fields',
-                        'info' => [
-                            'class' => 'help-block',
-                            'label' => 'Please insert correct data',
-                            'style' => ''
-                        ],
-                        'custom' => [
-                            ['title' => 'id', 'value' => '200'], ['title' => 'style', 'value' => 'test']
-                        ],
-                    //'style' => ''
-                    ]
-                ],
-                [
-                    'label' => 'Name', 'type' => 'input', 'name' => 'name', 'default' => '',
-                    'el' => [
-                        'id' => 'b', 'class' => 'form-control', 'placeholder' => 'Enter Name for content fields',
-                    //'custom' => [
-                    //    ['title' => '', 'value' => ''], ['title' => '', 'value' => '']
-                    //],
-                    //'style' => ''
-                    ]
-                ], //
-                [
-                    'label' => 'Is Active', 'type' => 'checkbox', 'name' => 'is_active', 'default' => '1',
-                    'el' => [
-                        'id' => 'c', 'class' => 'md-check',
-                        'custom' => [
-                            ['title' => 'id', 'value' => '200'], ['title' => 'style', 'value' => 'test']
-                        ],
-                    //'style' => ''
-                    ]
-                ],
-                [
-                    'label' => 'select radio', 'type' => 'radio', 'styleType' => 'list',
-                    'list' => [
-                        [
-                            'label' => 'Option A',
-                            'id' => 'd-1',
-                            'class' => 'md-radiobtn',
-                            'name' => 'opt',
-                            'value' => '1',
-                        //'style' => ''
-                        //'el' => [
-                        //    'custom' => [
-                        //        ['title' => 'id', 'value' => '200'],
-                        //        ['title' => 'style', 'value' => 'test']
-                        //    ],
-                        //],
-                        ],
-                        [
-                            'label' => 'Option B',
-                            'id' => 'd-2',
-                            'class' => 'md-radiobtn',
-                            'name' => 'opt',
-                            'value' => '2',
-                        //'style' => ''
-                        //'el' => [
-                        //    'custom' => [
-                        //        ['title' => 'id', 'value' => '200'],
-                        //        ['title' => 'style', 'value' => 'test']
-                        //    ],
-                        //],
-                        //'style' => ''
-                        ]
-                    ]
-                ],
-                [
-                    'label' => 'select radio inline', 'type' => 'radio', 'styleType' => 'inline',
-                    'list' => [
-                        [
-                            'label' => 'Option 1',
-                            'id' => 'e-1',
-                            'class' => 'md-radiobtn',
-                            'name' => 'opta',
-                            'value' => '1',
-                        //'style' => ''
-                        //'el' => [
-                        //    'custom' => [
-                        //        ['title' => 'id', 'value' => '200'],
-                        //        ['title' => 'style', 'value' => 'test']
-                        //    ],
-                        //],
-                        ],
-                        [
-                            'label' => 'Option 2',
-                            'id' => 'e-2',
-                            'class' => 'md-radiobtn',
-                            'name' => 'opta',
-                            'value' => '2',
-                        //'style' => ''
-                        //'el' => [
-                        //    'custom' => [
-                        //        ['title' => 'id', 'value' => '200'],
-                        //        ['title' => 'style', 'value' => 'test']
-                        //    ],
-                        //],
-                        //'style' => ''
-                        ]
-                    ]
-                ],
-                [
-                    'label' => 'select option inline', 'name' => 'f', 'type' => 'select', 'class' => 'form-control', 'id' => 'form-control-1', 'style' => '',
-                    'list' => [
-                        [
-                            'label' => 'Option 1',
-                            'value' => '1',
-                        ],
-                        [
-                            'label' => 'Option 2',
-                            'value' => '2',
-                        ],
+                    'form-generator' => [
+                        'id' => 1
                     ]
                 ]
             ]
         ];
-        $forms = $this->Formater->__fn_generate_form($_config);
+        $parent_code = 'nQeHidSZxk4WjqBDjauCiUZ';
+        $data_lv_1 = $this->__fn_get_form_generator($request, $parent_code, 1);
+        $strHtml = '';
+        if (isset($data_lv_1) && !empty($data_lv_1)) {
+            foreach ($data_lv_1 AS $keyword => $value) {
+                if ($value->__level && $value->__level == 1) {
+                    $strHtml .= '<div class="' . $value->__form_generator_class . '" id="' . $value->__form_generator_id . '" style="' . $value->__form_generator_style . '" name="' . $value->__form_generator_name . '">';
+                }
+                $data_lv_2 = $this->__fn_get_form_generator($request, $parent_code, 2);
+                if ($data_lv_2) {
+                    foreach ($data_lv_2 AS $key => $val) {
+                        if ($val->__level && $val->__level == 2) {
+                            $strHtml .= '<div class="' . $val->__form_generator_class . '" id="' . $val->__form_generator_id . '" style="' . $val->__form_generator_style . '" name="' . $val->__form_generator_name . '">';
+                        }
+                        $data_lv_3 = $this->__fn_get_form_generator($request, $parent_code, 3);
+                        if ($data_lv_3) {
+                            foreach ($data_lv_3 AS $k => $v) {
+                                if ($v->__level && $v->__level == 3) {
+                                    $strHtml .= '<div class="' . $v->__form_generator_class . '" id="' . $v->__form_generator_id . '" style="' . $v->__form_generator_style . '" name="' . $v->__form_generator_name . '">';
+                                }
+                                $data_lv_4 = $this->__fn_get_form_generator($request, $parent_code, 4);
+                                if ($data_lv_4) {
+                                    foreach ($data_lv_4 AS $l => $w) {
+                                        if ($w->__level && $w->__level == 4) {
+                                            $strHtml .= '<div class="' . $w->__form_generator_class . '" id="' . $w->__form_generator_id . '" style="' . $w->__form_generator_style . '" name="' . $w->__form_generator_name . '">';
+                                        }
+                                        $data_lv_5 = $this->__fn_get_form_generator($request, $parent_code, 5);
+                                        if ($data_lv_5) {
+                                            foreach ($data_lv_5 AS $m => $x) {
+                                                if ($x->__level && $x->__level == 5) {
+                                                    if ($x->__is_child_input == 1) {
+                                                        $strHtml .= $this->__fn_get_html_input_generator($request, $x->__generator_type_id);
+                                                    } else {
+                                                        $strHtml .= '<div class="' . $x->__form_generator_class . '" id="' . $x->__form_generator_id . '" style="' . $x->__form_generator_style . '" name="' . $x->__form_generator_name . '">';
+                                                    }
+                                                    if ($x->__level && $x->__level == 5) {
+                                                        $strHtml .= '</div>';
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if ($w->__level && $w->__level == 4) {
+                                            $strHtml .= '</div>';
+                                        }
+                                    }
+                                }
+                                if ($v->__level && $v->__level == 3) {
+                                    $strHtml .= '</div>';
+                                }
+                            }
+                        }
+                        if ($val->__level && $val->__level == 2) {
+                            $strHtml .= '</div>';
+                        }
+                    }
+                }
+                if ($value->__level && $value->__level == 1) {
+                    $strHtml .= '</div>';
+                }
+            }
+        }
         $this->load_css([
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.css",
@@ -361,7 +351,7 @@ class ContentController extends Controller {
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/select2/select2.min.js",
             config('app.base_url_assets_templates') . "/metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js",
         ]);
-        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'forms'));
+        return view('html.layouts.metronic.main', compact('title_for_layout', '_config', 'strHtml'));
     }
 
     public function insert(Request $request) {

@@ -9,12 +9,12 @@
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Content/create_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Contents/ContentController.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Content/edit_html.blade.php</file>
+            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Libraries/Oreno/Formater.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Content/view_html.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/.env</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/resources/views/html/pages/Backend/Contents/Content/view_js.blade.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/routes/web.php</file>
             <file>file:/D:/CISO-LABS/Projects/orenocms-v2/config/app.php</file>
-            <file>file:/D:/CISO-LABS/Projects/orenocms-v2/app/Http/Controllers/Backend/Master/AccessControl/MenuController.php</file>
         </group>
     </open-files>
 </project-private>
