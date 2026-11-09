@@ -248,7 +248,6 @@ class ContentController extends Controller {
                 ]
             ];
             $data = $this->Tbl_a_app_contents_p_en->__find($request, 'all', $params, 'mysql_app_bak');
-            dd($data);
             if (isset($data['data']) && !empty($data['data'])) {
                 $response = $data['data'];
             }
