@@ -408,9 +408,9 @@ Route::prefix('extraweb')->group(function () {
                 Route::post('/get_list', [UsergroupsController::class, 'get_list'])->name('extraweb.prefferences.uac.usergroups.get_list');
                 Route::get('/edit/{id}', [UsergroupsController::class, 'edit'])->name('extraweb.prefferences.uac.usergroups.edit');
                 Route::post('/update/{id}', [UsergroupsController::class, 'update'])->name('extraweb.prefferences.uac.usergroups.update');
-                Route::get('/create', [UsergroupsController::class, 'create'])->name('extraweb.prefferences.uac.usergroups.create');
-                Route::post('/insert', [UsergroupsController::class, 'insert'])->name('extraweb.prefferences.uac.usergroups.insert');
-                Route::get('/delete/{id}', [UsergroupsController::class, 'delete'])->name('extraweb.prefferences.uac.usergroups.delete');
+                //Route::get('/create', [UsergroupsController::class, 'create'])->name('extraweb.prefferences.uac.usergroups.create');
+                //Route::post('/insert', [UsergroupsController::class, 'insert'])->name('extraweb.prefferences.uac.usergroups.insert');
+                //Route::get('/delete/{id}', [UsergroupsController::class, 'delete'])->name('extraweb.prefferences.uac.usergroups.delete');
                 Route::get('/remove/{id}', [UsergroupsController::class, 'remove'])->name('extraweb.prefferences.uac.usergroups.remove');
             });
             Route::prefix('/user-permissions')->group(function () {
@@ -418,9 +418,9 @@ Route::prefix('extraweb')->group(function () {
                 Route::post('/get_list', [UserpermissionsController::class, 'get_list'])->name('extraweb.prefferences.uac.userpermissions.get_list');
                 Route::get('/edit/{id}', [UserpermissionsController::class, 'edit'])->name('extraweb.prefferences.uac.userpermissions.edit');
                 Route::post('/update/{id}', [UserpermissionsController::class, 'update'])->name('extraweb.prefferences.uac.userpermissions.update');
-                Route::get('/create', [UserpermissionsController::class, 'create'])->name('extraweb.prefferences.uac.userpermissions.create');
-                Route::post('/insert', [UserpermissionsController::class, 'insert'])->name('extraweb.prefferences.uac.userpermissions.insert');
-                Route::get('/delete/{id}', [UserController::class, 'delete'])->name('extraweb.prefferences.uac.userpermissions.delete');
+                //Route::get('/create', [UserpermissionsController::class, 'create'])->name('extraweb.prefferences.uac.userpermissions.create');
+                //Route::post('/insert', [UserpermissionsController::class, 'insert'])->name('extraweb.prefferences.uac.userpermissions.insert');
+                //Route::get('/delete/{id}', [UserController::class, 'delete'])->name('extraweb.prefferences.uac.userpermissions.delete');
                 Route::get('/remove/{id}', [UserpermissionsController::class, 'remove'])->name('extraweb.prefferences.uac.userpermissions.remove');
             });
             Route::prefix('/user-modules')->group(function () {
@@ -428,9 +428,9 @@ Route::prefix('extraweb')->group(function () {
                 Route::post('/get_list', [UsermodulesController::class, 'get_list'])->name('extraweb.prefferences.uac.usermodules.get_list');
                 Route::get('/edit/{id}', [UsermodulesController::class, 'edit'])->name('extraweb.prefferences.uac.usermodules.edit');
                 Route::post('/update/{id}', [UsermodulesController::class, 'update'])->name('extraweb.prefferences.uac.usermodules.update');
-                Route::get('/create', [UsermodulesController::class, 'create'])->name('extraweb.prefferences.uac.usermodules.create');
-                Route::post('/insert', [UsermodulesController::class, 'insert'])->name('extraweb.prefferences.uac.usermodules.insert');
-                Route::get('/delete/{id}', [UsermodulesController::class, 'delete'])->name('extraweb.prefferences.uac.usermodules.delete');
+                //Route::get('/create', [UsermodulesController::class, 'create'])->name('extraweb.prefferences.uac.usermodules.create');
+                //Route::post('/insert', [UsermodulesController::class, 'insert'])->name('extraweb.prefferences.uac.usermodules.insert');
+                //Route::get('/delete/{id}', [UsermodulesController::class, 'delete'])->name('extraweb.prefferences.uac.usermodules.delete');
                 Route::get('/remove/{id}', [UsermodulesController::class, 'remove'])->name('extraweb.prefferences.uac.usermodules.remove');
             });
             Route::prefix('/user-locations')->group(function () {
@@ -438,9 +438,9 @@ Route::prefix('extraweb')->group(function () {
                 Route::post('/get_list', [UserlocationsController::class, 'get_list'])->name('extraweb.prefferences.uac.userlocations.get_list');
                 Route::get('/edit/{id}', [UserlocationsController::class, 'edit'])->name('extraweb.prefferences.uac.userlocations.edit');
                 Route::post('/update/{id}', [UserlocationsController::class, 'update'])->name('extraweb.prefferences.uac.userlocations.update');
-                Route::get('/create', [UserlocationsController::class, 'create'])->name('extraweb.prefferences.uac.userlocations.create');
-                Route::post('/insert', [UserlocationsController::class, 'insert'])->name('extraweb.prefferences.uac.userlocations.insert');
-                Route::get('/delete/{id}', [UserlocationsController::class, 'delete'])->name('extraweb.prefferences.uac.userlocations.delete');
+                //Route::get('/create', [UserlocationsController::class, 'create'])->name('extraweb.prefferences.uac.userlocations.create');
+                //Route::post('/insert', [UserlocationsController::class, 'insert'])->name('extraweb.prefferences.uac.userlocations.insert');
+                //Route::get('/delete/{id}', [UserlocationsController::class, 'delete'])->name('extraweb.prefferences.uac.userlocations.delete');
                 Route::get('/remove/{id}', [UserlocationsController::class, 'remove'])->name('extraweb.prefferences.uac.userlocations.remove');
             });
             Route::prefix('/user-tokens')->group(function () {
@@ -448,9 +448,9 @@ Route::prefix('extraweb')->group(function () {
                 Route::post('/get_list', [UsertokensController::class, 'get_list'])->name('extraweb.prefferences.uac.usertokens.get_list');
                 Route::get('/edit/{id}', [UsertokensController::class, 'edit'])->name('extraweb.prefferences.uac.usertokens.edit');
                 Route::post('/update/{id}', [UsertokensController::class, 'update'])->name('extraweb.prefferences.uac.usertokens.update');
-                Route::get('/create', [UsertokensController::class, 'create'])->name('extraweb.prefferences.uac.usertokens.create');
-                Route::post('/insert', [UsertokensController::class, 'insert'])->name('extraweb.prefferences.uac.usertokens.insert');
-                Route::get('/delete/{id}', [UsertokensController::class, 'delete'])->name('extraweb.prefferences.uac.usertokens.delete');
+                //Route::get('/create', [UsertokensController::class, 'create'])->name('extraweb.prefferences.uac.usertokens.create');
+                //Route::post('/insert', [UsertokensController::class, 'insert'])->name('extraweb.prefferences.uac.usertokens.insert');
+                //Route::get('/delete/{id}', [UsertokensController::class, 'delete'])->name('extraweb.prefferences.uac.usertokens.delete');
                 Route::get('/remove/{id}', [UsertokensController::class, 'remove'])->name('extraweb.prefferences.uac.usertokens.remove');
             });
             Route::prefix('/group-permissions')->group(function () {
@@ -458,9 +458,9 @@ Route::prefix('extraweb')->group(function () {
                 Route::post('/get_list', [GrouppermissionsController::class, 'get_list'])->name('extraweb.prefferences.uac.grouppermissions.get_list');
                 Route::get('/edit/{id}', [GrouppermissionsController::class, 'edit'])->name('extraweb.prefferences.uac.grouppermissions.edit');
                 Route::post('/update/{id}', [GrouppermissionsController::class, 'update'])->name('extraweb.prefferences.uac.grouppermissions.update');
-                Route::get('/create', [GrouppermissionsController::class, 'create'])->name('extraweb.prefferences.uac.grouppermissions.create');
-                Route::post('/insert', [GrouppermissionsController::class, 'insert'])->name('extraweb.prefferences.uac.grouppermissions.insert');
-                Route::get('/delete/{id}', [GrouppermissionsController::class, 'delete'])->name('extraweb.prefferences.uac.grouppermissions.delete');
+                //Route::get('/create', [GrouppermissionsController::class, 'create'])->name('extraweb.prefferences.uac.grouppermissions.create');
+                //Route::post('/insert', [GrouppermissionsController::class, 'insert'])->name('extraweb.prefferences.uac.grouppermissions.insert');
+                //Route::get('/delete/{id}', [GrouppermissionsController::class, 'delete'])->name('extraweb.prefferences.uac.grouppermissions.delete');
                 Route::get('/remove/{id}', [GrouppermissionsController::class, 'remove'])->name('extraweb.prefferences.uac.grouppermissions.remove');
             });
             Route::prefix('/menu-permissions')->group(function () {
@@ -468,9 +468,9 @@ Route::prefix('extraweb')->group(function () {
                 Route::post('/get_list', [MenupermissionsController::class, 'get_list'])->name('extraweb.prefferences.uac.menupermissions.get_list');
                 Route::get('/edit/{id}', [MenupermissionsController::class, 'edit'])->name('extraweb.prefferences.uac.menupermissions.edit');
                 Route::post('/update/{id}', [MenupermissionsController::class, 'update'])->name('extraweb.prefferences.uac.menupermissions.update');
-                Route::get('/create', [MenupermissionsController::class, 'create'])->name('extraweb.prefferences.uac.menupermissions.create');
-                Route::post('/insert', [MenupermissionsController::class, 'insert'])->name('extraweb.prefferences.uac.menupermissions.insert');
-                Route::get('/delete/{id}', [MenupermissionsController::class, 'delete'])->name('extraweb.prefferences.uac.menupermissions.delete');
+                //Route::get('/create', [MenupermissionsController::class, 'create'])->name('extraweb.prefferences.uac.menupermissions.create');
+                //Route::post('/insert', [MenupermissionsController::class, 'insert'])->name('extraweb.prefferences.uac.menupermissions.insert');
+                //Route::get('/delete/{id}', [MenupermissionsController::class, 'delete'])->name('extraweb.prefferences.uac.menupermissions.delete');
                 Route::get('/remove/{id}', [MenupermissionsController::class, 'remove'])->name('extraweb.prefferences.uac.menupermissions.remove');
             });
         });

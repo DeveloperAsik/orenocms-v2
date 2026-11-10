@@ -7,15 +7,15 @@
                 $('input[name="b"]').on('change', function () {
                     var val = $(this).val();
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/get_list?a=1',
-                        methodType: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: ''
+                        'url': _base_extraweb_uri + '/master/uac/permissions/get_list?a=1',
+                        'type': 'POST',
+                        'dataType': 'json',
+                        'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        'async': false,
+                        'timeout': '',
+                        'data': JSON.stringify({'value': val})
                     };
-                    var response = __fn_ajax_send(JSON.stringify({'value': val}), options);
+                    var response = __ajax_send(options);
                     if (response && response.responseJSON && response.responseJSON.data) {
                         for (var i = 1; i <= response.responseJSON.data.length; i++) {
                             if (i > response.responseJSON.data.length) {
@@ -82,15 +82,15 @@
 
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/insert',
-                        methodType: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: 2000
+                        'url': _base_extraweb_uri + '/master/uac/permissions/insert',
+                        'type': 'POST',
+                        'dataType': 'json',
+                        'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        'async': false,
+                        'timeout': 2000,
+                        'data': JSON.stringify(formdata)
                     };
-                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var response = __ajax_send(options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';

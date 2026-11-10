@@ -30,9 +30,9 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
     }
 
     public function __get_permission(Request $request, $keyword, $loop) {
-        $__get_segment_by_url = $this->__get_where_by_url($keyword);
+        $__get_segment_by_url = $this->General->getWhereByURL($keyword);
         if($loop == 1){
-            $__get_segment_by_url = $this->__get_where_by_url($keyword, $loop);
+            $__get_segment_by_url = $this->General->getWhereByURL($keyword, $loop);
         }
         $conditions = [
             'where' => [
@@ -340,36 +340,36 @@ class Tbl_a_uac_permissions_p_en extends Tbl_a_uac_permissions_p {
         }
     }
 
-
-    public function __get_where_by_url($url = null, $loop = false) {
-        $ArrUrl = $url;//$this->General->getSegmentByUrl($url);
-        $cond = [];
-        $arrCond = [];
-        if ($ArrUrl) {
-            $explodeUrl = explode('/', $ArrUrl);
-            $maxSegment = count($explodeUrl);
-            $minSegment = $maxSegment - 8;
-            if($loop == 1){
-                $maxSegment = $maxSegment -2;
-            }
-            $no = 1;
-            foreach ($explodeUrl AS $key => $value) {
-                if ($maxSegment > 2) {
-                    $getRangeNumber = $this->General->getRangeNumber($minSegment, ($maxSegment - 1));
-                    foreach ($getRangeNumber AS $k => $v) {
-                        if ($key == ($v - 1)) {
-                            $arrCond[] = ['a.__segment' . $v, 'like', '%' . str_replace('-','_', $explodeUrl[$key]) . '%'];
-                        }
-                    }
-                } else {
-                    $arrCond[] = ['a.__segment' . $no, 'like', '%' . str_replace('-','_', $explodeUrl[$key]) . '%'];
-                }
-                $no++;
-            }
-            $cond = [
-                'where' => $arrCond
-            ];
-        }
-        return $cond;
-    }
+//
+//    public function __get_where_by_url($url = null, $loop = false) {
+//        $ArrUrl = $url;//$this->General->getSegmentByUrl($url);
+//        $cond = [];
+//        $arrCond = [];
+//        if ($ArrUrl) {
+//            $explodeUrl = explode('/', $ArrUrl);
+//            $maxSegment = count($explodeUrl);
+//            $minSegment = $maxSegment - 8;
+//            if($loop == 1){
+//                $maxSegment = $maxSegment -2;
+//            }
+//            $no = 1;
+//            foreach ($explodeUrl AS $key => $value) {
+//                if ($maxSegment > 2) {
+//                    $getRangeNumber = $this->General->getRangeNumber($minSegment, ($maxSegment - 1));
+//                    foreach ($getRangeNumber AS $k => $v) {
+//                        if ($key == ($v - 1)) {
+//                            $arrCond[] = ['a.__segment' . $v, 'like', '%' . str_replace('-','_', $explodeUrl[$key]) . '%'];
+//                        }
+//                    }
+//                } else {
+//                    $arrCond[] = ['a.__segment' . $no, 'like', '%' . str_replace('-','_', $explodeUrl[$key]) . '%'];
+//                }
+//                $no++;
+//            }
+//            $cond = [
+//                'where' => $arrCond
+//            ];
+//        }
+//        return $cond;
+//    }
 }

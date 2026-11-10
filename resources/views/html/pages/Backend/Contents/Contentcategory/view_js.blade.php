@@ -46,15 +46,15 @@
                     var id = $(this).attr('data-id');
                     var formdata = {a: 'is_basic', b: (checked == true) ? 1 : 0};
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/update/' + id,
-                        type: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: ''
+                        'url': _base_extraweb_uri + '/master/uac/permissions/update/' + id,
+                        'type': 'POST',
+                        'dataType': 'json',
+                        'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        'async': false,
+                        'timeout': '',
+                        'data':JSON.stringify(formdata)
                     };
-                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var response = __ajax_send(options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';
@@ -70,15 +70,15 @@
                     var id = $(this).attr('data-id');
                     var formdata = {a: 'is_public', b: (checked == true) ? 1 : 0};
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/update/' + id,
-                        type: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: ''
+                        'url': _base_extraweb_uri + '/master/uac/permissions/update/' + id,
+                        'type': 'POST',
+                        'dataType': 'json',
+                        'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        'async': false,
+                        'timeout': '',
+                        'data': JSON.stringify(formdata)
                     };
-                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var response = __ajax_send(options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';
@@ -94,15 +94,15 @@
                     var id = $(this).attr('data-id');
                     var formdata = {a: 'is_active', b: (checked == true) ? 1 : 0};
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/permissions/update/' + id,
-                        type: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: ''
+                        'url': _base_extraweb_uri + '/master/uac/permissions/update/' + id,
+                        'type': 'POST',
+                        'dataType': 'json',
+                        'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        'async': false,
+                        'timeout': '',
+                        'data': JSON.stringify(formdata)
                     };
-                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var response = __ajax_send(options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';

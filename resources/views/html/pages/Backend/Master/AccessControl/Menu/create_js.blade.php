@@ -21,15 +21,15 @@
                         m: ($('input[type="checkbox"][name="m"]:checked').val()) ? 1 : 0
                     };
                     var options = {
-                        url: _base_extraweb_uri + '/master/uac/menu/insert/',
-                        methodType: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: 2000
+                        'url': _base_extraweb_uri + '/master/uac/menu/insert/',
+                        'type': 'POST',
+                        'dataType': 'json',
+                        'header': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        'async': false,
+                        'timeout': 2000,
+                        'data': JSON.stringify(formdata)
                     };
-                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
+                    var response = __ajax_send(options);
                     var msg = 'error';
                     if (response.responseJSON.status.code == 200) {
                         msg = 'success';

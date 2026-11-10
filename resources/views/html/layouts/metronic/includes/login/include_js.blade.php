@@ -86,11 +86,17 @@ var _base_url='{{config("app.url")}}';var _env='{{config("app.env")}}';var _uuid
 @endif
 <!-- load js lib / class / library from controller end here -->
 
+<!-- load async js lib for every controller start here -->
+@if (isset($_path_app_asnyc_js) && !empty($_path_app_asnyc_js))
+    @include("{$_path_app_asnyc_js}")
+@endif
 
 <!-- load global js lib for every controller start here -->
 @if (isset($_path_app_global_js) && !empty($_path_app_global_js))
     @include("{$_path_app_global_js}")
 @endif
+<!-- load global js lib for every controller end here -->
+
 <!-- load global js lib for every controller end here -->
 <!-- load specified js lib for a view start here -->
 @if(isset($_default_views) && !empty($_default_views))

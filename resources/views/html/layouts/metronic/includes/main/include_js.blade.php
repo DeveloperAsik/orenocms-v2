@@ -81,16 +81,21 @@ var _base_url='{{config("app.url")}}';var _env='{{config("app.env")}}';var _uuid
 @if (isset($load_js) && !empty($load_js))
     @foreach ($load_js AS $key => $values)
         <script src="{{$values}}" type="text/javascript"></script>
-    @endforeach;
+    @endforeach
 @endif
 <!-- load js lib / class / library from controller end here -->
 
+<!-- load async js lib for every controller start here -->
+@if (isset($_path_app_asnyc_js) && !empty($_path_app_asnyc_js))
+    @include("{$_path_app_asnyc_js}")
+@endif
 
 <!-- load global js lib for every controller start here -->
 @if (isset($_path_app_global_js) && !empty($_path_app_global_js))
     @include("{$_path_app_global_js}")
 @endif
 <!-- load global js lib for every controller end here -->
+
 <!-- load specified js lib for a view start here -->
 @if(isset($_default_views) && !empty($_default_views))
     @foreach($_default_views AS $keyword => $value)

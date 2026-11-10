@@ -1,19 +1,17 @@
 <script>
-    var __fn_validate_input = function (keyword, types) {
-        var formdata = {t: types, k: keyword};
-        var options = {
-            url: _base_extraweb_uri + '/authentification/init',
-            methodType: 'POST',
-            dataType: 'json',
-            file: false,
-            header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            async: false,
-            timeout: ''
+    var __fn_validate_input = function (keyword, types) {      
+        var formData = {t: types, k: keyword};
+        var paramsData = {
+            'url': _base_extraweb_uri + '/authentification/init',
+            'type': 'POST',
+            'headers': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            'contentType': 'application/json',
+            'dataType': 'json',
+            'data': JSON.stringify(formData)
         };
-        var response = __fn_ajax_send(JSON.stringify(formdata), options);
-        var strResponse = '';
-        if (response.responseJSON.status.code == 200) {
-            strResponse = response.responseJSON.data;
+        var response = __ajax_send(paramsData);
+        if (response.status.code == 200) {
+            strResponse = response.data;
         }
         return strResponse;
     };
@@ -95,26 +93,24 @@
                     $('input[name="' + b + '"]').val(stringSanitize);
                 });
                 $('button#login-page').on('click', function (e) {
+                    e.preventDefault();
                     __fn_loading_img('img-loading', 'start');
-                    var options = {
-                        url: _base_extraweb_uri + '/authentification/init',
-                        methodType: 'POST',
-                        dataType: 'json',
-                        file: false,
-                        header: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        async: false,
-                        timeout: ''
-                    };
-                    var formdata = {
+                    var formData = {
                         t: 'validate-login-form',
                         c: _uuid,
                         d: Base64.encode($('input[name="' + a + '"]').val()),
                         e: Base64.encode($('input[name="' + b + '"]').val())
                     };
-                    var response = __fn_ajax_send(JSON.stringify(formdata), options);
-                    //console.log(response.responseJSON);
-                    //return false;
-                    if (response.responseJSON.status.code == 200) {
+                    var paramsData = {
+                        'url': _base_extraweb_uri + '/authentification/init',
+                        'type': 'POST',
+                        'headers': {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        'contentType': 'json',
+                        'data': JSON.stringify(formData)
+                    };
+                    var response = __ajax_send(paramsData);
+                    if (response.status.code == 200) {
+                        strResponse = response.data;
                         $('input[name="' + a + '"]').removeClass('is-invalid');
                         $('input[name="' + a + '"').css({'color': '#666', 'border': '1px solid #ced4da', 'font-size': '12px'});
                         $('input[name="' + b + '"]').removeClass('is-invalid');
@@ -132,7 +128,6 @@
                         $('input[name="' + b + '"]').css({'color': 'red', 'border': '2px solid red', 'font-size': '10px'});
                         return false;
                     }
-                    e.preventDefault();
                 });
             }
         }

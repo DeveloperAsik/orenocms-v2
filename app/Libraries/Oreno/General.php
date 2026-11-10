@@ -71,4 +71,45 @@ class General {
         }
         return $arrData;
     }
- }
+    
+    public function getWhereByURL($url = null, $loop = false) {
+        $ArrUrl = $url; //$this->General->getSegmentByUrl($url);
+        $cond = [];
+        $arrCond = [];
+        if ($ArrUrl) {
+            $explodeUrl = explode('/', $ArrUrl);
+            $maxSegment = count($explodeUrl);
+            $minSegment = $maxSegment - 6;
+            if ($maxSegment >= 8) {
+                $minSegment = $maxSegment - 8;
+            }
+            if ($loop == 1) {
+                $maxSegment = $maxSegment - 2;
+            }
+            $no = 1;
+            foreach ($explodeUrl AS $key => $value) {
+                if ($value !== null || $value != '') {
+                    if ($maxSegment > 2) {
+                        $paramMin = 1;
+                        if ($maxSegment <= 7) {
+                            $paramMin = 2;
+                        }
+                        $getRangeNumber = $this->getRangeNumber($minSegment, ($maxSegment - $paramMin));
+                        foreach ($getRangeNumber AS $k => $v) {
+                            if ($key == ($v - 1)) {
+                                $arrCond[] = ['a.__segment' . $v, 'like', '%' . str_replace('-', '_', $explodeUrl[$key]) . '%'];
+                            }
+                        }
+                    } else {
+                        $arrCond[] = ['a.__segment' . $no, 'like', '%' . str_replace('-', '_', $explodeUrl[$key]) . '%'];
+                    }
+                }
+                $no++;
+            }
+            $cond = [
+                'where' => $arrCond
+            ];
+        }
+        return $cond;
+    }
+}
